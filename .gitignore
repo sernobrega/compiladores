@@ -1,0 +1,7 @@
+CVS
+.cvsignore
+*.o
+*.output
+*.xml
+*.m19
+*.asm
