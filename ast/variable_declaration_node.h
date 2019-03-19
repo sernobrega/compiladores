@@ -12,13 +12,14 @@ namespace m19 {
    * Class for describing variable declaration nodes.
    */
   class variable_declaration_node: public cdk::basic_node {
+    int _scope;
     basic_type *_type;
     std::string _id;
     cdk::expression_node *_expr;
 
   public:
-    inline variable_declaration_node(int lineno, basic_type *type, const std::string &id, cdk::expression_node *expr) :
-        cdk::basic_node(lineno), _type(type), _id(id), _expr(expr) {
+    inline variable_declaration_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::expression_node *expr) :
+        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _expr(expr) {
     }
 
   public:
