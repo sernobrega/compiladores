@@ -1,4 +1,4 @@
-// $Id: for_node.h,v 1.1 2019/02/28 21:26:01 linux Exp $ -*- c++ -*-
+// $Id: for_node.h,v 1.1 2019/03/19 17:35:56 ist186806 Exp $ -*- c++ -*-
 #ifndef __M19_FORNODE_H__
 #define __M19_FORNODE_H__
 

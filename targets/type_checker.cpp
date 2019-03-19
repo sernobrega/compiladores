@@ -185,7 +185,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
 
 //---------------------------------------------------------------------------
 
-void m19::type_checker::do_nullptr_node(m19::nulptr_node * const node, int lvl) {
+void m19::type_checker::do_nullptr_node(m19::nullptr_node * const node, int lvl) {
   //EMPTY
 }
 
