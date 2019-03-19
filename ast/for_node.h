@@ -3,6 +3,7 @@
 #define __M19_FORNODE_H__
 
 #include <cdk/ast/expression_node.h>
+#include <cdk/ast/variable_node.h>
 
 namespace m19 {
 
@@ -18,11 +19,11 @@ namespace m19 {
 
   public:
     inline for_node(int lineno, cdk::expression_node *init, cdk::expression_node *stop, cdk::expression_node *step, cdk::basic_node *instruction) :
-        basic_node(lineno), _init(init), _stop(stop), _step(step), _instruction(instruction) {
+        cdk::basic_node(lineno), _init(init), _stop(stop), _step(step), _instruction(instruction) {
     }
 
     inline for_node(int lineno, cdk::variable_node *variable, cdk::expression_node *stop, cdk::expression_node *step, cdk::basic_node *instruction) :
-        basic_node(lineno), _variable(variable), _stop(stop), _step(step), _instruction(instruction) {
+        cdk::basic_node(lineno), _variable(variable), _stop(stop), _step(step), _instruction(instruction) {
     }
 
   public:
