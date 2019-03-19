@@ -16,15 +16,16 @@ namespace m19 {
     basic_type *_type;
     std::string _id;
     cdk::sequence_node * _arguments;
+    m19::block_node * _block;
   
   public:
-    inline function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments) {
+    inline function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, m19::block_node * block) :
+        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments), _block(block) {
     }
 
-    inline function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::basic_node(lineno), _scope(scope), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments) {
-    }
+    // inline function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments) :
+    //     cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments) {
+    // }
 
   public:
     inline int scope() {
@@ -42,6 +43,10 @@ namespace m19 {
 
     inline cdk::sequence_node *arguments() {
       return _arguments;
+    }
+
+    inline m19::block_node * block() {
+      return _block;
     }
 
     void accept(basic_ast_visitor *sp, int level) {
