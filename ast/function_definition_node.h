@@ -22,6 +22,10 @@ namespace m19 {
         cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments) {
     }
 
+    inline function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments) :
+        cdk::basic_node(lineno), _scope(scope), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments) {
+    }
+
   public:
     inline int scope() {
       return _scope;
