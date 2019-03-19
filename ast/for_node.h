@@ -11,7 +11,7 @@ namespace m19 {
    */
   class for_node: public cdk::basic_node {
     cdk::variable_node *_variable;
-    cdk::lvalue_node *_init;
+    cdk::expression_node *_init;
     cdk::expression_node *_stop;
     cdk::expression_node *_step;
     cdk::basic_node *_instruction;
