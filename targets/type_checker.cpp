@@ -180,7 +180,7 @@ void m19::type_checker::do_read_node(m19::read_node * const node, int lvl) {
 
 //---------------------------------------------------------------------------
 
-void m19::type_checker::do_nullptr_node(m19::nulptr_node * const node, int lvl) {
+void m19::type_checker::do_nullptr_node(m19::nullptr_node * const node, int lvl) {
   //EMPTY
 }
 
