@@ -23,6 +23,10 @@ namespace m19 {
     }
 
   public:
+    inline int scope() {
+      return _scope;
+    }
+
     inline std::string id() const {
       return _id;
     }
