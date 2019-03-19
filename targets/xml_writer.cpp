@@ -159,6 +159,11 @@ void m19::xml_writer::do_read_node(m19::read_node * const node, int lvl) {
 }
 
 //---------------------------------------------------------------------------
+void m19::xml_writer::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
+  //
+}
+
+//---------------------------------------------------------------------------
 void m19::xml_writer::do_nullptr_node(m19::nulptr_node * const node, int lvl) {
   //EMPTY
 }
