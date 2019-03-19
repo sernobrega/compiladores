@@ -2,12 +2,10 @@
 #ifndef __M19_NULLPTRNODE_H__
 #define __M19_NULLPTRNODE_H__
 
-#include <cdk/ast/expression_node.h>
-
 namespace m19 {
 
   /**
-   * Class for describing print nodes.
+   * Class for describing nullptr nodes.
    */
   class nullptr_node: public cdk::basic_node {
 
