@@ -172,6 +172,10 @@ void m19::xml_writer::do_nullptr_node(m19::nullptr_node * const node, int lvl) {
   //EMPTY
 }
 
+void m19::xml_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
+  //
+}
+
 //---------------------------------------------------------------------------
 
 void m19::xml_writer::do_for_node(m19::for_node * const node, int lvl) {

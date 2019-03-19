@@ -242,6 +242,10 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
   //
 }
 
+void m19::postfix_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
+  //
+}
+
 //---------------------------------------------------------------------------
 
 void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
