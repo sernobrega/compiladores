@@ -17,7 +17,7 @@ namespace m19 {
     cdk::basic_node *_instruction;
 
   public:
-    inline for_node(int lineno, cdk::lvalue_node *init, cdk::expression_node *stop, cdk::expression_node *step, cdk::basic_node *instruction) :
+    inline for_node(int lineno, cdk::expression_node *init, cdk::expression_node *stop, cdk::expression_node *step, cdk::basic_node *instruction) :
         basic_node(lineno), _init(init), _stop(stop), _step(step), _instruction(instruction) {
     }
 
