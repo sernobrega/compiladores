@@ -180,6 +180,12 @@ void m19::type_checker::do_read_node(m19::read_node * const node, int lvl) {
 
 //---------------------------------------------------------------------------
 
+void m19::type_checker::do_nullptr_node(m19::nulptr_node * const node, int lvl) {
+  //EMPTY
+}
+
+//---------------------------------------------------------------------------
+
 void m19::type_checker::do_for_node(m19::for_node * const node, int lvl) {
   // node->condition()->accept(this, lvl + 4);
 }

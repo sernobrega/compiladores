@@ -234,6 +234,11 @@ void m19::postfix_writer::do_read_node(m19::read_node * const node, int lvl) {
 }
 
 //---------------------------------------------------------------------------
+void m19::postfix_writer::do_nullptr_node(m19::nulptr_node * const node, int lvl) {
+  //EMPTY
+}
+
+//---------------------------------------------------------------------------
 
 void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
