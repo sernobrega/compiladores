@@ -2,7 +2,6 @@
 #ifndef __M19_VARIABLEDECLARATIONNODE_H__
 #define __M19_VARIABLEDECLARATIONNODE_H__
 
-#include <cdk/ast/lvalue_node.h>
 #include <cdk/ast/expression_node.h>
 #include <cdk/basic_type.h>
 #include <string>
