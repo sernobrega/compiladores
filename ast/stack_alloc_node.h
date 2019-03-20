@@ -9,7 +9,7 @@ namespace m19 {
   /**
    * Class for describing the stack allocation nodes.
    */
-  class stack_alloc_node: public cdk::basic_node {
+  class stack_alloc_node: public cdk::unary_expression_node {
 
   public:
     inline stack_alloc_node(int lineno, cdk::expression_node *argument) :
@@ -17,7 +17,6 @@ namespace m19 {
     }
 
   public:
-
     void accept(basic_ast_visitor *sp, int level) {
       sp->do_stack_alloc_node(this, level);
     }
