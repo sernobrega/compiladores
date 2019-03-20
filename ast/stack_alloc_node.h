@@ -17,9 +17,6 @@ namespace m19 {
     }
 
   public:
-    inline cdk::expression_node *argument() {
-      return _argument;
-    }
 
     void accept(basic_ast_visitor *sp, int level) {
       sp->do_stack_alloc_node(this, level);
