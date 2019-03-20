@@ -171,11 +171,11 @@ void m19::type_checker::do_print_node(m19::print_node * const node, int lvl) {
 //---------------------------------------------------------------------------
 
 void m19::type_checker::do_read_node(m19::read_node * const node, int lvl) {
-  try {
-    node->argument()->accept(this, lvl);
-  } catch (const std::string &id) {
-    throw "undeclared variable '" + id + "'";
-  }
+  // try {
+  //   node->argument()->accept(this, lvl);
+  // } catch (const std::string &id) {
+  //   throw "undeclared variable '" + id + "'";
+  // }
 }
 
 //---------------------------------------------------------------------------
