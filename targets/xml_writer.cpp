@@ -176,6 +176,10 @@ void m19::xml_writer::do_function_declaration_node(m19::function_declaration_nod
   //
 }
 
+void m19::xml_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
+  //
+}
+
 void m19::xml_writer::do_block_node(m19::block_node * const node, int lvl) {
   //
 }
@@ -185,6 +189,38 @@ void m19::xml_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, in
 }
 
 void m19::xml_writer::do_address_node(m19::address_node * const node, int lvl) {
+  //
+}
+
+void m19::xml_writer::do_index_node(m19::index_node * const node, int lvl) {
+  //
+}
+
+void m19::xml_writer::do_section_node(m19::section_node * const node, int lvl) {
+  //
+}
+
+void m19::xml_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
+  //
+}
+
+void m19::xml_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
+  //
+}
+
+void m19::xml_writer::do_continue_node(m19::continue_node * const node, int lvl) {
+  //
+}
+
+void m19::xml_writer::do_return_end_node(m19::return_node * const node, int lvl) {
+  //
+}
+
+void m19::xml_writer::do_stop_init_node(m19::stop_node * const node, int lvl) {
+  //
+}
+
+void m19::xml_writer::do_body_node(m19::body_node * const node, int lvl) {
   //
 }
 
