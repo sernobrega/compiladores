@@ -16,7 +16,7 @@ namespace m19 {
   
   public:
     inline function_call_node(int lineno, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::basic_node(lineno), id(id), _arguments(arguments) {
+        cdk::basic_node(lineno), _id(id), _arguments(arguments) {
     }
 
   public:
