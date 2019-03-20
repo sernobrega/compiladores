@@ -11,35 +11,26 @@ namespace m19 {
    * Class for describing for-cycle nodes.
    */
   class for_node: public cdk::basic_node {
-    cdk::variable_node *_variable;
-    cdk::expression_node *_init;
-    cdk::expression_node *_stop;
-    cdk::expression_node *_step;
+    cdk::sequence_node *_init;
+    cdk::sequence_node *_stop;
+    cdk::sequence_node *_step;
     cdk::basic_node *_instruction;
 
   public:
-    inline for_node(int lineno, cdk::expression_node *init, cdk::expression_node *stop, cdk::expression_node *step, cdk::basic_node *instruction) :
+    inline for_node(int lineno, cdk::sequence_node *init, cdk::sequence_node *stop, cdk::sequence_node *step, cdk::basic_node *instruction) :
         cdk::basic_node(lineno), _init(init), _stop(stop), _step(step), _instruction(instruction) {
     }
 
-    inline for_node(int lineno, cdk::variable_node *variable, cdk::expression_node *stop, cdk::expression_node *step, cdk::basic_node *instruction) :
-        cdk::basic_node(lineno), _variable(variable), _stop(stop), _step(step), _instruction(instruction) {
-    }
-
   public:
-    inline cdk::variable_node *variable() {
-      return _variable;
-    }
-
-    inline cdk::expression_node *init() {
+    inline cdk::sequence_node *init() {
       return _init;
     }
 
-    inline cdk::expression_node *stop() {
+    inline cdk::sequence_node *stop() {
       return _stop;
     }
 
-    inline cdk::expression_node *step() {
+    inline cdk::sequence_node *step() {
       return _step;
     }
 
