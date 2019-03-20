@@ -20,8 +20,8 @@ namespace m19 {
     cdk::expression_node *_retval;
   
   public:
-    inline function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments, m19::body_node * body) :
-        cdk::basic_node(lineno), _scope(scope),  _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _body(body), _retval(new cdk::expression_node(lineno)) {
+    inline function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments, m19::body_node * body, cdk::expression_node *retval) :
+        cdk::basic_node(lineno), _scope(scope),  _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _body(body), _retval(retval) {
     }
 
     inline function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, m19::body_node * body, cdk::expression_node *retval) :
