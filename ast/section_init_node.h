@@ -11,7 +11,7 @@ namespace m19 {
     m19::block_node *_block;
   
   public:
-    inline section_init_node(int lineno, cdk::block_node *block) :
+    inline section_init_node(int lineno, m19::block_node *block) :
         cdk::basic_node(lineno), _block(block) {
     }
 

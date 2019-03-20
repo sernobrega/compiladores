@@ -13,7 +13,7 @@ namespace m19 {
     m19::block_node *_block;
   
   public: //Qualifier contains information if the section is exclusive, inclusive or just a block.
-    inline section_end_node(int lineno, int qualifier, cdk::expression_node * expr, cdk::block_node *block) :
+    inline section_end_node(int lineno, int qualifier, cdk::expression_node * expr, m19::block_node *block) :
         cdk::basic_node(lineno), _qualifier(qualifier), _expr(expr), _block(block) {
     }
 

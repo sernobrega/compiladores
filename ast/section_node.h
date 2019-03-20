@@ -12,7 +12,7 @@ namespace m19 {
     m19::block_node *_block;
   
   public:
-    inline section_node(int lineno, cdk::expression_node *expr, cdk::block_node *block) :
+    inline section_node(int lineno, cdk::expression_node *expr, m19::block_node *block) :
         cdk::basic_node(lineno), _expr(expr), _block(block) {
     }
 
