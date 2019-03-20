@@ -229,11 +229,11 @@ void m19::type_checker::do_continue_node(m19::continue_node * const node, int lv
   //
 }
 
-void m19::type_checker::do_return_end_node(m19::return_node * const node, int lvl) {
+void m19::type_checker::do_return_node(m19::return_node * const node, int lvl) {
   //
 }
 
-void m19::type_checker::do_stop_init_node(m19::stop_node * const node, int lvl) {
+void m19::type_checker::do_stop_node(m19::stop_node * const node, int lvl) {
   //
 }
 
