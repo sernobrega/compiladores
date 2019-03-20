@@ -2,7 +2,7 @@
 #ifndef __M19_STACKALLOCNODE_H__
 #define __M19_STACKALLOCNODE_H__
 
-#include <cdk/ast/expression_node.h>
+#include <cdk/ast/unary_expression_node.h>
 
 namespace m19 {
 
