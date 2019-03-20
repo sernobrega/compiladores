@@ -201,6 +201,10 @@ void m19::type_checker::do_stack_alloc_node(m19::stack_alloc_node * const node, 
   //
 }
 
+void m19::type_checker::do_address_node(m19::address_node * const node, int lvl) {
+  //
+}
+
 //---------------------------------------------------------------------------
 
 void m19::type_checker::do_for_node(m19::for_node * const node, int lvl) {
