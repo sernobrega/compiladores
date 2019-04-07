@@ -1,4 +1,4 @@
-// $Id: continue_node.h,v 1.1 2019/02/28 21:26:01 linux Exp $ -*- c++ -*-
+// $Id: continue_node.h,v 1.1 2019/03/20 18:28:19 ist186806 Exp $ -*- c++ -*-
 #ifndef __M19_CONTINUENODE_H__
 #define __M19_CONTINUENODE_H__
 

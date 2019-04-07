@@ -1,4 +1,4 @@
-// $Id: function_definition_node.h,v 1.1 2019/02/28 21:26:01 linux Exp $ -*- c++ -*-
+// $Id: function_definition_node.h,v 1.4 2019/03/22 16:26:23 ist186806 Exp $ -*- c++ -*-
 #ifndef __M19_FUNCTIONDEFINITION_H__
 #define __M19_FUNCTIONDEFINITION_H__
 
@@ -17,15 +17,17 @@ namespace m19 {
     std::string _id;
     cdk::sequence_node * _arguments;
     m19::body_node * _body;
-    cdk::expression_node *_retval;
   
   public:
-    inline function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments, m19::body_node * body, cdk::expression_node *retval) :
-        cdk::basic_node(lineno), _scope(scope),  _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _body(body), _retval(retval) {
+    inline function_definition_node(int lineno, int scope, const std::string &id, 
+cdk::sequence_node *arguments, m19::body_node * body) :
+        cdk::basic_node(lineno), _scope(scope),  _type(new basic_type(0, 
+basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _body(body) {
     }
 
-    inline function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, m19::body_node * body, cdk::expression_node *retval) :
-        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments), _body(body), _retval(retval) {
+    inline function_definition_node(int lineno, int scope, basic_type *type, const 
+std::string &id, cdk::sequence_node *arguments, m19::body_node * body) :
+        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments), _body(body) {
     }
   public:
     inline int scope() {

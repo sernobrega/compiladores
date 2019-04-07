@@ -1,4 +1,4 @@
-// $Id: stack_alloc_node.h,v 1.1 2019/02/28 21:26:01 linux Exp $
+// $Id: stack_alloc_node.h,v 1.2 2019/03/20 18:28:20 ist186806 Exp $
 #ifndef __M19_STACKALLOCNODE_H__
 #define __M19_STACKALLOCNODE_H__
 

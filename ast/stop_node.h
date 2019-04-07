@@ -1,4 +1,4 @@
-// $Id: stop_node.h,v 1.1 2019/02/28 21:26:01 linux Exp $ -*- c++ -*-
+// $Id: stop_node.h,v 1.1 2019/03/20 18:28:21 ist186806 Exp $ -*- c++ -*-
 #ifndef __M19_STOPNODE_H__
 #define __M19_STOPNODE_H__
 

@@ -42,7 +42,7 @@
 %}
 %%
 
-program	: tBEGIN list tEND { compiler->ast(new m19::program_node(LINE, $2)); }
+//program	: tBEGIN list tEND { compiler->ast(new m19::program_node(LINE, $2)); }
 	      ;
 
 list : stmt	     { $$ = new cdk::sequence_node(LINE, $1); }

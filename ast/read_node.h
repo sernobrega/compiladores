@@ -1,4 +1,4 @@
-// $Id: read_node.h,v 1.1 2019/02/28 21:26:01 linux Exp $ -*- c++ -*-
+// $Id: read_node.h,v 1.4 2019/03/22 09:44:32 ist186806 Exp $ -*- c++ -*-
 #ifndef __M19_READNODE_H__
 #define __M19_READNODE_H__
 
@@ -7,11 +7,11 @@ namespace m19 {
   /**
    * Class for describing read nodes.
    */
-  class read_node: public cdk::basic_node {
+  class read_node: public cdk::expression_node {
 
   public:
     inline read_node(int lineno) :
-        cdk::basic_node(lineno) {
+        cdk::expression_node(lineno) {
     }
 
   public:
