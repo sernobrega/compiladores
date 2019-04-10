@@ -4,6 +4,7 @@
 
 #include <cdk/ast/basic_node.h>
 #include <cdk/ast/sequence_node.h>
+#include <cdk/basic_type.h>
 #include <string>
 
 namespace m19 {
@@ -13,18 +14,27 @@ namespace m19 {
    */
   class function_definition_node: public cdk::basic_node {
     int _scope;
+    basic_type *_type;
     std::string _id;
     cdk::sequence_node * _arguments;
     cdk::sequence_node * _body;
     cdk::basic_node * _retval;
   
   public:
+    function_definition_node(int lineno, basic_type *type, int scope, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body) :
+        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments), _body(body) {
+    }
+
+    function_definition_node(int lineno, basic_type *type, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body, cdk::basic_node * retval) :
+        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments), _body(body), _retval(retval) {
+    }
+
     function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body) :
-        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body) {
+        cdk::basic_node(lineno), _scope(scope), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _body(body) {
     }
 
     function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body, cdk::basic_node * retval) :
-        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(retval) {
+        cdk::basic_node(lineno), _scope(scope), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _body(body), _retval(retval) {
     }
   public:
     inline int scope() {
