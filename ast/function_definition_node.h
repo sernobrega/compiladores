@@ -13,20 +13,18 @@ namespace m19 {
    */
   class function_definition_node: public cdk::basic_node {
     int _scope;
-    cdk::literal_node * _retval;
     std::string _id;
     cdk::sequence_node * _arguments;
     cdk::sequence_node * _body;
+    cdk::literal_node * _retval;
   
   public:
-    inline function_definition_node(int lineno, int scope, const std::string &id, 
-cdk::sequence_node *arguments, cdk::sequence_node * body) :
-        cdk::basic_node(lineno), _retval(new cdk::literal_node(lineno)), _scope(scope), _id(id), _arguments(arguments), _body(body) {
+    function_definition_node(int lineno, int scope, const std::string &id,  cdk::sequence_node *arguments, cdk::sequence_node * body) :
+        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new cdk::literal_node(lineno)) {
     }
 
-    inline function_definition_node(int lineno, cdk::literal_node retval, int scope, basic_type *type, const 
-std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body) :
-        cdk::basic_node(lineno), _retval(new cdk::literal_node(lineno, retval)), _scope(scope), _id(id), _arguments(arguments), _body(body) {
+    function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body, cdk::literal_node retval) :
+        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new cdk::literal_node(lineno, retval)) {
     }
   public:
     inline int scope() {
@@ -37,7 +35,7 @@ std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body) :
       return _retval;
     }
 
-    inline std::string id() const {
+    inline std::string &id() const {
       return _id;
     }
 
