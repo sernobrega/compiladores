@@ -11,16 +11,16 @@ namespace m19 {
    */
   class section_node: public cdk::basic_node {
     int _qualifier;
-    cdk::expression_node *_expr;
     m19::block_node *_block;
+    cdk::expression_node *_expr;
   
   public:
     inline section_node(int lineno, int qualifier, cdk::expression_node * expr, m19::block_node *block) :
-        cdk::basic_node(lineno), _qualifier(qualifier), _expr(expr), _block(block) {
+        cdk::basic_node(lineno), _qualifier(qualifier), _block(block), _expr(expr) {
     }
 
     inline section_node(int lineno, int qualifier, m19::block_node *block) :
-        cdk::basic_node(lineno), _qualifier(qualifier), _expr(new cdk::expression_node(lineno)), _block(block) {
+        cdk::basic_node(lineno), _qualifier(qualifier), _block(block), _expr(new cdk::expression_node(lineno)) {
     }
 
   public:
