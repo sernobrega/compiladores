@@ -20,7 +20,7 @@ namespace m19 {
   
   public:
     function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body) :
-        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new cdk::basic_node(lineno)) {
+        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body) {
     }
 
     function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body, cdk::basic_node * retval) :
