@@ -2,6 +2,8 @@
 #ifndef __M19_SECTIONNODE_H__
 #define __M19_SECTIONNODE_H__
 
+#include <cdk/ast/expression_node.h>
+
 namespace m19 {
 
   /**

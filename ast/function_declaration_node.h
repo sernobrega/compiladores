@@ -28,20 +28,19 @@ namespace m19 {
     }
 
   public:
-    inline int qualifier() {
+    int qualifier() {
       return _qualifier;
     }
 
-    inline basic_type * type() {
+    basic_type * type() {
       return _type;
     }
 
-
-    inline std::string &id() const {
+    const std::string &id() const {
       return _id;
     }
 
-    inline cdk::sequence_node *arguments() {
+    cdk::sequence_node *arguments() {
       return _arguments;
     }
 
