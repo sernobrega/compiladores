@@ -36,7 +36,7 @@ namespace m19 {
       return _type;
     }
 
-    const std::string &id() const {
+    inline std::string id() const {
       return _id;
     }
 

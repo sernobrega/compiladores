@@ -23,7 +23,7 @@ namespace m19 {
         cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new cdk::literal_node(lineno)) {
     }
 
-    function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body, cdk::literal_node retval) :
+    function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body, StoredType retval) :
         cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new cdk::literal_node(lineno, retval)) {
     }
   public:
@@ -35,10 +35,9 @@ namespace m19 {
       return _retval;
     }
 
-    inline std::string &id() const {
+    inline std::string id() const {
       return _id;
     }
-
     inline cdk::sequence_node *arguments() {
       return _arguments;
     }
