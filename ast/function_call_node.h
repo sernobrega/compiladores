@@ -17,11 +17,11 @@ namespace m19 {
 
   public:
     inline function_call_node(int lineno, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::expresion_node(lineno), _id(id), _arguments(arguments) {
+        cdk::expression_node(lineno), _id(id), _arguments(arguments) {
 		}
 
     inline function_call_node(int lineno,  const std::string &id): 
-    cdk::expresion_node(lineno), _id(id), _arguments(new cdk::sequence_node(lineno))  {
+    cdk::expression_node(lineno), _id(id), _arguments(new cdk::sequence_node(lineno))  {
   }
 
   public:
