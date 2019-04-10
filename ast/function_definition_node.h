@@ -16,22 +16,22 @@ namespace m19 {
     std::string _id;
     cdk::sequence_node * _arguments;
     cdk::sequence_node * _body;
-    cdk::literal_node * _retval;
+    StoredType * _retval;
   
   public:
     function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body) :
-        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new cdk::literal_node(lineno)) {
+        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new StoredType(lineno)) {
     }
 
-    function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body, cdk::literal_node retval) :
-        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new cdk::literal_node(lineno, retval)) {
+    function_definition_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments, cdk::sequence_node * body, StoredType retval) :
+        cdk::basic_node(lineno), _scope(scope), _id(id), _arguments(arguments), _body(body), _retval(new StoredType(lineno, retval)) {
     }
   public:
     inline int scope() {
       return _scope;
     }
 
-    inline cdk::literal_node * retval() {
+    inline StoredType * retval() {
       return _retval;
     }
 
