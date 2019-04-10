@@ -11,17 +11,16 @@ namespace m19 {
   /**
    * Class for describing function call nodes.
    */
-  class function_call_node: public cdk::literal_node {
+  class function_call_node: public cdk::expresion_node {
     std::string _id;
     cdk::sequence_node * _arguments;
 
   public:
     inline function_call_node(int lineno, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::literal_node(lineno, retval), _id(id), _arguments(arguments) {
+        cdk::expresion_node(lineno), _id(id), _arguments(arguments) {
 		}
 
-    inline function_call_node(int lineno,  cdk::literal_node retval, const std::string &id, cdk::sequence_node 
-  *arguments) : cdk::literal_node(lineno, retval), _id(id), _arguments(arguments),  {
+    inline function_call_node(int lineno,  const std::string &id: cdk::expresion_node(lineno), _id(id), _arguments(new cdk::sequence_node(lineno)),  {
   }
 
   public:
