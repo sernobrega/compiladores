@@ -20,7 +20,7 @@ namespace m19 {
     }
 
     inline section_node(int lineno, int qualifier, m19::block_node *block) :
-        cdk::basic_node(lineno), _qualifier(qualifier), _block(block), _expr(new cdk::expression_node(lineno)) {
+        cdk::basic_node(lineno), _qualifier(qualifier), _block(block) {
     }
 
   public:
