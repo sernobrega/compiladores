@@ -11,7 +11,7 @@ namespace m19 {
   /**
    * Class for describing function definition nodes.
    */
-  class function_definition_node: public cdk::basic_node {
+  class function_definition_node: public cdk::literal_node {
     int _scope;
     basic_type *_type;
     std::string _id;
@@ -21,13 +21,13 @@ namespace m19 {
   public:
     inline function_definition_node(int lineno, int scope, const std::string &id, 
 cdk::sequence_node *arguments, m19::body_node * body) :
-        cdk::basic_node(lineno), _scope(scope),  _type(new basic_type(0, 
+        cdk::literal_node(lineno), _scope(scope),  _type(new basic_type(0, 
 basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _body(body) {
     }
 
-    inline function_definition_node(int lineno, int scope, basic_type *type, const 
+    inline function_definition_node(int lineno, cdk::literal_node retval, int scope, basic_type *type, const 
 std::string &id, cdk::sequence_node *arguments, m19::body_node * body) :
-        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments), _body(body) {
+        cdk::literal_node(lineno, retval), _scope(scope), _type(type), _id(id), _arguments(arguments), _body(body) {
     }
   public:
     inline int scope() {

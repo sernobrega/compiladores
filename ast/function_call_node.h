@@ -3,7 +3,7 @@
 #define __M19_FUNCTIONCALL_H__
 
 #include <cdk/ast/sequence_node.h>
-#include <cdk/basic_type.h>
+#include <cdk/ast/literal_node.h>
 #include <string>
 
 namespace m19 {
@@ -11,21 +11,18 @@ namespace m19 {
   /**
    * Class for describing function call nodes.
    */
-  class function_call_node: public cdk::basic_node {
+  class function_call_node: public cdk::literal_node {
     std::string _id;
     cdk::sequence_node * _arguments;
-    basic_type *_retval;
 
   public:
     inline function_call_node(int lineno, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::basic_node(lineno), _id(id), _arguments(arguments), _retval(new basic_type(0, 
-basic_type::TYPE_VOID)) {
-    }
+        cdk::literal_node(lineno, retval), _id(id), _arguments(arguments) {
+		}
 
-    inline function_call_node(int lineno, const std::string &id, cdk::sequence_node 
-*arguments, basic_type* retval) : cdk::basic_node(lineno), _id(id), _arguments(arguments), 
-_retval(retval) {
-}
+    inline function_call_node(int lineno,  cdk::literal_node retval, const std::string &id, cdk::sequence_node 
+  *arguments) : cdk::literal_node(lineno, retval), _id(id), _arguments(arguments),  {
+  }
 
   public:
     inline std::string id() const {

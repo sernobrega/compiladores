@@ -264,7 +264,7 @@ void m19::postfix_writer::do_stop_node(m19::stop_node * const node, int lvl) {
   //
 }
 
-void m19::postfix_writer::do_body_node(m19::body_node * const node, int lvl) {
+void m19::postfix_writer::do_identity_node(m19::identity_node * const node, int lvl) {
   //
 }
 

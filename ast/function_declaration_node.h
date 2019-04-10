@@ -13,23 +13,23 @@ namespace m19 {
    * Class for describing function declaration nodes.
    */
   class function_declaration_node: public cdk::basic_node {
-    int _scope;
+    int _qualifier;
     basic_type *_type;
     std::string _id;
-    cdk::sequence_node * _arguments;
+    cdk::sequence_node *_arguments;
   
   public:
-    inline function_declaration_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _arguments(arguments) {
+    function_declaration_node(int lineno, int qualifier, basic_type *type, const std::string &id, cdk::sequence_node *arguments) :
+        cdk::basic_node(lineno), _qualifier(qualifier), _type(type), _id(id), _arguments(arguments) {
     }
 
-    inline function_declaration_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::basic_node(lineno), _scope(scope), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments) {
+    function_declaration_node(int lineno, int qualifier, const std::string &id, cdk::sequence_node *arguments) :
+        cdk::basic_node(lineno), _qualifier(qualifier), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments) {
     }
 
   public:
-    inline int scope() {
-      return _scope;
+    inline int qualifier() {
+      return _qualifier;
     }
 
     inline basic_type * type() {
@@ -37,7 +37,7 @@ namespace m19 {
     }
 
 
-    inline std::string id() const {
+    inline std::string &id() const {
       return _id;
     }
 

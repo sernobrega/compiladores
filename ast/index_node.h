@@ -7,13 +7,13 @@ namespace m19 {
   /**
    * Class for describing indexation nodes.
    */
-  class index_node: public cdk::expression_node {
+  class index_node: public cdk::lvalue_node {
     cdk::expression_node *_expr;
     cdk::expression_node *_index;
   
   public:
     inline index_node(int lineno, cdk::expression_node *expr, cdk::expression_node *index) :
-        cdk::expression_node(lineno), _expr(expr), _index(index) {
+        cdk::lvalue_node(lineno), _expr(expr), _index(index) {
     }
 
   public:
