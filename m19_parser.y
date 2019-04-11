@@ -26,12 +26,8 @@
 %token <i> tINTEGER
 %token <d> tREAL
 %token <s> tID tSTRING '@'
-%token tWHILE tPRINT tREAD tBEGIN tEND tPUBLIC tEXTERN tPRIVATE
-%token tSTOP tCONTINUE tRETURN tELIF tAND tOR tMAIN
-%token tBEGINS tENDS tNULL tIF tPRINTNL
-
-%nonassoc tIFX
-%nonassoc tELSE
+%token tREAD tPUBLIC tEXTERN tPRIVATE tPRINTNL
+%token tSTOP tCONTINUE tRETURN tAND tOR tIF
 
 %right '='
 %left tGE tLE tEQ tNE '>' '<'
