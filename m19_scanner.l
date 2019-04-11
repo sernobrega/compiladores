@@ -74,7 +74,7 @@ static std::ostringstream strlit;
  /* ----------------->   Símbolos Globais   <----------------- */
  /* ---------------------------------------------------------- */
 "0"                    return tNULL;
-[#%$<>%?@!,]           return *yytext;
+[#%$<>%?!,]           return *yytext;
 'm19'                  return tMAIN;
 
  /* ------------------------------------------------------------ */
@@ -122,7 +122,7 @@ static std::ostringstream strlit;
                             yy_pop_state();
                             return tREAL;
                         }
-                        
+
 [1-9][0-9]u             yy_push_state(X_u); yyless(yyleng - 1); strtlit << *yytext; 
 <X_u>[0-9]+             {
                             strtlit << '.' + *yytext + "e-6";
@@ -200,6 +200,7 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->  Identificadores (nomes)  <--------------- */
  /* ------------------------------------------------------------ */
+[@]                    yylval.s = new std::string(yytext); return tIDAT; 
 [A-Za-z][A-Za-z0-9_]*  yylval.s = new std::string(yytext); return tID;
 
  /* ------------------------------------------------------------ */
