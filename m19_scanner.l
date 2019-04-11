@@ -90,7 +90,8 @@ static std::ostringstream strlit;
 [1-9][0-9]a             yy_push_state(X_a); yyless(yyleng - 1); strlit << *yytext; 
 <X_a>[0-9]+             {
                             strlit << '.' + *yytext + "e-18";
-                            yylval.d = strtod(&strlit.str(), NULL);
+                            std::string s = strlit.str();
+                            yylval.d = strtod(&s, NULL);
                             strlit.str("");
                             yy_pop_state();
                             return tREAL;
