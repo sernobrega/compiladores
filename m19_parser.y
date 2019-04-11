@@ -180,7 +180,7 @@ vars            : /* empty */                                       { $$ = new c
 
 exprs           : /* empty */                                       { $$ = new cdk::sequence_node(LINE); }
                 | expr                                              { $$ = new cdk::sequence_node(LINE, $1); }
-                | exprs ',' expr                                    { $$ = new cdk::sequence_node(LINE, $1, $3); }
+                | exprs ',' expr                                    { $$ = new cdk::sequence_node(LINE, $3, $1); }
                 ;
 
 expr            : literal                                           { $$ = $1; }
