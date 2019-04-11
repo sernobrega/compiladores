@@ -91,7 +91,7 @@ fundecl         : data_type tID                  		            { $$ = new m19::f
 				| data_type tID     	  '(' args ')'              { $$ = new m19::function_declaration_node(LINE, tPRIVATE, $1, *$2, nullptr); delete $2; }
                 | '!' tID           	  '(' args ')'              { $$ = new m19::function_declaration_node(LINE, tPRIVATE,     *$2, nullptr); delete $2; }
 				| data_type tID qualifier '(' args ')'              { $$ = new m19::function_declaration_node(LINE, $3, $1, *$2, nullptr); delete $2; }
-				| '!' tID qualifier       '(' args ')'              { $$ = new m19::function_declaration_node(LINE, $3, $1, *$2, nullptr); delete $2; }
+				| '!' tID qualifier       '(' args ')'              { $$ = new m19::function_declaration_node(LINE, $3,           *$2, nullptr); delete $2; }
                 ;
 
 qualifier		: '!'									            { $$ = tPUBLIC; }
