@@ -18,12 +18,8 @@ namespace m19 {
     cdk::expression_node *_expr;
 
   public:
-    inline variable_declaration_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::expression_node *expr) :
+    variable_declaration_node(int lineno, int scope, basic_type *type, const std::string &id, cdk::expression_node *expr) :
         cdk::basic_node(lineno), _scope(scope), _type(type), _id(id), _expr(expr) {
-    }
-
-    inline variable_declaration_node(int lineno, int scope, const std::string &id, cdk::expression_node *expr) :
-        cdk::basic_node(lineno), _scope(scope), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _expr(expr) {
     }
 
   public:
