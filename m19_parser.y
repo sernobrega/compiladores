@@ -208,7 +208,7 @@ expr            : literal                                           { $$ = $1; }
                 | expr tOR expr                                     { $$ = new cdk::or_node(LINE, $1, $3); }
 
                 | '(' expr ')'                                      { $$ = $2; }
-                | '[' expr ']'                                      { $$ = new m19::stack_alloc_node(LINE, $1); }
+                | '[' expr ']'                                      { $$ = new m19::stack_alloc_node(LINE, $2); }
 
                 | tID '(' args ')'                                  { $$ = new m19::function_call_node($1, $3);}
 
