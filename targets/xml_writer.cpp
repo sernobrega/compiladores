@@ -187,7 +187,6 @@ void m19::xml_writer::do_block_node(m19::block_node * const node, int lvl) {
 void m19::xml_writer::do_read_node(m19::read_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
   openTag(node, lvl);
-  node->argument()->accept(this, lvl + 2);
   closeTag(node, lvl);
 }
 
