@@ -1,5 +1,5 @@
 %option c++ prefix="m19_scanner_" outfile="m19_scanner.cpp"
-%option stack noyywrap yylineno 8bit
+%option stack noyywrap yylineno 8bit debug
 %{ 
 // make relevant includes before including the parser's tab file
 #include <string>
@@ -79,7 +79,7 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->          Inteiros          <--------------- */
  /* ------------------------------------------------------------ */
-0x[0-9A-Fa-f]+              yylval.i = strtoul(yyless(yytext-2), nullptr, 16); return tINTEGER;
+0x[0-9A-Fa-f]+              yylval.i = strtoul(yyless(2), nullptr, 16); return tINTEGER;
 
 [1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
 
