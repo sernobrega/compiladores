@@ -130,8 +130,8 @@ sections        : section                                           { $$ = new c
                 | section end_section                               { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 ;
 
-section         : '[' expr ']' block                                { $$ = new m19::section_node(LINE, 2, $4, $2); }
-                | '(' expr ')' block                                { $$ = new m19::section_node(LINE, 1, $4, $2); }
+section         : '[' expr ']' block                                { $$ = new m19::section_node(LINE, 2, $2, $4); }
+                | '(' expr ')' block                                { $$ = new m19::section_node(LINE, 1, $2, $4); }
                 | block                                             { $$ = new m19::section_node(LINE, 0, $1    ); }
                 ;
 
