@@ -217,7 +217,7 @@ expr            : literal                                           { $$ = $1; }
                 | lval '?'                                          { $$ = new m19::address_node(LINE, $1); }
                 ;
 
-lval            : tIDENTIFIER                                       { $$ = new cdk::variable_node(LINE, $1); }
+lval            : tID                                               { $$ = new cdk::variable_node(LINE, $1); }
                 | lvalue '[' expr ']'                               { $$ = new m19::index_node(LINE, $1, $3); }
                 // | '@'                                               { $$ = new m19::index_node(LINE, )}
                 // |
