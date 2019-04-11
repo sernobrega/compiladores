@@ -68,9 +68,9 @@ declaration     : vardecl ';'                                       { $$ = $1; }
                 ;
 
 vardecl         : data_type tID                                     { $$ = new m19::variable_node(LINE, tPRIVATE, $1, $2, nullptr); delete $2; }
-                | data_type tID '=' expression                      { $$ = new m19::variable_node(LINE, tPRIVATE, $1, $2, *$4); delete $2; }
+                | data_type tID '=' expr                            { $$ = new m19::variable_node(LINE, tPRIVATE, $1, $2, *$4); delete $2; }
                 | data_type tID '!'                                 { $$ = new m19::variable_node(LINE, tPUBLIC, $1, $2, nullptr); delete $2; }
-                | data_type tID '!' '=' expression                  { $$ = new m19::variable_node(LINE, tPUBLIC, $1, $2, *$5); delete $2; }
+                | data_type tID '!' '=' expr                        { $$ = new m19::variable_node(LINE, tPUBLIC, $1, $2, *$5); delete $2; }
                 | data_type tID '?'                                 { $$ = new m19::variable_node(LINE, tEXTERN, $1, $2, nullptr); delete $2; }
                 ;
 
