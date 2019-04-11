@@ -145,41 +145,41 @@ innerdecls      :            vardecl ';'                            { $$ = new c
                 | innerdecls vardecl ';'                            { $$ = new cdk::sequence_node(LINE, $2, $1); }
                 ;
 
-opt_instructions: /* empty */                                       { $$ = cdk::sequence_node(LINE); }
+opt_instructions: /* empty */                                       { $$ = new cdk::sequence_node(LINE); }
                 | instructions                                      { $$ = $1; }
                 ;
 
-instructions    : instruction                                       { $$ = cdk::sequence_node(LINE, $1); }
+instructions    : instruction                                       { $$ = new cdk::sequence_node(LINE, $1); }
                 | instruction instructions                          { $$ = $1} //FIXME dk the order
                 ;
 
-instruction     : tRETURN                                           { $$ = m19::return_node(LINE); }
-                | tCONTINUE                                         { $$ = m19::continue_node(LINE); }
-                | tSTOP                                             { $$ = m19::stop_node(LINE); }
-                | expr ';'                                          { $$ = m19::evaluation_node(LINE, $1); }
-                | expr '!'                                          { $$ = m19::print_node(LINE, false); }
-                | expr tPRINTNL                                     { $$ = m19::print_node(LINE, true); }
+instruction     : tRETURN                                           { $$ = new m19::return_node(LINE); }
+                | tCONTINUE                                         { $$ = new m19::continue_node(LINE); }
+                | tSTOP                                             { $$ = new m19::stop_node(LINE); }
+                | expr ';'                                          { $$ = new m19::evaluation_node(LINE, $1); }
+                | expr '!'                                          { $$ = new m19::print_node(LINE, false); }
+                | expr tPRINTNL                                     { $$ = new m19::print_node(LINE, true); }
                 | cond_i                                            { $$ = $1; }
                 | iter_i                                            { $$ = $1; }
                 | block                                             { $$ = $1; }
                 ;
 
-cond_i          : '[' expr ']' '#' instruction                      { $$ = m19::if_node(LINE, $2, $5); }
-                | '[' expr ']' '?' instruction                      { $$ = m19::if_node(LINE, $2, $5); }
-                | '[' expr ']' '?' instruction ':' instruction      { $$ = m19::if_else_node(LINE, $2, $5, $7); }
+cond_i          : '[' expr ']' '#' instruction                      { $$ = new m19::if_node(LINE, $2, $5); }
+                | '[' expr ']' '?' instruction                      { $$ = new m19::if_node(LINE, $2, $5); }
+                | '[' expr ']' '?' instruction ':' instruction      { $$ = new m19::if_else_node(LINE, $2, $5, $7); }
                 ;
 
-iter_i          : '[' vars ';' exprs ';' exprs ']' instruction      { $$ = m19::for_node(LINE, $2, $4, $6, $8); }
-                | '[' exprs ';' exprs ';' exprs ']' instruction     { $$ = m19::for_node(LINE, $2, $4, $6, $8); }
+iter_i          : '[' vars ';' exprs ';' exprs ']' instruction      { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
+                | '[' exprs ';' exprs ';' exprs ']' instruction     { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
                 ;
 
-vars            : /* empty */                                       { $$ = cdk::sequence_node(LINE); }
+vars            : /* empty */                                       { $$ = new cdk::sequence_node(LINE); }
                 | args                                              { $$ = $1; }
                 ;
 
-exprs           : /* empty */                                       { $$ = cdk::sequence_node(LINE); }
-                | expr                                              { $$ = cdk::sequence_node(LINE, $1); }
-                | exprs ',' expr                                    { $$ = cdk::sequence_node(LINE, $1, $3); }
+exprs           : /* empty */                                       { $$ = new cdk::sequence_node(LINE); }
+                | expr                                              { $$ = new cdk::sequence_node(LINE, $1); }
+                | exprs ',' expr                                    { $$ = new cdk::sequence_node(LINE, $1, $3); }
                 ;
 
 expr            : literal                                           { $$ = $1; }
@@ -217,7 +217,7 @@ expr            : literal                                           { $$ = $1; }
                 ;
 
 lval            : tID                                               { $$ = new cdk::variable_node(LINE, $1); }
-                | lval '[' expr ']'                               { $$ = new m19::index_node(LINE, $1, $3); }
+                | lval '[' expr ']'                                 { $$ = new m19::index_node(LINE, $1, $3); }
                 // | '@'                                               { $$ = new m19::index_node(LINE, )}
                 // |
                 // |
