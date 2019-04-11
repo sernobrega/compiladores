@@ -26,7 +26,7 @@ static std::ostringstream strlit;
 
 "/*"                   yy_push_state(X_COMMENT);
 <X_COMMENT>"/*"        yy_push_state(X_COMMENT);
-<X_COMMENT>"*/"        yy_pop_state(X_COMMENT);
+<X_COMMENT>"*/"        yy_pop_state();
 <X_COMMENT>.|\n        ; /* ignore content of contents */  
 
  /* ---------------------------------------------------------- */
