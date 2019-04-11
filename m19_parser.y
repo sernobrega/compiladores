@@ -221,8 +221,8 @@ expr            : integer                                           { $$ = $1; }
 lval            : tID                                               { $$ = new cdk::variable_node(LINE, $1); delete $1; }
                 | lval             '[' expr ']'                     { $$ = new m19::index_node(LINE, new cdk::rvalue_node(LINE, $1), $3); }
                 | '(' expr ')'     '[' expr ']'                     { $$ = new m19::index_node(LINE, $2, $5); }
-                | tID '(' args ')' '[' expr ']'                     { $$ = new m19::index_node(LINE, new gr8::function_call_node(LINE, *$1, $3), $6); delete $1; }
-                | '@' '(' args ')'  '[' expr ']'                     { $$ = new m19::index_node(LINE, new gr8::function_call_node(LINE, *$1, $3), $6); delete $1; }
+                | tID '(' args ')' '[' expr ']'                     { $$ = new m19::index_node(LINE, new m19::function_call_node(LINE, *$1, $3), $6); delete $1; }
+                | '@' '(' args ')'  '[' expr ']'                     { $$ = new m19::index_node(LINE, new m19::function_call_node(LINE, *$1, $3), $6); delete $1; }
                 ;
 
 integer         : tINTEGER                                          { $$ = new cdk::integer_node(LINE, $1); };
