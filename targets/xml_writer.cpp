@@ -5,7 +5,7 @@
 #include "targets/symbol.h"
 #include "ast/all.h"  // automatically generated
 // must come after other #includes
-#include "gr8_parser.tab.h"
+#include "m19_parser.tab.h"
 
 static std::string type_name(basic_type *type) {
   if (type->name() == basic_type::TYPE_INT) return "integer";
