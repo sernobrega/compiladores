@@ -11,17 +11,17 @@ void m19::xml_writer::do_nil_node(cdk::nil_node * const node, int lvl) {
 void m19::xml_writer::do_data_node(cdk::data_node * const node, int lvl) {
   // EMPTY
 }
-void m19::xml_writer::do_double_node(cdk::double_node * const node, int lvl) {
-  // EMPTY
-}
+
+//---------------------------------------------------------------------------
+
 void m19::xml_writer::do_not_node(cdk::not_node * const node, int lvl) {
-  // EMPTY
+  do_unary_expression_node(node, lvl);
 }
 void m19::xml_writer::do_and_node(cdk::and_node * const node, int lvl) {
-  // EMPTY
+  do_binary_expression_node(node, lvl);
 }
 void m19::xml_writer::do_or_node(cdk::or_node * const node, int lvl) {
-  // EMPTY
+  do_binary_expression_node(node, lvl);
 }
 
 //---------------------------------------------------------------------------
@@ -37,6 +37,10 @@ void m19::xml_writer::do_sequence_node(cdk::sequence_node * const node, int lvl)
 
 void m19::xml_writer::do_integer_node(cdk::integer_node * const node, int lvl) {
   process_literal(node, lvl);
+}
+
+void m19::xml_writer::do_double_node(cdk::double_node * const node, int lvl) {
+   process_literal(node, lvl);
 }
 
 void m19::xml_writer::do_string_node(cdk::string_node * const node, int lvl) {
@@ -143,91 +147,106 @@ void m19::xml_writer::do_print_node(m19::print_node * const node, int lvl) {
 
 //---------------------------------------------------------------------------
 
-void m19::xml_writer::do_read_node(m19::read_node * const node, int lvl) {
-  // ASSERT_SAFE_EXPRESSIONS;
-  // openTag(node, lvl);
-  // node->argument()->accept(this, lvl + 2);
-  // closeTag(node, lvl);
-}
-
-//---------------------------------------------------------------------------
-
-
-
 void m19::xml_writer::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
-  //
+  // ASSERT_SAFE_EXPRESSIONS;
 }
 
 //---------------------------------------------------------------------------
 
 void m19::xml_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
-  //
+  // ASSERT_SAFE_EXPRESSIONS;
 }
 
 void m19::xml_writer::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
-  //
+  // ASSERT_SAFE_EXPRESSIONS;
 }
 
 void m19::xml_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
-  //
+  // ASSERT_SAFE_EXPRESSIONS;
 }
 
-void m19::xml_writer::do_block_node(m19::block_node * const node, int lvl) {
-  //
-}
-
-void m19::xml_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
-  //
-}
-
-void m19::xml_writer::do_address_node(m19::address_node * const node, int lvl) {
-  //
-}
-
-void m19::xml_writer::do_index_node(m19::index_node * const node, int lvl) {
-  //
-}
+//---------------------------------------------------------------------------
 
 void m19::xml_writer::do_section_node(m19::section_node * const node, int lvl) {
-  //
+  // ASSERT_SAFE_EXPRESSIONS;
 }
 
 void m19::xml_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
-  //
+  // ASSERT_SAFE_EXPRESSIONS;
 }
 
 void m19::xml_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
-  //
+  // ASSERT_SAFE_EXPRESSIONS;
+}
+
+void m19::xml_writer::do_block_node(m19::block_node * const node, int lvl) {
+  // ASSERT_SAFE_EXPRESSIONS;
+}
+
+//---------------------------------------------------------------------------
+
+void m19::xml_writer::do_read_node(m19::read_node * const node, int lvl) {
+  // ASSERT_SAFE_EXPRESSIONS;
+  openTag(node, lvl);
+  node->argument()->accept(this, lvl + 2);
+  closeTag(node, lvl);
 }
 
 void m19::xml_writer::do_continue_node(m19::continue_node * const node, int lvl) {
-  //
+  openTag(node, lvl);
+  closeTag(node, lvl);
 }
 
 void m19::xml_writer::do_return_node(m19::return_node * const node, int lvl) {
-  //
+  openTag(node, lvl);
+  closeTag(node, lvl);
 }
 
 void m19::xml_writer::do_stop_node(m19::stop_node * const node, int lvl) {
-  //
+  openTag(node, lvl);
+  closeTag(node, lvl);
 }
 
+//---------------------------------------------------------------------------
+
 void m19::xml_writer::do_identity_node(m19::identity_node * const node, int lvl) {
-  //
+  do_unary_expression(node, lvl);
+}
+
+void m19::xml_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
+  openTag(node, lvl);
+  node->argument()->accept(this, lvl + 2);
+  closeTag(node, lvl);
+}
+
+void m19::xml_writer::do_address_node(m19::address_node * const node, int lvl) {
+  openTag(node, lvl);
+  node->lvalue()->accept(this, lvl + 2);
+  closeTag(node, lvl);
+}
+
+void m19::xml_writer::do_index_node(m19::index_node * const node, int lvl) {
+  // ASSERT_SAFE_EXPRESSIONS;
 }
 
 //---------------------------------------------------------------------------
 
 void m19::xml_writer::do_for_node(m19::for_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
-  // openTag(node, lvl);
-  // openTag("condition", lvl + 2);
-  // node->condition()->accept(this, lvl + 4);
-  // closeTag("condition", lvl + 2);
-  // openTag("block", lvl + 2);
-  // node->block()->accept(this, lvl + 4);
-  // closeTag("block", lvl + 2);
-  // closeTag(node, lvl);
+  openTag(node, lvl);
+  openTag("initial", lvl + 2);
+  node->init()->accept(this, lvl + 4);
+  closeTag("initial", lvl + 2);
+  openTag("stop-condition", lvl + 2);
+  node->stop()->accept(this, lvl + 4);
+  closeTag("stop-condition", lvl + 2);
+  openTag("step", lvl + 2);
+  node->step()->accept(this, lvl + 4);
+  closeTag("step", lvl + 2);
+  openTag("instruction", lvl);
+  node->instruction()->accept(this, lvl + 4);
+  closeTag("instruction", lvl);
+  closeTag(node, lvl);
 }
 
 //---------------------------------------------------------------------------
