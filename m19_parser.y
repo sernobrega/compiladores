@@ -25,7 +25,7 @@
 
 %token <i> tINTEGER
 %token <d> tREAL
-%token <s> tID tSTRING
+%token <s> tID tSTRING '@'
 %token tWHILE tPRINT tREAD tBEGIN tEND tPUBLIC tEXTERN tPRIVATE
 %token tSTOP tCONTINUE tRETURN tELIF tAND tOR tMAIN
 %token tBEGINS tENDS tNULL tIF tPRINTNL
@@ -42,7 +42,7 @@
 %type <node> declaration vardecl fundecl fundef init_section end_section section instruction
 %type <node> cond_i iter_i 
 %type <sequence> expressions args body sections declarations innerdecls 
-%type <sequence> opt_instructions instructions vars exprs file
+%type <sequence> opt_instructions instructions exprs file
 %type <expression> expr literal integer real string_wrap
 %type <lvalue> lval
 %type <type> data_type pure_type
@@ -99,7 +99,8 @@ qualifier		: '!'									            { $$ = tPUBLIC; }
 				| '?'									            { $$ = tEXTERN; }
 				;
 
-args			: vardecl								            { $$ = new cdk::sequence_node(LINE, $1); }
+args			: /* empty */                                       { $$ = new cdk::sequence_node(LINE); }
+                | vardecl								            { $$ = new cdk::sequence_node(LINE, $1); }
 				| args ',' vardecl						            { $$ = new cdk::sequence_node(LINE, $3, $1); }
 				;
 
@@ -171,12 +172,8 @@ cond_i          : '[' expr ']' '#' instruction                      { $$ = new m
                 | '[' expr ']' '?' instruction ':' instruction      { $$ = new m19::if_else_node(LINE, $2, $5, $7); }
                 ;
 
-iter_i          : '[' vars ';' exprs ';' exprs ']' instruction      { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
+iter_i          : '[' args ';' exprs ';' exprs ']' instruction      { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
                 | '[' exprs ';' exprs ';' exprs ']' instruction     { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
-                ;
-
-vars            : /* empty */                                       { $$ = new cdk::sequence_node(LINE); }
-                | args                                              { $$ = $1; }
                 ;
 
 exprs           : /* empty */                                       { $$ = new cdk::sequence_node(LINE); }
@@ -214,6 +211,7 @@ expr            : integer                                           { $$ = $1; }
                 | '[' expr ']'                                      { $$ = new m19::stack_alloc_node(LINE, $2); }
 
                 | tID '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
+                | '@' '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
 
                 | lval                                              { $$ = new cdk::rvalue_node(LINE, $1); }  //FIXME
                 | lval '=' expr                                     { $$ = new cdk::assignment_node(LINE, $1, $3); }
@@ -222,7 +220,7 @@ expr            : integer                                           { $$ = $1; }
 
 lval            : tID                                               { $$ = new cdk::variable_node(LINE, $1); }
                 | lval '[' expr ']'                                 { $$ = new m19::index_node(LINE, new cdk::rvalue_node(LINE, $1), $3); }
-                // | '@'                                               { $$ = new m19::index_node(LINE, )}
+                // | '@'                                            { $$ = new m19::index_node(LINE, )}
                 // |
                 // |
                 ;
