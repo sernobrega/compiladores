@@ -27,7 +27,7 @@
 %token <d> tREAL
 %token <s> tID tSTRING '@'
 %token tREAD tPUBLIC tEXTERN tPRIVATE tPRINTNL
-%token tSTOP tCONTINUE tRETURN tAND tOR tIF
+%token tSTOP tCONTINUE tRETURN tAND tOR tIF tBEGINS tENDS
 
 %right '='
 %left tGE tLE tEQ tNE '>' '<'
@@ -122,7 +122,7 @@ body			: init_section sections                             { $$ = new cdk::seque
                 | end_section                                       { $$ = new cdk::sequence_node(LINE, $1); }
 				; 
 
-init_section    : '<<' block                                        { $$ = new m19::section_init_node(LINE, $2); };
+init_section    : tBEGINS block                                        { $$ = new m19::section_init_node(LINE, $2); };
 
 sections        : section                                           { $$ = new cdk::sequence_node(LINE, $1); }
                 | sections section                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
@@ -134,7 +134,7 @@ section         : '[' expr ']' block                                { $$ = new m
                 | block                                             { $$ = new m19::section_node(LINE, 0, $1    ); }
                 ;
 
-end_section     : '>>' block                                        { $$ = new m19::section_end_node(LINE, $2); };
+end_section     : tENDS block                                        { $$ = new m19::section_end_node(LINE, $2); };
 
 block           : '{' innerdecls opt_instructions '}'              { $$ = new m19::block_node(LINE, $2, $3); }
                 | '{'             opt_instructions '}'              { $$ = new m19::block_node(LINE, nullptr, $2); }
