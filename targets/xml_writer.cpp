@@ -219,21 +219,31 @@ void m19::xml_writer::do_section_node(m19::section_node * const node, int lvl) {
 
   if(node->expr()) {
 	  openTag("expression", lvl);
-	  node->expr()->accept(this, lvl + 2);
+	  node->expr()->accept(this, lvl + 4);
 	  closeTag("expression", lvl);
   }
   openTag("block", lvl);
-  node->block()->accept(this, lvl + 2);
+  node->block()->accept(this, lvl + 4);
   closeTag("block", lvl);
   closeTag(node, lvl);
 }
 
 void m19::xml_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
+  openTag(node, lvl);
+  openTag("block", lvl;
+  node->block()->accept(this, lvl + 4);
+  closeTag("block", lvl);
+  closetag(node, lvl);
 }
 
 void m19::xml_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
+  openTag(node, lvl);
+  openTag("block", lvl;
+  node->block()->accept(this, lvl + 4);
+  closeTag("block", lvl);
+  closetag(node, lvl);
 }
 
 void m19::xml_writer::do_block_node(m19::block_node * const node, int lvl) {
