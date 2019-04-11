@@ -41,8 +41,8 @@
 %type <node> declaration vardecl fundecl fundef init_section end_section section instruction
 %type <node> cond_i iter_i 
 %type <sequence> expressions args body sections declarations innerdecls 
-%type <sequence> opt_instructions instructions vars exprs
-%type <expression> file expr literal integer real
+%type <sequence> opt_instructions instructions vars exprs file
+%type <expression> expr literal integer real
 %type <lvalue> lval
 %type <type> data_type pure_type
 %type <i> qualifier
