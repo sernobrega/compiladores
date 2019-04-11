@@ -114,7 +114,7 @@ fundef			: data_type tID 	'(' args ')' body				{ $$ = new m19::function_definiti
 
 literal			: integer                                           { $$ = $1; }
 				| real                                              { $$ = $1; }
-				| string                                            { $$ = $1; }
+				| string_wrap                                       { $$ = $1; }
 				;
 
 body			: init_section sections                             { $$ = new cdk::sequence_node(LINE, $1, $2); }
@@ -183,7 +183,9 @@ exprs           : /* empty */                                       { $$ = new c
                 | exprs ',' expr                                    { $$ = new cdk::sequence_node(LINE, $3, $1); }
                 ;
 
-expr            : literal                                           { $$ = $1; }
+expr            : integer                                           { $$ = $1; }
+                : real                                              { $$ = $1; }    
+                : string                                            { $$ = $1; }
                 | '@'                                               { $$ = new m19::read_node(LINE); }
 
                 | '-' expr %prec tUNARY                             { $$ = new cdk::neg_node(LINE, $2); }
@@ -228,8 +230,11 @@ integer         : tINTEGER                                          { $$ = new c
 
 real            : tREAL                                             { $$ = new cdk::double_node(LINE, $1); };
 
-string          : tSTRING                                           { $$ = new cdk::string_node(LINE, *$1); }
-                | string tSTRING                                    { $$ = new cdk::string_node(LINE, std::string(*$1 + *$2)); delete $1; delete $2; }
+string_wrap     : string                                            { $$ = new cdk::string_node(LINE, *$1); }
+                ;
+
+string          : tSTRING                                           { $$ = $1; }
+                | string tSTRING                                    { $$ = std::string(*$1 + *$2); delete $1; delete $2; }
                 ;
 
 %%
