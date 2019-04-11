@@ -38,10 +38,16 @@
 %left '*' '/' '%'
 %nonassoc tUNARY
 
-%type <node> declaration vardecl
-%type <sequence> expressions
-%type <expression> file declarations expr
+%type <node> declaration vardecl fundecl fundef init_section end_section section instruction
+%type <node> cond_i iter_i 
+%type <sequence> expressions args body sections declarations innerdecls 
+%type <sequence> opt_instructions instructions vars exprs
+%type <expression> file expr literal integer real
 %type <lvalue> lval
+%type <type> data_type pure_type
+%type <i> qualifier
+%type <block> block
+%type <s> string
 
 %{
 //-- The rules below will be included in yyparse, the main parsing function.
@@ -136,10 +142,11 @@ block           : '{' innnerdecls opt_instructions '}'              { $$ = new m
                 | '{'             opt_instructions '}'              { $$ = new m19::block_node(LINE, nullptr, $3); }
                 ;
 
-innerdecls      : 
+innerdecls      :            vardecl ';'                            { $$ = new cdk::sequence_node(LINE, $1); }
+                | innerdecls vardecl ';'                            { $$ = new cdk::sequence_node(LINE, $2, $1); }
                 ;
 
-opt_instruction : /* empty */                                       { $$ = cdk::sequence_node(LINE); }
+opt_instructions: /* empty */                                       { $$ = cdk::sequence_node(LINE); }
                 | instructions                                      { $$ = $1; }
                 ;
 
