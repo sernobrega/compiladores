@@ -106,7 +106,7 @@ fundef			: data_type tID 	'(' args ')' body				{ $$ = new m19::function_definiti
 				| '!' tID			'(' args ')' body				{ $$ = new m19::function_definition_node(LINE, tPRIVATE,     $2, $4, $6); delete $2; }
 				| data_type tID '!' '(' args ')' body				{ $$ = new m19::function_definition_node(LINE, tPUBLIC, $1, $2, $5, $7); delete $2; }
 				| '!' tID '!'       '(' args ')' body				{ $$ = new m19::function_definition_node(LINE, tPUBLIC,     $2, $5, $7); delete $2; }
-				: data_type tID 	'(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, $2, $4, $8, $7); delete $2; }
+				| data_type tID 	'(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, $2, $4, $8, $7); delete $2; }
 				| '!' tID			'(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPRIVATE,     $2, $4, $8, $7); delete $2; }
 				| data_type tID '!' '(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPUBLIC, $1, $2, $5, $9, $8); delete $2; }
 				| '!' tID '!'       '(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPUBLIC,     $2, $5, $9, $8); delete $2; }
