@@ -150,7 +150,7 @@ opt_instructions: /* empty */                                       { $$ = new c
                 ;
 
 instructions    : instruction                                       { $$ = new cdk::sequence_node(LINE, $1); }
-                | instruction instructions                          { std::reverse($3->nodes().begin(), $2->nodes().end()); $$ = new cdk::sequence_node(LINE, $1, $2); std::reverse($$->nodes().begin(), $$->nodes().end()); }
+                | instruction instructions                          { std::reverse($2->nodes().begin(), $2->nodes().end()); $$ = new cdk::sequence_node(LINE, $1, $2); std::reverse($$->nodes().begin(), $$->nodes().end()); }
                 ;
 
 instruction     : tRETURN                                           { $$ = new m19::return_node(LINE); }
