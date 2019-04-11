@@ -126,8 +126,8 @@ body			: init_section sections                             { $$ = new cdk::seque
 init_section    : '<<' block                                        { $$ = new m19::section_init_node(LINE, $2); };
 
 sections        : section                                           { $$ = new cdk::sequence_node(LINE, $1); }
-                | sections section                                  { $$ = new cdk::sequence_node(LINE, $1, $2); }
-                | section end_section                               { $$ = new cdk::sequence_node(LINE, $1, $2); }
+                | sections section                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
+                | section end_section                               { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 ;
 
 section         : '[' expr ']' block                                { $$ = new m19::section_node(LINE, 2, $4, $2); }
