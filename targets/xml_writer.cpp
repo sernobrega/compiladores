@@ -26,7 +26,7 @@ static std::string type_name(basic_type *type) {
 
 static std::string qualifier_name(int qualifier) {
   if (qualifier == tPUBLIC) return "public";
-  if (qualifer == tEXTERN) return "extern";
+  if (qualifier == tEXTERN) return "extern";
   if (qualifier == tPRIVATE)
     return "private";
   else
@@ -224,7 +224,7 @@ void m19::xml_writer::do_section_node(m19::section_node * const node, int lvl) {
   }
   openTag("block", lvl);
   node->block()->accept(this, lvl + 2);
-  closetag("block", lvl);
+  closeTag("block", lvl);
   closeTag(node, lvl);
 }
 
