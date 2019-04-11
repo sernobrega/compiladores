@@ -31,19 +31,15 @@ static std::ostringstream strlit;
 <X_COMMENT>.|\n        ; /* ignore content of contents */  
 
  /* ---------------------------------------------------------- */
- /* --------------->   Instrução condicional  <--------------- */
- /* ---------------------------------------------------------- */
-"if"                   return tIF; 
-"else if"              return tELIF;
-"else"                 return tELSE; 
 
  /* ---------------------------------------------------------- */
  /* -------------->   Instrução de iteração    <-------------- */
  /* -------------->   Instrução de terminação  <-------------- */
  /* -------------->   Instrução de continuação <-------------- */
  /* -------------->   Instrução de retorno     <-------------- */
+ /* --------------->   Instrução condicional  <--------------- */
  /* ---------------------------------------------------------- */
-[;]                    return *yytext;
+[;\]\[]                return *yytext;
 ">>@"                  return tSTOP;
 "@<<"                  return tCONTINUE;
 ">@<"                  return tRETURN;
@@ -57,7 +53,7 @@ static std::ostringstream strlit;
 "!="                   return tNE; 
 "&&"                   return tAND;
 "||"                   return tOR;
-[+\-*/~=()\]\[]         return *yytext;
+[+\-*/~=()]            return *yytext;
 
  /* ---------------------------------------------------------- */
  /* ------------>   Delimitadores e separadores  <------------ */
@@ -73,9 +69,7 @@ static std::ostringstream strlit;
  /* ----------------->   Constantes         <----------------- */
  /* ----------------->   Símbolos Globais   <----------------- */
  /* ---------------------------------------------------------- */
-"0"                    return tNULL;
-[#%$<>%?!,]           return *yytext;
-'m19'                  return tMAIN;
+[#%$<>%?!,]            return *yytext;
 
  /* ------------------------------------------------------------ */
  /* --------------->          Inteiros          <--------------- */
@@ -194,6 +188,8 @@ static std::ostringstream strlit;
                             yy_pop_state();
                             return tREAL;
                         }
+
+
 
 [1-9][0-9]*\.?[0-9]+    yylval.d = strtod(yytext, NULL); return tREAL;
 
