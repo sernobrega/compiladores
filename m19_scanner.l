@@ -17,6 +17,7 @@
 static std::ostringstream strlit;
 %}
 %x X_STRING X_COMMENT X_ISLASH
+%x X_a X_f X_p X_n X_u X_m X_k X_Me X_G X_T X_P X_E
 %%
 
  /* ---------------------------------------------------------- */
@@ -86,10 +87,118 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->            Reais           <--------------- */
  /* ------------------------------------------------------------ */
+[1-9][0-9]a             yy_push_state(X_a); yyless(yyleng - 1); strtlit << *yytext; 
+<X_a>[0-9]+             {
+                            strtlit << '.' + *yytext + "e-18";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]f             yy_push_state(X_f); yyless(yyleng - 1); strtlit << *yytext; 
+<X_f>[0-9]+             {
+                            strtlit << '.' + *yytext + "e-15";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+                        
+[1-9][0-9]p             yy_push_state(X_p); yyless(yyleng - 1); strtlit << *yytext; 
+<X_p>[0-9]+             {
+                            strtlit << '.' + *yytext + "e-12";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]n             yy_push_state(X_n); yyless(yyleng - 1); strtlit << *yytext; 
+<X_n>[0-9]+             {
+                            strtlit << '.' + *yytext + "e-9";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+                        
+[1-9][0-9]u             yy_push_state(X_u); yyless(yyleng - 1); strtlit << *yytext; 
+<X_u>[0-9]+             {
+                            strtlit << '.' + *yytext + "e-6";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]m             yy_push_state(X_m); yyless(yyleng - 1); strtlit << *yytext; 
+<X_m>[0-9]+             {
+                            strtlit << '.' + *yytext + "e-3";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]k             yy_push_state(X_k); yyless(yyleng - 1); strtlit << *yytext; 
+<X_k>[0-9]+             {
+                            strtlit << '.' + *yytext + "e+3";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]M             yy_push_state(X_Me); yyless(yyleng - 1); strtlit << *yytext;
+<X_Me>[0-9]+             {
+                            strtlit << '.' + *yytext + "e+6";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]G             yy_push_state(X_G); yyless(yyleng - 1); strtlit << *yytext; 
+<X_G>[0-9]+             {
+                            strtlit << '.' + *yytext + "e+9";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]T             yy_push_state(X_T); yyless(yyleng - 1); strtlit << *yytext; 
+<X_T>[0-9]+             {
+                            strtlit << '.' + *yytext + "e+12";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]P             yy_push_state(X_P); yyless(yyleng - 1); strtlit << *yytext; 
+<X_P>[0-9]+             {
+                            strtlit << '.' + *yytext + "e+15";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
+[1-9][0-9]E             yy_push_state(X_E); yyless(yyleng - 1); strtlit << *yytext; 
+<X_E>[0-9]+             {
+                            strtlit << '.' + *yytext + "e+18";
+                            yylval.d = strtod(strlit, NULL);
+                            strlit.str("");
+                            yy_pop_state();
+                            return tREAL;
+                        }
+
 [1-9][0-9]*\.?[0-9]+    yylval.d = strtod(yytext, NULL); return tREAL;
 
  /* ------------------------------------------------------------ */
- /* --------------->   Identificadores (nomes)  <--------------- */
+ /* --------------->  Identificadores (nomes)  <--------------- */
  /* ------------------------------------------------------------ */
 [A-Za-z][A-Za-z0-9_]*  yylval.s = new std::string(yytext); return tID;
 
