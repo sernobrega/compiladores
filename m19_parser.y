@@ -150,15 +150,15 @@ opt_instructions: /* empty */                                       { $$ = new c
                 ;
 
 instructions    : instruction                                       { $$ = new cdk::sequence_node(LINE, $1); }
-                | instruction instructions                          { $$ = $1} //FIXME dk the order
+                | instruction instructions                          { std::reverse($3->nodes().begin(), $2->nodes().end()); $$ = new cdk::sequence_node(LINE, $1, $2); std::reverse($$->nodes().begin(), $$->nodes().end()); }
                 ;
 
 instruction     : tRETURN                                           { $$ = new m19::return_node(LINE); }
                 | tCONTINUE                                         { $$ = new m19::continue_node(LINE); }
                 | tSTOP                                             { $$ = new m19::stop_node(LINE); }
                 | expr ';'                                          { $$ = new m19::evaluation_node(LINE, $1); }
-                | expr '!'                                          { $$ = new m19::print_node(LINE, false); }
-                | expr tPRINTNL                                     { $$ = new m19::print_node(LINE, true); }
+                | expr '!'                                          { $$ = new m19::print_node(LINE, $1, false); }
+                | expr tPRINTNL                                     { $$ = new m19::print_node(LINE, $1, true); }
                 | cond_i                                            { $$ = $1; }
                 | iter_i                                            { $$ = $1; }
                 | block                                             { $$ = $1; }
