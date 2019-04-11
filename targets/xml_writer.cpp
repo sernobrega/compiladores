@@ -26,8 +26,17 @@ static std::string type_name(basic_type *type) {
 
 static std::string qualifier_name(int qualifier) {
   if (qualifier == tPUBLIC) return "public";
+  if (qualifer == tEXTERN) return "extern";
   if (qualifier == tPRIVATE)
     return "private";
+  else
+    return "unknown qualifier";
+}
+
+static std::string qualifier_section_name(int qualifier) {
+  if (qualifier == tINCLUSIVE) return "inclusive";
+  if (qualifier == tEXCLUSIVE)
+    return "exclusive";
   else
     return "unknown qualifier";
 }
@@ -205,7 +214,18 @@ void m19::xml_writer::do_function_call_node(m19::function_call_node * const node
 //---------------------------------------------------------------------------
 
 void m19::xml_writer::do_section_node(m19::section_node * const node, int lvl) {
-  // ASSERT_SAFE_EXPRESSIONS;
+  os() << std::string(lvl, ' ') << "<" << node->label() << "' qualifier='"
+  << qualifier_section_name(node->qualifier()) << "'>" << std::endl;
+
+  if(node->expr()) {
+	  openTag("expression", lvl);
+	  node->expr()->accept(this, lvl + 2);
+	  closeTag("expression", lvl);
+  }
+  openTag("block", lvl);
+  node->block()->accept(this, lvl + 2);
+  closetag("block", lvl);
+  closeTag(node, lvl);
 }
 
 void m19::xml_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
