@@ -216,13 +216,13 @@ void m19::xml_writer::do_block_node(m19::block_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
   openTag(node, lvl);
   openTag("declarations", lvl);
-  if (node->declarations()) {
-    node->declarations()->accept(this, lvl + 4);
+  if (node->declaration()) {
+    node->declaration()->accept(this, lvl + 4);
   }
   closeTag("declarations", lvl);
   openTag("instructions", lvl);
-  if (node->instructions()) {
-    node->instructions()->accept(this, lvl + 4);
+  if (node->instruction()) {
+    node->instruction()->accept(this, lvl + 4);
   }
   closeTag("instructions", lvl);
   closeTag(node, lvl);
