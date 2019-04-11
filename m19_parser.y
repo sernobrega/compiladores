@@ -1,5 +1,6 @@
 %{
 //-- don't change *any* of these: if you do, you'll break the compiler.
+#include <algorithm>
 #include <cdk/compiler.h>
 #include "ast/all.h"
 #define LINE               compiler->scanner()->lineno()
