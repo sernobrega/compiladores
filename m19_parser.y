@@ -170,8 +170,8 @@ cond_i          : '[' expr ']' '#' instruction                      { $$ = m19::
                 | '[' expr ']' '?' instruction ':' instruction      { $$ = m19::if_else_node(LINE, $2, $5, $7); }
                 ;
 
-iter_i          : '[' vars ';' exprs ';' exprs ']' instruction
-                | '[' exprs ';' exprs ';' exprs ']' instruction
+iter_i          : '[' vars ';' exprs ';' exprs ']' instruction      { $$ = m19::for_node(LINE, $2, $4, $6, $8); }
+                | '[' exprs ';' exprs ';' exprs ']' instruction     { $$ = m19::for_node(LINE, $2, $4, $6, $8); }
                 ;
 
 vars            : /* empty */                                       { $$ = cdk::sequence_node(LINE); }
