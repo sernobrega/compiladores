@@ -210,7 +210,7 @@ expr            : literal                                           { $$ = $1; }
                 | '(' expr ')'                                      { $$ = $2; }
                 | '[' expr ']'                                      { $$ = new m19::stack_alloc_node(LINE, $2); }
 
-                | tID '(' args ')'                                  { $$ = new m19::function_call_node(*$1, $3);}
+                | tID '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
 
                 | lval                                              { $$ = new cdk::rvalue_node(LINE, $1); }  //FIXME
                 | lval '=' expr                                     { $$ = new cdk::assignment_node(LINE, $1, $3); }
