@@ -3,6 +3,31 @@
 #include "targets/type_checker.h"
 #include "ast/all.h"  // automatically generated
 
+static std::string type_name(basic_type *type) {
+  if (type->name() == basic_type::TYPE_INT) return "integer";
+  if (type->name() == basic_type::TYPE_DOUBLE) return "double";
+  if (type->name() == basic_type::TYPE_STRING) return "string";
+  if (type->name() == basic_type::TYPE_VOID) return "void";
+  if (type->name() == basic_type::TYPE_POINTER) {
+    std::string s = "pointer";
+    basic_type *p = type->subtype();
+    while (p != nullptr) {
+      s += " to " + type_name(p);
+      p = p->subtype();
+    }
+    return s;
+  } else
+    return "unknown type";
+}
+
+static std::string qualifier_name(int qualifier) {
+  if (qualifier == tPUBLIC) return "public";
+  if (qualifier == tPRIVATE)
+    return "private";
+  else
+    return "unknown qualifier";
+}
+
 //---------------------------------------------------------------------------
 
 void m19::xml_writer::do_nil_node(cdk::nil_node * const node, int lvl) {
@@ -147,7 +172,16 @@ void m19::xml_writer::do_print_node(m19::print_node * const node, int lvl) {
 //---------------------------------------------------------------------------
 
 void m19::xml_writer::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
-  // ASSERT_SAFE_EXPRESSIONS;
+  os() << std::string(lvl, ' ') << "<" << node->label() << " name='" << node->id() << "' qualifier='"
+  << qualifier_name(node->scope()) << "' type='" << type_name(node->type()) << "'>"
+  << std::endl;
+
+  if (node->expr()) {
+    openTag("init", lvl);
+    node->expr()->accept(this, lvl + 4);
+    closeTag("init", lvl);
+  }
+  closeTag(node, lvl);
 }
 
 //---------------------------------------------------------------------------
@@ -180,6 +214,18 @@ void m19::xml_writer::do_section_init_node(m19::section_init_node * const node, 
 
 void m19::xml_writer::do_block_node(m19::block_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
+  openTag(node, lvl);
+  openTag("declarations", lvl);
+  if (node->declarations()) {
+    node->declarations()->accept(this, lvl + 4);
+  }
+  closeTag("declarations", lvl);
+  openTag("instructions", lvl);
+  if (node->instructions()) {
+    node->instructions()->accept(this, lvl + 4);
+  }
+  closeTag("instructions", lvl);
+  closeTag(node, lvl);
 }
 
 //---------------------------------------------------------------------------
