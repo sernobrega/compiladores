@@ -219,7 +219,7 @@ void m19::xml_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, in
 
 void m19::xml_writer::do_address_node(m19::address_node * const node, int lvl) {
   openTag(node, lvl);
-  node->lvalue()->accept(this, lvl + 2);
+  node->lval()->accept(this, lvl + 2);
   closeTag(node, lvl);
 }
 
