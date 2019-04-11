@@ -3,16 +3,18 @@
 %{ 
 // make relevant includes before including the parser's tab file
 #include <string>
+#include <vector>
+#include <sstream>
 #include <cdk/ast/sequence_node.h>
 #include <cdk/ast/expression_node.h>
 #include <cdk/ast/lvalue_node.h>
 #include "m19_parser.tab.h"
 
-// output stream for building string literals
-static std::ostringstream strlit;
-
 // don't change this
 #define yyerror LexerError
+
+// output stream for building string literals
+static std::ostringstream strlit;
 %}
 %x X_STRING X_COMMENT X_ISLASH
 %%
@@ -89,7 +91,7 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->   Identificadores (nomes)  <--------------- */
  /* ------------------------------------------------------------ */
-[A-Za-z][A-Za-z0-9_]*  yylval.s = new std::string(yytext); return tIDENTIFIER;
+[A-Za-z][A-Za-z0-9_]*  yylval.s = new std::string(yytext); return tID;
 
  /* ------------------------------------------------------------ */
  /* --------------->    Cadeias de caracteres   <--------------- */
