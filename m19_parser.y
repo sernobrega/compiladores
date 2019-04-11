@@ -138,7 +138,7 @@ section         : '[' expr ']' block                                { $$ = new m
 
 end_section     : '>>' block                                        { $$ = new m19::section_end_node(LINE, $2); };
 
-block           : '{' innnerdecls opt_instructions '}'              { $$ = new m19::block_node(LINE, $2, $3); }
+block           : '{' innerdecls opt_instructions '}'              { $$ = new m19::block_node(LINE, $2, $3); }
                 | '{'             opt_instructions '}'              { $$ = new m19::block_node(LINE, nullptr, $3); }
                 ;
 
