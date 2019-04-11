@@ -153,7 +153,7 @@ static std::ostringstream strlit;
 [1-9][0-9]M             yy_push_state(X_Me); yyless(yyleng - 1); strlit << *yytext;
 <X_Me>[0-9]+             {
                             strlit << '.' + *yytext + "e+6";
-                            yylval.d = strlit.str().c_str(), NULL);
+                            yylval.d = strtod(strlit.str().c_str(), NULL);
                             strlit.str("");
                             yy_pop_state();
                             return tREAL;
