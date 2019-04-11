@@ -79,7 +79,7 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->          Inteiros          <--------------- */
  /* ------------------------------------------------------------ */
-0x[0-9A-Fa-f]+              yylval.i = strtoul(yyless(2), nullptr, 16); return tINTEGER;
+0x[0-9A-Fa-f]+              yyless(2); yylval.i = strtoul(yytext, nullptr, 16); return tINTEGER;
 
 [1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
 
