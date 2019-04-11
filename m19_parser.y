@@ -25,7 +25,7 @@
 
 %token <i> tINTEGER
 %token <d> tREAL
-%token <s> tID tSTRING tIDAT
+%token <s> tID tSTRING '@'
 %token tWHILE tPRINT tREAD tBEGIN tEND tPUBLIC tEXTERN tPRIVATE
 %token tSTOP tCONTINUE tRETURN tELIF tAND tOR tMAIN
 %token tBEGINS tENDS tNULL tIF tPRINTNL
@@ -211,7 +211,7 @@ expr            : integer                                           { $$ = $1; }
                 | '[' expr ']'                                      { $$ = new m19::stack_alloc_node(LINE, $2); }
 
                 | tID '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
-                | tIDAT '(' args ')'                                { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
+                | '@' '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
 
                 | lval                                              { $$ = new cdk::rvalue_node(LINE, $1); }
                 | lval '=' expr                                     { $$ = new cdk::assignment_node(LINE, $1, $3); }
@@ -222,7 +222,7 @@ lval            : tID                                               { $$ = new c
                 | lval             '[' expr ']'                     { $$ = new m19::index_node(LINE, new cdk::rvalue_node(LINE, $1), $3); }
                 | '(' expr ')'     '[' expr ']'                     { $$ = new m19::index_node(LINE, $2, $5); }
                 | tID '(' args ')' '[' expr ']'                     { $$ = new m19::index_node(LINE, new gr8::function_call_node(LINE, *$1, $3), $6); delete $1; }
-                | tIDAT (' args ')'  '[' expr ']'                   { $$ = new m19::index_node(LINE, new gr8::function_call_node(LINE, *$1, $3), $6); delete $1; }
+                | '@' '(' args ')'  '[' expr ']'                     { $$ = new m19::index_node(LINE, new gr8::function_call_node(LINE, *$1, $3), $6); delete $1; }
                 ;
 
 integer         : tINTEGER                                          { $$ = new cdk::integer_node(LINE, $1); };

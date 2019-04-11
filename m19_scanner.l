@@ -200,7 +200,7 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->  Identificadores (nomes)  <--------------- */
  /* ------------------------------------------------------------ */
-[@]                    yylval.s = new std::string(yytext); return tIDAT; 
+[@]                    yylval.s = new std::string(yytext); return *yytext; 
 [A-Za-z][A-Za-z0-9_]*  yylval.s = new std::string(yytext); return tID;
 
  /* ------------------------------------------------------------ */
