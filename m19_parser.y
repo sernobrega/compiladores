@@ -185,8 +185,8 @@ exprs           : /* empty */                                       { $$ = new c
                 ;
 
 expr            : integer                                           { $$ = $1; }
-                : real                                              { $$ = $1; }    
-                : string                                            { $$ = $1; }
+                | real                                              { $$ = $1; }    
+                | string                                            { $$ = $1; }
                 | '@'                                               { $$ = new m19::read_node(LINE); }
 
                 | '-' expr %prec tUNARY                             { $$ = new cdk::neg_node(LINE, $2); }
