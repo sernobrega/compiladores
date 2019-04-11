@@ -14,18 +14,6 @@ void m19::xml_writer::do_data_node(cdk::data_node * const node, int lvl) {
 
 //---------------------------------------------------------------------------
 
-void m19::xml_writer::do_not_node(cdk::not_node * const node, int lvl) {
-  do_unary_expression_node(node, lvl);
-}
-void m19::xml_writer::do_and_node(cdk::and_node * const node, int lvl) {
-  do_binary_expression_node(node, lvl);
-}
-void m19::xml_writer::do_or_node(cdk::or_node * const node, int lvl) {
-  do_binary_expression_node(node, lvl);
-}
-
-//---------------------------------------------------------------------------
-
 void m19::xml_writer::do_sequence_node(cdk::sequence_node * const node, int lvl) {
   os() << std::string(lvl, ' ') << "<sequence_node size='" << node->size() << "'>" << std::endl;
   for (size_t i = 0; i < node->size(); i++)
@@ -58,6 +46,10 @@ void m19::xml_writer::do_unary_expression(cdk::unary_expression_node * const nod
 
 void m19::xml_writer::do_neg_node(cdk::neg_node * const node, int lvl) {
   do_unary_expression(node, lvl);
+}
+
+void m19::xml_writer::do_not_node(cdk::not_node * const node, int lvl) {
+  do_unary_expression_node(node, lvl);
 }
 
 //---------------------------------------------------------------------------
@@ -102,6 +94,13 @@ void m19::xml_writer::do_ne_node(cdk::ne_node * const node, int lvl) {
 }
 void m19::xml_writer::do_eq_node(cdk::eq_node * const node, int lvl) {
   do_binary_expression(node, lvl);
+}
+
+void m19::xml_writer::do_and_node(cdk::and_node * const node, int lvl) {
+  do_binary_expression_node(node, lvl);
+}
+void m19::xml_writer::do_or_node(cdk::or_node * const node, int lvl) {
+  do_binary_expression_node(node, lvl);
 }
 
 //---------------------------------------------------------------------------
