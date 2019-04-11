@@ -184,6 +184,7 @@ void m19::xml_writer::do_block_node(m19::block_node * const node, int lvl) {
 
 //---------------------------------------------------------------------------
 
+//FIXME 
 void m19::xml_writer::do_read_node(m19::read_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
   openTag(node, lvl);
@@ -224,7 +225,14 @@ void m19::xml_writer::do_address_node(m19::address_node * const node, int lvl) {
 }
 
 void m19::xml_writer::do_index_node(m19::index_node * const node, int lvl) {
-  // ASSERT_SAFE_EXPRESSIONS;
+  openTag(node, lvl);
+  openTag("expr", lvl);
+  node->expr()->accept(this, lvl + 2);
+  closeTag("expr", lvl);
+  openTag("index", lvl);
+  node->index()->accept(this, lvl + 2);
+  closeTag("index", lvl);
+  closeTag(node, lvl);
 }
 
 //---------------------------------------------------------------------------
