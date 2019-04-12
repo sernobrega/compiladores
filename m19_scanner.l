@@ -68,7 +68,7 @@ static std::ostringstream strlit;
  /* --------------->          Inteiros          <--------------- */
  /* ------------------------------------------------------------ */
 "0x"                        yy_push_state(X_HEX);
-<X_HEX>0x[0-9A-Fa-f]+        yylval.i = strtoul(yytext, nullptr, 16); return tINTEGER;
+<X_HEX>[0-9A-Fa-f]+        yylval.i = strtoul(yytext, nullptr, 16); return tINTEGER;
 
 [1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
 
