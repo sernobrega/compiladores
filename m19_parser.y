@@ -128,7 +128,7 @@ init_section    : tBEGINS block                                     { $$ = new m
 
 sections        : section                                           { $$ = new cdk::sequence_node(LINE, $1); }
                 | sections section                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
-                | section end_section                               { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
+                | end_section                                       { $$ = new cdk::sequence_node(LINE, $1); }
                 ;
 
 section         : '[' expr ']' block                                { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
