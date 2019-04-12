@@ -117,8 +117,7 @@ literal			: integer                                           { $$ = $1; }
 				| string                                            { $$ = new cdk::string_node(LINE, $1); }
 				;
 
-body			: init_section section                              { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
-                | init_section sections                             { $$ = new cdk::sequence_node(LINE, $1, $2); }
+body			: init_section sections                             { $$ = new cdk::sequence_node(LINE, $1, $2); }
 				| init_section end_section                          { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 | init_section                                      { $$ = new cdk::sequence_node(LINE, $1); }
                 | sections                                          { $$ = new cdk::sequence_node(LINE, $1); }
@@ -132,9 +131,13 @@ sections        : section                                           { $$ = new c
                 | section end_section                               { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 ;
 
-section         : '[' expr ']' block                                { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
-                | '(' expr ')' block                                { $$ = new m19::section_node(LINE, tINCLUSIVE, $2, $4); }
+section         : '[' expr_opt ']' block                            { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
+                | '(' expr_opt ')' block                            { $$ = new m19::section_node(LINE, tINCLUSIVE, $2, $4); }
                 | block                                             { $$ = new m19::section_node(LINE, tINCLUSIVE, $1    ); }
+                ;
+
+expr_opt        : /* empty */                                       { $$ = new cdk::expression_node(LINE); }
+                | expr                                              { $$ = $1; }
                 ;
 
 end_section     : tENDS block                                        { $$ = new m19::section_end_node(LINE, $2); };
