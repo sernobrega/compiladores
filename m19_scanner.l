@@ -41,7 +41,7 @@ static std::ostringstream strlit;
  /* ---------------------------------------------------------- */
 [;:\]\[]               return *yytext;
 ">>@"                  return tSTOP;
-"@<<"                  return tCONTINUE;
+"@>>"                  return tCONTINUE;
 ">@<"                  return tRETURN;
 
  /* ------------------------------------------------------------ */
