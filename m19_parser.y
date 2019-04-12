@@ -212,8 +212,7 @@ expr            : integer                                           { $$ = $1; }
                 | '@' '(' exprs ')'                                 { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
                 
                 | lval                                              { $$ = new cdk::rvalue_node(LINE, $1); }
-                | lval '=' expr                                     { $$ = new cdk::assignment_node(LINE, $1, $3); }
-                | '@' '=' expr                                      { $$ = new cdk::assignment_node(LINE, $1, $3); }                                   
+                | lval '=' expr                                     { $$ = new cdk::assignment_node(LINE, $1, $3); }                                 
                 | lval '?'                                          { $$ = new m19::address_node(LINE, $1); }
                 ;
 
