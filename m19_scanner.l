@@ -64,20 +64,12 @@ static std::ostringstream strlit;
 ">>"                   return tENDS;
 [\{\}\!]               return *yytext;
 
- /* ------------------------------------------------------------ */
- /* --------------->          Inteiros          <--------------- */
- /* ------------------------------------------------------------ */
-"0x"                        yy_push_state(X_HEX);
-<X_HEX>[0-9A-Fa-f]+         yylval.i = strtoul(yytext, nullptr, 16); yy_pop_state(); return tINTEGER;
-
-[1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
 
  /* ---------------------------------------------------------- */
  /* ----------------->   Tipos de dados     <---------------- */
  /* ----------------->   Constantes         <----------------- */
  /* ----------------->   Símbolos Globais   <----------------- */
  /* ---------------------------------------------------------- */
-[0]                    return tNULL;
 [#%$<>%?!,]            return *yytext;
 
  /* ------------------------------------------------------------ */
@@ -194,6 +186,15 @@ static std::ostringstream strlit;
 
 
 [1-9][0-9]*\.?[0-9]+    yylval.d = strtod(yytext, NULL); return tREAL;
+
+ /* ------------------------------------------------------------ */
+ /* --------------->          Inteiros          <--------------- */
+ /* ------------------------------------------------------------ */
+"0x"                        yy_push_state(X_HEX);
+<X_HEX>[0-9A-Fa-f]+         yylval.i = strtoul(yytext, nullptr, 16); yy_pop_state(); return tINTEGER;
+
+[0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
+
 
  /* ------------------------------------------------------------ */
  /* --------------->  Identificadores (nomes)  <--------------- */

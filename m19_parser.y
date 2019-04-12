@@ -27,7 +27,7 @@
 %token <d> tREAL
 %token <s> tID tSTRING '@'
 %token tREAD tPUBLIC tEXTERN tPRIVATE tPRINTNL tINCLUSIVE tEXCLUSIVE
-%token tSTOP tCONTINUE tRETURN tAND tOR tIF tBEGINS tENDS tNULL
+%token tSTOP tCONTINUE tRETURN tAND tOR tIF tBEGINS tENDS
 
 %right '='
 %left tGE tLE tEQ tNE '>' '<'
@@ -35,14 +35,14 @@
 %left '*' '/' '%'
 %nonassoc tUNARY
 
-%type <node> declaration vardecl fundecl fundef init_section end_section section instruction
+%type <node> declaration vardecl fundecl fundecl_args fundef init_section end_section section instruction
 %type <node> cond_i iter_i 
 %type <sequence> args body sections declarations innerdecls 
 %type <sequence> opt_instructions instructions exprs file
 %type <expression> expr literal integer real 
-%type <lvalue> lval
+cd %type <lvalue> lval
 %type <type> data_type pure_type
-%type <i> qualifier tNULL
+%type <i> qualifier
 %type <block> block
 %type <s> string
 
@@ -84,11 +84,13 @@ fundecl         : data_type tID                  		            { $$ = new m19::f
                 | '!' tID            			 		            { $$ = new m19::function_declaration_node(LINE, tPRIVATE,     *$2, nullptr); delete $2; }
 				| data_type tID qualifier        		            { $$ = new m19::function_declaration_node(LINE, $3, $1, *$2, nullptr); delete $2; }
                 | '!' tID qualifier        		 		            { $$ = new m19::function_declaration_node(LINE, $3,     *$2, nullptr); delete $2; }
+                | fundecl_args                                      { $$ = $1; }
+                ;
 
-				| data_type tID     	  '(' args ')'              { $$ = new m19::function_declaration_node(LINE, tPRIVATE, $1, *$2, nullptr); delete $2; }
-                | '!' tID           	  '(' args ')'              { $$ = new m19::function_declaration_node(LINE, tPRIVATE,     *$2, nullptr); delete $2; }
-				| data_type tID qualifier '(' args ')'              { $$ = new m19::function_declaration_node(LINE, $3, $1, *$2, nullptr); delete $2; }
-				| '!' tID qualifier       '(' args ')'              { $$ = new m19::function_declaration_node(LINE, $3,           *$2, nullptr); delete $2; }
+fundecl_args    : data_type tID     	  '(' args ')'              { $$ = new m19::function_declaration_node(LINE, tPRIVATE, $1, *$2, $4); delete $2; }
+                | '!' tID           	  '(' args ')'              { $$ = new m19::function_declaration_node(LINE, tPRIVATE,     *$2, $4); delete $2; }
+				| data_type tID qualifier '(' args ')'              { $$ = new m19::function_declaration_node(LINE, $3, $1, *$2, $5); delete $2; }
+				| '!' tID qualifier       '(' args ')'              { $$ = new m19::function_declaration_node(LINE, $3,           *$2, $5); delete $2; }
                 ;
 
 qualifier		: '!'									            { $$ = tPUBLIC; }
@@ -113,7 +115,6 @@ fundef			: data_type tID 	'(' args ')' body				{ $$ = new m19::function_definiti
 literal			: integer                                           { $$ = $1; }
 				| real                                              { $$ = $1; }
 				| string                                            { $$ = new cdk::string_node(LINE, $1); }
-                | tNULL                                             { $$ = new cdk::integer_node(LINE, $1); } 
 				;
 
 body			: init_section sections                             { $$ = new cdk::sequence_node(LINE, $1, $2); }
@@ -182,7 +183,6 @@ expr            : integer                                           { $$ = $1; }
                 | real                                              { $$ = $1; }    
                 | string                                            { $$ = new cdk::string_node(LINE, $1); }
                 | '@'                                               { $$ = new m19::read_node(LINE); }
-                | tNULL                                             { $$ = new cdk::integer_node(LINE, $1); }
 
                 | '-' expr %prec tUNARY                             { $$ = new cdk::neg_node(LINE, $2); }
                 | '+' expr %prec tUNARY                             { $$ = new m19::identity_node(LINE, $2); }
