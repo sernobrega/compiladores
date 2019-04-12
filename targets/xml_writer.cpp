@@ -241,7 +241,7 @@ void m19::xml_writer::do_function_call_node(m19::function_call_node * const node
 //---------------------------------------------------------------------------
 
 void m19::xml_writer::do_section_node(m19::section_node * const node, int lvl) {
-  os() << std::string(lvl, ' ') << "<" << node->label() << "' qualifier='"
+  os() << std::string(lvl, ' ') << "<" << node->label() << " qualifier='"
   << qualifier_section_name(node->qualifier()) << "'>" << std::endl;
 
   if(node->expr()) {
