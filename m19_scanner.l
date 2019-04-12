@@ -39,7 +39,7 @@ static std::ostringstream strlit;
  /* -------------->   Instrução de retorno     <-------------- */
  /* --------------->   Instrução condicional  <--------------- */
  /* ---------------------------------------------------------- */
-[;\]\[]                return *yytext;
+[;:\]\[]                return *yytext;
 ">>@"                  return tSTOP;
 "@<<"                  return tCONTINUE;
 ">@<"                  return tRETURN;
