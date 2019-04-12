@@ -117,7 +117,7 @@ literal			: integer                                           { $$ = $1; }
 				| string                                            { $$ = new cdk::string_node(LINE, $1); }
 				;
 
-body			: init_section section                              { $$ = new cdk::sequence_node(LINE, $1, $2); }
+body			: init_section section                              { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 | init_section sections                             { $$ = new cdk::sequence_node(LINE, $1, $2); }
 				| init_section end_section                          { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 | init_section                                      { $$ = new cdk::sequence_node(LINE, $1); }
