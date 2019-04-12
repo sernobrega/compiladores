@@ -40,7 +40,7 @@
 %type <sequence> args body sections declarations innerdecls 
 %type <sequence> opt_instructions instructions exprs file
 %type <expression> expr literal integer real 
-cd %type <lvalue> lval
+%type <lvalue> lval
 %type <type> data_type pure_type
 %type <i> qualifier
 %type <block> block
