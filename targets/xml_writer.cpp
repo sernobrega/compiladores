@@ -217,7 +217,7 @@ void m19::xml_writer::do_function_definition_node(m19::function_definition_node 
 }
 
 void m19::xml_writer::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
-  os() << std::string(lvl, ' ') << "<" << node->label() << " name='" << node->identifier() << "' qualifier='"
+  os() << std::string(lvl, ' ') << "<" << node->label() << " name='" << node->id() << "' qualifier='"
        << qualifier_name(node->qualifier()) << "' type='" << type_name(node->type()) << "'>" << std::endl;
 
   openTag("arguments", lvl);
