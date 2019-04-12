@@ -127,8 +127,7 @@ body			: init_section sections                             { $$ = new cdk::seque
 init_section    : tBEGINS block                                     { $$ = new m19::section_init_node(LINE, $2); };
 
 sections        : section                                           { $$ = new cdk::sequence_node(LINE, $1); }
-                | sections section                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
-                | end_section                                       { $$ = new cdk::sequence_node(LINE, $1); }
+                | section sections                                  { $$ = new cdk::sequence_node(LINE, $2, new cdk::sequence_node(LINE, $1)); }
                 ;
 
 section         : '[' expr ']' block                                { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
@@ -136,6 +135,7 @@ section         : '[' expr ']' block                                { $$ = new m
                 | '[' ']' block                                     { $$ = new m19::section_node(LINE, tEXCLUSIVE, nullptr, $3); }
                 | '(' ')' block                                     { $$ = new m19::section_node(LINE, tINCLUSIVE, nullptr, $3); }
                 | block                                             { $$ = new m19::section_node(LINE, tINCLUSIVE, $1    ); }
+                | end_section                                       { $$ = new cdk::sequence_node(LINE, $1); }
                 ;
 
 end_section     : tENDS block                                       { $$ = new m19::section_end_node(LINE, $2); };
