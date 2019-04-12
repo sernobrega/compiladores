@@ -56,7 +56,7 @@ file    	    : /* empty */                                       { compiler->ast
                 ;
 
 declarations    : declaration                                       { $$ = new cdk::sequence_node(LINE, $1); }
-                | declarations declaration                          { $$ = new cdk::sequence_node(LINE, $2, $1); }
+                | declaration declarations                          { $$ = new cdk::sequence_node(LINE, $2, $1); }
                 ;
 
 declaration     : vardecl ';'                                       { $$ = $1; }
