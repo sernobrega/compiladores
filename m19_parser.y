@@ -211,7 +211,7 @@ expr            : integer                                           { $$ = $1; }
                 | tID '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
                 | '@' '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
                 
-                | '@' '=' expr                                      { $$ = new m19::function_definition_node(LINE, 0, nullptr, std::string(""), nullptr, nullptr, $3); }
+                | '@' '=' expr                                      { $$ = new m19::function_definition_node(LINE, 0, std::string(""), nullptr, nullptr, $3); }
 
                 | lval                                              { $$ = new cdk::rvalue_node(LINE, $1); }
                 | lval '=' expr                                     { $$ = new cdk::assignment_node(LINE, $1, $3); }
