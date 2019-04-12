@@ -37,9 +37,9 @@
 
 %type <node> declaration vardecl fundecl fundef init_section end_section section instruction
 %type <node> cond_i iter_i 
-%type <sequence> expressions args body sections declarations innerdecls 
+%type <sequence> args body sections declarations innerdecls 
 %type <sequence> opt_instructions instructions exprs file
-%type <expression> expr literal integer real string_wrap
+%type <expression> expr literal integer real 
 %type <lvalue> lval
 %type <type> data_type pure_type
 %type <i> qualifier tNULL
@@ -56,7 +56,7 @@ file    	    : /* empty */                                       { compiler->ast
                 ;
 
 declarations    : declaration                                       { $$ = new cdk::sequence_node(LINE, $1); }
-                | declaration declarations                          { $$ = new cdk::sequence_node(LINE, $1, $2); }
+                | declarations declaration                          { $$ = new cdk::sequence_node(LINE, $2, $1); }
                 ;
 
 declaration     : vardecl ';'                                       { $$ = $1; }
