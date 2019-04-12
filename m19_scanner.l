@@ -39,7 +39,7 @@ static std::ostringstream strlit;
  /* -------------->   Instrução de retorno     <-------------- */
  /* --------------->   Instrução condicional  <--------------- */
  /* ---------------------------------------------------------- */
-[;:\]\[\!]             return *yytext;
+[;:\]\[]             return *yytext;
 ">>@"                  return tSTOP;
 "@<<"                  return tCONTINUE;
 ">@<"                  return tRETURN;
@@ -59,10 +59,10 @@ static std::ostringstream strlit;
  /* ------------>   Delimitadores e separadores  <------------ */
  /* ------------>   Corpo (de função)            <------------ */
  /* ---------------------------------------------------------- */
-[\{\}]                 return *yytext;
 "!!"                   return tPRINTNL;
 "<<"                   return tBEGINS;
 ">>"                   return tENDS;
+[\{\}\!]               return *yytext;
 
  /* ------------------------------------------------------------ */
  /* --------------->          Inteiros          <--------------- */
