@@ -59,7 +59,7 @@ static std::ostringstream strlit;
  /* ------------>   Delimitadores e separadores  <------------ */
  /* ------------>   Corpo (de função)            <------------ */
  /* ---------------------------------------------------------- */
-[{}]                   return *yytext;
+[\{\}]                   return *yytext;
 "!!"                   return tPRINTNL;
 "<<"                   return tBEGINS;
 ">>"                   return tENDS;
