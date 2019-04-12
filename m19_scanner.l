@@ -16,7 +16,7 @@
 // output stream for building string literals
 static std::ostringstream strlit;
 %}
-%x X_STRING X_COMMENT X_ISLASH
+%x X_STRING X_COMMENT X_ISLASH X_HEX
 %x X_a X_f X_p X_n X_u X_m X_k X_Me X_G X_T X_P X_E
 %%
 
@@ -39,7 +39,7 @@ static std::ostringstream strlit;
  /* -------------->   Instrução de retorno     <-------------- */
  /* --------------->   Instrução condicional  <--------------- */
  /* ---------------------------------------------------------- */
-[;:\]\[]             return *yytext;
+[;:\]\[]               return *yytext;
 ">>@"                  return tSTOP;
 "@<<"                  return tCONTINUE;
 ">@<"                  return tRETURN;
@@ -67,7 +67,8 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->          Inteiros          <--------------- */
  /* ------------------------------------------------------------ */
-0x[0-9A-Fa-f]+              yyless(2); yylval.i = strtoul(yytext, nullptr, 16); return tINTEGER;
+"0x"                        yy_push_state(tHEX);
+<X_HEX>0x[0-9A-Fa-f]+        yylval.i = strtoul(yytext, nullptr, 16); return tINTEGER;
 
 [1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
 
