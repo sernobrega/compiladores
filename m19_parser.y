@@ -39,7 +39,7 @@
 %type <node> cond_i iter_i 
 %type <sequence> args body sections declarations innerdecls 
 %type <sequence> opt_instructions instructions exprs file
-%type <expression> expr literal integer real expr_opt
+%type <expression> expr literal integer real
 %type <lvalue> lval
 %type <type> data_type pure_type
 %type <i> qualifier
@@ -124,25 +124,23 @@ body			: init_section sections                             { $$ = new cdk::seque
                 | end_section                                       { $$ = new cdk::sequence_node(LINE, $1); }
 				; 
 
-init_section    : tBEGINS block                                        { $$ = new m19::section_init_node(LINE, $2); };
+init_section    : tBEGINS block                                     { $$ = new m19::section_init_node(LINE, $2); };
 
 sections        : section                                           { $$ = new cdk::sequence_node(LINE, $1); }
                 | sections section                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 | section end_section                               { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 ;
 
-section         : '[' expr_opt ']' block                            { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
-                | '(' expr_opt ')' block                            { $$ = new m19::section_node(LINE, tINCLUSIVE, $2, $4); }
+section         : '[' expr ']' block                                { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
+                | '(' expr ')' block                                { $$ = new m19::section_node(LINE, tINCLUSIVE, $2, $4); }
+                | '[' ']' block                                     { $$ = new m19::section_node(LINE, tEXCLUSIVE, nullptr, $4); }
+                | '(' ')' block                                     { $$ = new m19::section_node(LINE, tINCLUSIVE, nullptr, $4); }
                 | block                                             { $$ = new m19::section_node(LINE, tINCLUSIVE, $1    ); }
                 ;
 
-expr_opt        : /* empty */                                       { $$ = new cdk::expression_node(LINE); }
-                | expr                                              { $$ = $1; }
-                ;
+end_section     : tENDS block                                       { $$ = new m19::section_end_node(LINE, $2); };
 
-end_section     : tENDS block                                        { $$ = new m19::section_end_node(LINE, $2); };
-
-block           : '{' innerdecls opt_instructions '}'              { $$ = new m19::block_node(LINE, $2, $3); }
+block           : '{' innerdecls opt_instructions '}'               { $$ = new m19::block_node(LINE, $2, $3); }
                 | '{'             opt_instructions '}'              { $$ = new m19::block_node(LINE, nullptr, $2); }
                 ;
 
