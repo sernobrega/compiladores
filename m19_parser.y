@@ -39,7 +39,7 @@
 %type <node> cond_i iter_i 
 %type <sequence> args body sections declarations innerdecls 
 %type <sequence> opt_instructions instructions exprs file
-%type <expression> expr literal integer real 
+%type <expression> expr literal integer real expr_opt
 %type <lvalue> lval
 %type <type> data_type pure_type
 %type <i> qualifier
