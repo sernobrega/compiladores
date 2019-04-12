@@ -211,7 +211,7 @@ expr            : integer                                           { $$ = $1; }
                 | tID '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
                 | '@' '(' args ')'                                  { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
                 
-                | '@' '=' expr                                      { $$ = new m19::function_definition_node(LINE, 0, std::string(""), nullptr, nullptr, $3); }
+                
 
                 | lval                                              { $$ = new cdk::rvalue_node(LINE, $1); }
                 | lval '=' expr                                     { $$ = new cdk::assignment_node(LINE, $1, $3); }
@@ -223,6 +223,7 @@ lval            : tID                                               { $$ = new c
                 | '(' expr ')'     '[' expr ']'                     { $$ = new m19::index_node(LINE, $2, $5); }
                 | tID '(' args ')' '[' expr ']'                     { $$ = new m19::index_node(LINE, new m19::function_call_node(LINE, *$1, $3), $6); delete $1; }
                 | '@' '(' args ')' '[' expr ']'                     { $$ = new m19::index_node(LINE, new m19::function_call_node(LINE, *$1, $3), $6); delete $1; }
+                | '@' '=' expr                                      { $$ = new m19::index_node(LINE, new m19::function_declaration_node(LINE, tPRIVATE, "", nullptr), $3); }
                 ;
 
 integer         : tINTEGER                                          { $$ = new cdk::integer_node(LINE, $1); };
