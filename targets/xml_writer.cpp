@@ -201,14 +201,41 @@ void m19::xml_writer::do_variable_declaration_node(m19::variable_declaration_nod
 
 void m19::xml_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
+
+  os() << std::string(lvl, ' ') << "<" << node->label() << " name='" << node->id() << "' qualifier='"
+  	<< qualifier_name(node->scope()) << "' type='" << type_name(node->type()) << "'>" << std::endl;
+  openTag("return", lvl);
+  if(node->retval()) node->retval()->accept(this, lvl + 4);
+  closeTag("return", lvl);
+  openTag("arguments", lvl);
+  if (node->arguments()) {
+    node->arguments()->accept(this, lvl + 4);
+  }
+  closeTag("arguments", lvl);
+  node->block()->accept(this, lvl + 2);
+  closeTag(node, lvl);
 }
 
 void m19::xml_writer::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
-  // ASSERT_SAFE_EXPRESSIONS;
+  os() << std::string(lvl, ' ') << "<" << node->label() << " name='" << node->identifier() << "' qualifier='"
+       << qualifier_name(node->qualifier()) << "' type='" << type_name(node->type()) << "'>" << std::endl;
+
+  openTag("arguments", lvl);
+  if (node->arguments()) {
+    _symtab.push();
+    node->arguments()->accept(this, lvl + 4);
+    _symtab.pop();
+  }
+  closeTag("arguments", lvl);
+  closeTag(node, lvl);
 }
 
 void m19::xml_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
-  // ASSERT_SAFE_EXPRESSIONS;
+  os() << std::string(lvl, ' ') << "<" << node->label() << " name='" << node->id() << "'>" << std::endl;
+  openTag("arguments", lvl);
+  if (node->arguments()) node->arguments()->accept(this, lvl + 4);
+  closeTag("arguments", lvl);
+  closeTag(node, lvl);
 }
 
 //---------------------------------------------------------------------------

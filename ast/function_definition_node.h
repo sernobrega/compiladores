@@ -42,6 +42,10 @@ namespace m19 {
       return _scope;
     }
 
+    basic_type *type() {
+      return _type;
+    }
+
     inline cdk::expression_node * retval() {
       return _retval;
     }
