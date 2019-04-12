@@ -39,7 +39,7 @@ static std::ostringstream strlit;
  /* -------------->   Instrução de retorno     <-------------- */
  /* --------------->   Instrução condicional  <--------------- */
  /* ---------------------------------------------------------- */
-[;:\]\[]                return *yytext;
+[;:\]\[\!]             return *yytext;
 ">>@"                  return tSTOP;
 "@<<"                  return tCONTINUE;
 ">@<"                  return tRETURN;
@@ -67,7 +67,7 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->          Inteiros          <--------------- */
  /* ------------------------------------------------------------ */
-(0x)[0-9A-Fa-f]+              yyless(2); yylval.i = strtoul(yytext, nullptr, 16); return tINTEGER;
+0x[0-9A-Fa-f]+              yyless(2); yylval.i = strtoul(yytext, nullptr, 16); return tINTEGER;
 
 [1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
 
