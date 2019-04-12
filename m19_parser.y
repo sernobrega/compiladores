@@ -113,6 +113,7 @@ fundef			: data_type tID 	'(' args ')' body				{ $$ = new m19::function_definiti
 literal			: integer                                           { $$ = $1; }
 				| real                                              { $$ = $1; }
 				| string                                            { $$ = new cdk::string_node(LINE, $1); }
+                | tNULL                                             { $$ = new cdk::integer_node(LINE, $1); } 
 				;
 
 body			: init_section sections                             { $$ = new cdk::sequence_node(LINE, $1, $2); }
