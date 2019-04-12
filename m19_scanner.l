@@ -68,7 +68,7 @@ static std::ostringstream strlit;
  /* --------------->          Inteiros          <--------------- */
  /* ------------------------------------------------------------ */
 "0x"                        yy_push_state(X_HEX);
-<X_HEX>[0-9A-Fa-f]+        yylval.i = strtoul(yytext, nullptr, 16); return tINTEGER;
+<X_HEX>[0-9A-Fa-f]+         yylval.i = strtoul(yytext, nullptr, 16); yy_pop_state(); return tINTEGER;
 
 [1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
 
@@ -86,7 +86,7 @@ static std::ostringstream strlit;
 [1-9][0-9]a             yy_push_state(X_a); yyless(yyleng - 1); strlit << *yytext; 
 <X_a>[0-9]+             {
                             strlit << '.' + *yytext + "e-18";
-                            yylval.d = strtod(strlit.str().c_str(), NULL);
+                            yylval.d = strtod(strlit.str().c_str(), NULL); 
                             strlit.str("");
                             yy_pop_state();
                             return tREAL;
