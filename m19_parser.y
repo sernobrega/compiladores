@@ -181,6 +181,7 @@ expr            : integer                                           { $$ = $1; }
                 | real                                              { $$ = $1; }    
                 | string                                            { $$ = new cdk::string_node(LINE, $1); }
                 | '@'                                               { $$ = new m19::read_node(LINE); }
+                | tNULL                                             { $$ = new cdk::integer_node(LINE, $1); }
 
                 | '-' expr %prec tUNARY                             { $$ = new cdk::neg_node(LINE, $2); }
                 | '+' expr %prec tUNARY                             { $$ = new m19::identity_node(LINE, $2); }
