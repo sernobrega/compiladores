@@ -27,7 +27,7 @@
 %token <d> tREAL
 %token <s> tID tSTRING '@'
 %token tREAD tPUBLIC tEXTERN tPRIVATE tPRINTNL tINCLUSIVE tEXCLUSIVE
-%token tSTOP tCONTINUE tRETURN tAND tOR tIF tBEGINS tENDS
+%token tSTOP tCONTINUE tRETURN tAND tOR tIF tBEGINS tENDS tNULL
 
 %right '='
 %left tGE tLE tEQ tNE '>' '<'
@@ -42,7 +42,7 @@
 %type <expression> expr literal integer real string_wrap
 %type <lvalue> lval
 %type <type> data_type pure_type
-%type <i> qualifier
+%type <i> qualifier tNULL
 %type <block> block
 %type <s> string
 
