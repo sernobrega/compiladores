@@ -1,4 +1,4 @@
-// $Id: index_node.h,v 1.1 2019/03/20 18:28:19 ist186806 Exp $ -*- c++ -*-
+// $Id: index_node.h,v 1.3 2019/04/12 11:53:21 ist186806 Exp $ -*- c++ -*-
 #ifndef __M19_INDEXNODE_H__
 #define __M19_INDEXNODE_H__
 
