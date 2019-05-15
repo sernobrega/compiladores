@@ -36,14 +36,19 @@
 %token tSTOP tCONTINUE tRETURN tAND tOR tIF tBEGINS tENDS
 
 %right '='
-%left tGE tLE tEQ tNE '>' '<'
+%left tOR
+%left tAND
+%nonassoc '~'
+%left tNE tEQ
+%left tGE tLE '>' '<'
 %left '+' '-'
 %left '*' '/' '%'
+%nonassoc '?'
 %nonassoc tUNARY
 
 %type <node> declaration vardecl fundecl fundecl_args fundef instruction
 %type <node> cond_i iter_i 
-%type <sequence> args body secs declarations innerdecls 
+%type <sequence> args secs declarations innerdecls 
 %type <sequence> opt_instructions instructions exprs file
 %type <expression> expr literal integer real
 %type <lvalue> lval
@@ -53,7 +58,6 @@
 %type <init> ini_sec
 %type <end> end_sec
 %type <sec> sec
-
 %type <s> string
 
 %{
