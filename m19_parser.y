@@ -98,10 +98,10 @@ func            : fundecl                                           { $$ = $1; }
                 | fundef                                            { $$ = $1; }
                 ;
 
-fundecl         : data_type tID     	    fundecl_args              { $$ = new m19::function_declaration_node(LINE, tPRIVATE, $1, *$2, $4); delete $2; }
-                | '!'       tID           fundecl_args              { $$ = new m19::function_declaration_node(LINE, tPRIVATE,     *$2, $4); delete $2; }
-                | data_type tID qualifier fundecl_args              { $$ = new m19::function_declaration_node(LINE, $3, $1, *$2, $5); delete $2; }
-                | '!'       tID qualifier fundecl_args              { $$ = new m19::function_declaration_node(LINE, $3,           *$2, $5); delete $2; }
+fundecl         : data_type tID     	    fundecl_args              { $$ = new m19::function_declaration_node(LINE, tPRIVATE, $1, *$2, $3); delete $2; }
+                | '!'       tID           fundecl_args              { $$ = new m19::function_declaration_node(LINE, tPRIVATE,     *$2, $3); delete $2; }
+                | data_type tID qualifier fundecl_args              { $$ = new m19::function_declaration_node(LINE, $3      , $1, *$2, $4); delete $2; }
+                | '!'       tID qualifier fundecl_args              { $$ = new m19::function_declaration_node(LINE, $3      ,     *$2, $4); delete $2; }
                 ;
 
 qualifier		    : '!'									                              { $$ = tPUBLIC; }
