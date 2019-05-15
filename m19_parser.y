@@ -66,7 +66,7 @@
 %}
 %%
 
-file    	    : /* empty */                                       { compiler->ast($$ = new cdk::sequence_node(LINE)); }
+file    	      : /* empty */                                       { compiler->ast($$ = new cdk::sequence_node(LINE)); }
                 | declarations                                      { compiler->ast($$ = $1); }
                 ;
 
@@ -75,7 +75,7 @@ declarations    : declaration                                       { $$ = new c
                 ;
 
 declaration     : vardecl ';'                                       { $$ = $1; }
-                | func                                               { $$ = $1; }
+                | func                                              { $$ = $1; }
                 ;
 
 vardecl         : data_type tID                                     { $$ = new m19::variable_declaration_node(LINE, tPRIVATE, $1, *$2, nullptr); delete $2; }
@@ -153,7 +153,7 @@ end_sec         : /* empty */                                       { $$ = nullp
                 ;
 
 block           : '{' innerdecls opt_instructions '}'               { $$ = new m19::block_node(LINE, $2, $3); }
-                | '{'             opt_instructions '}'              { $$ = new m19::block_node(LINE, nullptr, $2); }
+                | '{'            opt_instructions '}'               { $$ = new m19::block_node(LINE, nullptr, $2); }
                 ;
 
 innerdecls      :            vardecl ';'                            { $$ = new cdk::sequence_node(LINE, $1); }
@@ -196,7 +196,7 @@ exprs           : /* empty */                                       { $$ = new c
 expr            : integer                                           { $$ = $1; }
                 | real                                              { $$ = $1; }    
                 | string                                            { $$ = new cdk::string_node(LINE, $1); }
-                | '@'                                               { $$ = new m19::read_node(LINE); }
+                | '@' %prec tUNARY                                  { $$ = new m19::read_node(LINE); }
 
                 | '-' expr %prec tUNARY                             { $$ = new cdk::neg_node(LINE, $2); }
                 | '+' expr %prec tUNARY                             { $$ = new m19::identity_node(LINE, $2); }
@@ -232,8 +232,8 @@ expr            : integer                                           { $$ = $1; }
 
 lval            : tID                                               { $$ = new cdk::variable_node(LINE, $1); delete $1; }  
                 | '@'                                               { $$ = new cdk::variable_node(LINE, $1); delete $1; }  
-                | lval             '[' expr ']'                     { $$ = new m19::index_node(LINE, new cdk::rvalue_node(LINE, $1), $3); }
-                | '(' expr ')'     '[' expr ']'                     { $$ = new m19::index_node(LINE, $2, $5); }
+                | lval              '[' expr ']'                    { $$ = new m19::index_node(LINE, new cdk::rvalue_node(LINE, $1), $3); }
+                |     '(' expr  ')' '[' expr ']'                    { $$ = new m19::index_node(LINE, $2, $5); }
                 | tID '(' exprs ')' '[' expr ']'                    { $$ = new m19::index_node(LINE, new m19::function_call_node(LINE, *$1, $3), $6); delete $1; }
                 | '@' '(' exprs ')' '[' expr ']'                    { $$ = new m19::index_node(LINE, new m19::function_call_node(LINE, *$1, $3), $6); delete $1; }
                 ;
