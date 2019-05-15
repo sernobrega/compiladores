@@ -19,12 +19,12 @@ namespace m19 {
     cdk::sequence_node *_arguments;
     
   public:
-    function_declaration_node(int lineno, int qualifier, basic_type *type, const std::string &id) :
-        cdk::basic_node(lineno), _qualifier(qualifier), _type(type), _id(id) {
+    function_declaration_node(int lineno, int qualifier, basic_type *type, const std::string &id, cdk::sequence_node * arguments) :
+        cdk::basic_node(lineno), _qualifier(qualifier), _type(type), _id(id), _arguments(arguments) {
     }
 
-    function_declaration_node(int lineno, int qualifier, const std::string &id) :
-        cdk::basic_node(lineno), _qualifier(qualifier), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id) {
+    function_declaration_node(int lineno, int qualifier, const std::string &id, cdk::sequence_node * arguments) :
+        cdk::basic_node(lineno), _qualifier(qualifier), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments) {
     }
 
   public:
@@ -39,6 +39,10 @@ namespace m19 {
     inline std::string id() const {
       return _id;
     }  
+
+    cdk::sequence_node *arguments() {
+      return _arguments;
+    }
 
     void accept(basic_ast_visitor *sp, int level) {
       sp->do_function_declaration_node(this, level);

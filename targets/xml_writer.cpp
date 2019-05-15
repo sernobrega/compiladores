@@ -212,7 +212,7 @@ void m19::xml_writer::do_function_definition_node(m19::function_definition_node 
     node->arguments()->accept(this, lvl + 4);
   }
   closeTag("arguments", lvl);
-  node->body()->accept(this, lvl + 2);
+  //node->body()->accept(this, lvl + 2);
   closeTag(node, lvl);
 }
 
