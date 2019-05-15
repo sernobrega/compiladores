@@ -18,7 +18,9 @@ namespace m19 {
     basic_type *_type;
     std::string _id;
     cdk::sequence_node * _arguments;
-    cdk::sequence_node * _body;
+    m19::section_init_node * _init;
+    cdk::sequence_node * _section;
+    m19::section_end_node * _end;
     cdk::expression_node * _retval;
   
   public:
@@ -57,8 +59,16 @@ namespace m19 {
       return _arguments;
     }
 
-    inline cdk::sequence_node * body() {
-      return _body;
+    m19::section_init_node *init() {
+      return _init;
+    }
+
+    m19::section_end_node *end() {
+      return _end;
+    }
+
+    m19::sequence_node *section() {
+      return _section;
     }
 
     void accept(basic_ast_visitor *sp, int level) {
