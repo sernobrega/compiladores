@@ -45,6 +45,7 @@
 %left '*' '/' '%'
 %nonassoc '?'
 %nonassoc tUNARY
+%right '(' '['
 
 %type <node> declaration vardecl fundecl fundecl_args fundef instruction
 %type <node> cond_i iter_i 
