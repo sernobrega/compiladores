@@ -138,7 +138,7 @@ ini_sec         : /* empty */                                       { $$ = nullp
 
 secs            : /* empty */                                       { $$ = nullptr; }
                 | sec                                               { $$ = new cdk::sequence_node(LINE, $1); }
-                | sec secs                                          { $$ = new cdk::sequence_node(LINE, $2, new cdk::sequence_node(LINE, $1)); }
+                | secs sec                                          { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 ;
 
 sec             : '[' expr ']' block                                { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
