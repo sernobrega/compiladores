@@ -213,7 +213,7 @@ static std::ostringstream strlit;
                             return tSTRING;
                             }
 <X_STRING>.                 strlit << *yytext;
-<X_STRING>\n              yyerror("Illegal change of line within string");
+<X_STRING>\n                yyerror("Illegal change of line within string");
 
 <X_ISLASH>n                 strlit << '\n'; yy_pop_state();
 <X_ISLASH>r                 strlit << '\r'; yy_pop_state();
@@ -225,7 +225,7 @@ static std::ostringstream strlit;
                             yy_pop_state();
                             }
 <X_ISLASH>.                 strlit << *yytext; yy_pop_state();
-<X_ISLASH\n                yyerror("Illegal change of line within string");
+<X_ISLASH>\n                 yyerror("Illegal change of line within string");
 
  /* ------------------------------------------------------------ */
  /* --------------->           Outros           <--------------- */
