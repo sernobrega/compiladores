@@ -196,7 +196,7 @@ exprs           : /* empty */                                       { $$ = new c
 expr            : integer                                           { $$ = $1; }
                 | real                                              { $$ = $1; }    
                 | string                                            { $$ = new cdk::string_node(LINE, $1); }
-                | '@' %prec tUNARY                                  { $$ = new m19::read_node(LINE); }
+                | '@'                                               { $$ = new m19::read_node(LINE); }
 
                 | '-' expr %prec tUNARY                             { $$ = new cdk::neg_node(LINE, $2); }
                 | '+' expr %prec tUNARY                             { $$ = new m19::identity_node(LINE, $2); }
@@ -231,7 +231,7 @@ expr            : integer                                           { $$ = $1; }
                 ;
 
 lval            : tID                                               { $$ = new cdk::variable_node(LINE, $1); delete $1; }  
-                | '@'                                               { $$ = new cdk::variable_node(LINE, $1); delete $1; }  
+                | '@' '='                                           { $$ = new cdk::variable_node(LINE, $1); delete $1; }  
                 | lval              '[' expr ']'                    { $$ = new m19::index_node(LINE, new cdk::rvalue_node(LINE, $1), $3); }
                 |     '(' expr  ')' '[' expr ']'                    { $$ = new m19::index_node(LINE, $2, $5); }
                 | tID '(' exprs ')' '[' expr ']'                    { $$ = new m19::index_node(LINE, new m19::function_call_node(LINE, *$1, $3), $6); delete $1; }
