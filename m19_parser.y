@@ -15,15 +15,18 @@
 %}
 
 %union {
-  int                   i;	/* integer value */
-  double                d;  /* real value*/
-  std::string          *s;	/* symbol name or string literal */
-  cdk::basic_node      *node;	/* node pointer */
-  cdk::sequence_node   *sequence;
-  cdk::expression_node *expression; /* expression nodes */
-  cdk::lvalue_node     *lvalue;
-  basic_type           *type;
-  m19::block_node      *block; /* block node*/
+  int                     i;	/* integer value */
+  double                  d;  /* real value*/
+  std::string             *s;	/* symbol name or string literal */
+  cdk::basic_node         *node;	/* node pointer */
+  cdk::sequence_node      *sequence;
+  cdk::expression_node    *expression; /* expression nodes */
+  cdk::lvalue_node        *lvalue;
+  basic_type              *type;
+  m19::block_node         *block; /* block node*/
+  m19::section_init_node  *init;
+  m19::section_end_node   *end;
+  m19::section_node       *sec;
 };
 
 %token <i> tINTEGER
@@ -38,7 +41,7 @@
 %left '*' '/' '%'
 %nonassoc tUNARY
 
-%type <node> declaration vardecl fundecl fundecl_args fundef ini_sec end_sec sec instruction
+%type <node> declaration vardecl fundecl fundecl_args fundef instruction
 %type <node> cond_i iter_i 
 %type <sequence> args body secs declarations innerdecls 
 %type <sequence> opt_instructions instructions exprs file
@@ -47,6 +50,10 @@
 %type <type> data_type pure_type
 %type <i> qualifier
 %type <block> block
+%type <init> ini_sec
+%type <end> end_sec
+%type <sec> sec
+
 %type <s> string
 
 %{
