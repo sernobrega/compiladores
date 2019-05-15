@@ -17,14 +17,17 @@ namespace m19 {
     basic_type *_type;
     std::string _id;
     cdk::sequence_node *_arguments;
-  
+    m19::section_init_node * _init;
+    cdk::sequence_node * _section;
+    m19::section_end_node * _end;
+    
   public:
-    function_declaration_node(int lineno, int qualifier, basic_type *type, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::basic_node(lineno), _qualifier(qualifier), _type(type), _id(id), _arguments(arguments) {
+    function_declaration_node(int lineno, int qualifier, basic_type *type, const std::string &id, m19::section_init_node * init, m19::sequence_node * section, m19::section_end_node * end) :
+        cdk::basic_node(lineno), _qualifier(qualifier), _type(type), _id(id), _init(init), _section(section), _end(end) {
     }
 
-    function_declaration_node(int lineno, int qualifier, const std::string &id, cdk::sequence_node *arguments) :
-        cdk::basic_node(lineno), _qualifier(qualifier), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments) {
+    function_declaration_node(int lineno, int qualifier, const std::string &id, m19::section_init_node * init, m19::sequence_node * section, m19::section_end_node * end) :
+        cdk::basic_node(lineno), _qualifier(qualifier), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _init(init), _section(section), _end(end) {
     }
 
   public:
@@ -40,8 +43,16 @@ namespace m19 {
       return _id;
     }
 
-    cdk::sequence_node *arguments() {
-      return _arguments;
+    m19::section_init_node *init() {
+      return _init;
+    }
+
+    m19::section_end_node *end() {
+      return _end;
+    }
+
+    m19::sequence_node *section() {
+      return _section;
     }
 
     void accept(basic_ast_visitor *sp, int level) {

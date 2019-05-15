@@ -38,9 +38,9 @@
 %left '*' '/' '%'
 %nonassoc tUNARY
 
-%type <node> declaration vardecl fundecl fundecl_args fundef init_section end_section section instruction
+%type <node> declaration vardecl fundecl fundecl_args fundef ini_sec end_sec sec instruction
 %type <node> cond_i iter_i 
-%type <sequence> args body sections declarations innerdecls 
+%type <sequence> args body secs declarations innerdecls 
 %type <sequence> opt_instructions instructions exprs file
 %type <expression> expr literal integer real
 %type <lvalue> lval
@@ -105,14 +105,14 @@ args			: /* empty */                                       { $$ = new cdk::seque
 				| args ',' vardecl						            { $$ = new cdk::sequence_node(LINE, $3, $1); }
 				;
 
-fundef			: data_type tID 	'(' args ')' body				{ $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $4, $6); delete $2;}
-				| '!' tID			'(' args ')' body				{ $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $4, $6); delete $2; }
-				| data_type tID '!' '(' args ')' body				{ $$ = new m19::function_definition_node(LINE, tPUBLIC,  $1, *$2, $5, $7); delete $2; }
-				| '!' tID '!'       '(' args ')' body				{ $$ = new m19::function_definition_node(LINE, tPUBLIC,      *$2, $5, $7); delete $2; }
-				| data_type tID 	'(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $4, $8, $7); delete $2; }
-				| '!' tID			'(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $4, $8, $7); delete $2; }
-				| data_type tID '!' '(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPUBLIC,  $1, *$2, $5, $9, $8); delete $2; }
-				| '!' tID '!'       '(' args ')' '=' literal body	{ $$ = new m19::function_definition_node(LINE, tPUBLIC,      *$2, $5, $9, $8); delete $2; }
+fundef			: data_type tID 	'(' args ')' ini_sec secs end_sec				{ $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $4, $6, $7, $8); delete $2;}
+				| '!' tID			'(' args ')' ini_sec secs end_sec				{ $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $4, $6, $7, $8); delete $2; }
+				| data_type tID '!' '(' args ')' ini_sec secs end_sec				{ $$ = new m19::function_definition_node(LINE, tPUBLIC,  $1, *$2, $5, $7, $8, $9); delete $2; }
+				| '!' tID '!'       '(' args ')' ini_sec secs end_sec				{ $$ = new m19::function_definition_node(LINE, tPUBLIC,      *$2, $5, $7, $8, $9); delete $2; }
+				| data_type tID 	'(' args ')' '=' literal ini_sec secs end_sec	{ $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $4, $7, $8, $9, $10); delete $2; }
+				| '!' tID			'(' args ')' '=' literal ini_sec secs end_sec	{ $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $4, $7, $8, $9, $10); delete $2; }
+				| data_type tID '!' '(' args ')' '=' literal ini_sec secs end_sec	{ $$ = new m19::function_definition_node(LINE, tPUBLIC,  $1, *$2, $5, $8, $9, $10, $11); delete $2; }
+				| '!' tID '!'       '(' args ')' '=' literal ini_sec secs end_sec	{ $$ = new m19::function_definition_node(LINE, tPUBLIC,      *$2, $5, $8, $9, $10, $11); delete $2; }
 				;
 
 literal			: integer                                           { $$ = $1; }
@@ -120,28 +120,25 @@ literal			: integer                                           { $$ = $1; }
 				| string                                            { $$ = new cdk::string_node(LINE, $1); }
 				;
 
-body			: init_section sections                             { $$ = new cdk::sequence_node(LINE, $1, $2); }
-				| init_section end_section                          { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
-                | init_section                                      { $$ = new cdk::sequence_node(LINE, $1); }
-                | sections                                          { $$ = new cdk::sequence_node(LINE, $1); }
-                | end_section                                       { $$ = new cdk::sequence_node(LINE, $1); }
-				; 
+ini_sec         : /* empty */                                       { $$ = nullptr; }
+                | tBEGINS block                                     { $$ = new m19::section_init_node(LINE, $2); };
+                
 
-init_section    : tBEGINS block                                     { $$ = new m19::section_init_node(LINE, $2); };
-
-sections        : section                                           { $$ = new cdk::sequence_node(LINE, $1); }
-                | section sections                                  { $$ = new cdk::sequence_node(LINE, $2, new cdk::sequence_node(LINE, $1)); }
+secs            : /* empty */                                       { $$ = nullptr; }
+                | sec                                               { $$ = new cdk::sequence_node(LINE, $1); }
+                | sec secs                                          { $$ = new cdk::sequence_node(LINE, $2, new cdk::sequence_node(LINE, $1)); }
                 ;
 
-section         : '[' expr ']' block                                { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
+sec             : '[' expr ']' block                                { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
                 | '(' expr ')' block                                { $$ = new m19::section_node(LINE, tINCLUSIVE, $2, $4); }
                 | '[' ']' block                                     { $$ = new m19::section_node(LINE, tEXCLUSIVE, nullptr, $3); }
                 | '(' ')' block                                     { $$ = new m19::section_node(LINE, tINCLUSIVE, nullptr, $3); }
                 | block                                             { $$ = new m19::section_node(LINE, tINCLUSIVE, $1    ); }
-                | end_section                                       { $$ = new cdk::sequence_node(LINE, $1); }
                 ;
 
-end_section     : tENDS block                                       { $$ = new m19::section_end_node(LINE, $2); };
+end_sec         : /* empty */                                       { $$ = nullptr; }
+                | tENDS block                                       { $$ = new m19::section_end_node(LINE, $2); };
+                ;
 
 block           : '{' innerdecls opt_instructions '}'               { $$ = new m19::block_node(LINE, $2, $3); }
                 | '{'             opt_instructions '}'              { $$ = new m19::block_node(LINE, nullptr, $2); }
@@ -191,7 +188,7 @@ expr            : integer                                           { $$ = $1; }
 
                 | '-' expr %prec tUNARY                             { $$ = new cdk::neg_node(LINE, $2); }
                 | '+' expr %prec tUNARY                             { $$ = new m19::identity_node(LINE, $2); }
-                | '~' expr %prec tUNARY                             { $$ = new cdk::not_node(LINE, $2); }
+                | '~' expr                                          { $$ = new cdk::not_node(LINE, $2); }
 
                 | expr '+' expr	                                    { $$ = new cdk::add_node(LINE, $1, $3); }
                 | expr '-' expr	                                    { $$ = new cdk::sub_node(LINE, $1, $3); }
