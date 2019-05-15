@@ -185,15 +185,15 @@ static std::ostringstream strlit;
 
 
 
-[1-9][0-9]*\.?[0-9]+    yylval.d = strtod(yytext, NULL); return tREAL;
+[1-9][0-9]*\.?[0-9]+    yylval.d = strtod(yytext, NULL); if(errno != 0) yyerror("Overflow strtod"); return tREAL;
 
  /* ------------------------------------------------------------ */
  /* --------------->          Inteiros          <--------------- */
  /* ------------------------------------------------------------ */
 "0x"                        yy_push_state(X_HEX);
-<X_HEX>[0-9A-Fa-f]+         yylval.i = strtoul(yytext, nullptr, 16); yy_pop_state(); return tINTEGER;
+<X_HEX>[0-9A-Fa-f]+         yylval.i = strtoul(yytext, nullptr, 16); if(errno != 0) yyerror("Overflow strtod"); yy_pop_state(); return tINTEGER;
 
-[1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); return tINTEGER;
+[1-9][0-9]*                 yylval.i = strtoul(yytext, nullptr, 10); if(errno != 0) yyerror("Overflow strtod"); return tINTEGER;
 
  /* ------------------------------------------------------------ */
  /* --------------->  Identificadores (nomes)  <--------------- */
