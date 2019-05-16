@@ -48,7 +48,7 @@
 %right '(' '['
 
 %type <node> declaration vardecl func fundecl  fundef instruction
-%type <node> cond_i iter_i 
+%type <node> cond_i iter_i cond_else
 %type <sequence> args secs declarations innerdecls
 %type <sequence> opt_instructions instructions exprs file vardecls
 %type <expression> expr literal integer real
