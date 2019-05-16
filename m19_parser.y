@@ -46,9 +46,10 @@
 %nonassoc '?'
 %nonassoc tUNARY
 %right '(' '['
+%nonassoc ':'
 
 %type <node> declaration vardecl func fundecl  fundef instruction
-%type <node> cond_i iter_i cond_else
+%type <node> cond_i iter_i 
 %type <sequence> args secs declarations innerdecls
 %type <sequence> opt_instructions instructions exprs file vardecls
 %type <expression> expr literal integer real
@@ -176,10 +177,7 @@ instruction     : tRETURN                                           { $$ = new m
 
 cond_i          : '[' expr ']' '#' instruction                      { $$ = new m19::if_node(LINE, $2, $5); }
                 | '[' expr ']' '?' instruction                      { $$ = new m19::if_node(LINE, $2, $5); }
-                | '[' expr ']' '?' instruction cond_else            { $$ = new m19::if_else_node(LINE, $2, $5, $6); }
-                ;
-
-cond_else       : ':' instruction                                   { $$ = $2; }
+                | '[' expr ']' '?' instruction ':' instruction      { $$ = new m19::if_else_node(LINE, $2, $5, $7); }
                 ;
 
 iter_i          : '[' args  ';' exprs ';' exprs ']' instruction     { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
