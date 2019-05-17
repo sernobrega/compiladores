@@ -54,8 +54,8 @@
 %type <lvalue> lval
 %type <type> data_type pure_type
 %type <block> block
-%type <init> ini_sec
-%type <end> end_sec
+%type <init> ini_sec ini_sem
+%type <end> end_sec end_sem
 %type <sec> sec
 %type <s> string
 
