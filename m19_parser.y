@@ -144,11 +144,6 @@ literal			    : integer                                                   { $$ =
                 ;
 
 ini_sem         : tBEGINS block                                             { $$ = new m19::section_init_node(LINE, $2); };
-                
-
-ini_sec         : /* empty */                                               { $$ = nullptr; }
-                | ini_sem                                                   { $$ = $1; }
-                ;
 
 secm            : sec                                                       { $$ = new cdk::sequence_node(LINE, $1); }
                 | secm sec                                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
