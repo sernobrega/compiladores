@@ -315,7 +315,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   reset_new_symbol();
 
   _offset = 8; //FP IP
-  _symtab.push();
+  // _symtab.push();
   // if(node->arguments()) {
   //   for(size_t ix = 0; ix < node->arguments()->size(); ix++) {
   //     cdk::basic_node * arg = node->arguments()->node(ix);
@@ -358,7 +358,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _pf.INT(0);
   _pf.STFVAL32();
 
-  _symtab.pop(); 
+  // _symtab.pop(); 
 
   _pf.LEAVE();
   _pf.RET();
