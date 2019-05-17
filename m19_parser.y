@@ -131,8 +131,7 @@ ini_sec         : /* empty */                                               { $$
                 | tBEGINS block                                             { $$ = new m19::section_init_node(LINE, $2); }
                 ;
                 
-secs            : /* empty */                                               { $$ = nullptr; }
-                | sec                                                       { $$ = new cdk::sequence_node(LINE, $1); }
+secs            : sec                                                       { $$ = new cdk::sequence_node(LINE, $1); }
                 | secs sec                                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 ;
 
