@@ -124,7 +124,7 @@ fundef			    : data_type tID 	  args             ini_sec secs end_sec	  { $$ = n
                 | '!'       tID			args '=' literal ini_sem      end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $3, $5, $6, nullptr, $7); delete $2; }
                 | data_type tID '!' args '=' literal ini_sem      end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC , $1, *$2, $4, $6, $7, nullptr, $8); delete $2; }
                 | '!'       tID '!' args '=' literal ini_sem      end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC ,     *$2, $4, $6, $7, nullptr, $8); delete $2; }
-                | data_type tID 	  args                          end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $3, $4, $5, $6); delete $2;}
+                | data_type tID 	  args                          end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $3, nullptr, nullptr, $4); delete $2;}
                 | '!'       tID			args                          end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $3, nullptr, nullptr, $4); delete $2; }
                 | data_type tID '!' args                          end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC , $1, *$2, $4, nullptr, nullptr, $5); delete $2; }
                 | '!'       tID '!' args                          end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC ,     *$2, $4, nullptr, nullptr, $5); delete $2; }
