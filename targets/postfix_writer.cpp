@@ -310,9 +310,9 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   //FIXME: naive approach - what if functions are defined inside a block or in an argument
   bool isMain = (node->id() == "m19");
 
-  // _function = new_symbol();
-  // _functions_to_declare.erase(_function->name());
-  // reset_new_symbol();
+  _function = new_symbol();
+  _functions_to_declare.erase(_function->name());
+  reset_new_symbol();
 
   // _offset = 8; //FP IP
   // _symtab.push();
@@ -359,12 +359,9 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _pf.STFVAL32();
   _pf.LEAVE();
   _pf.RET();
-
-  // _pf.LEAVE();
-  // _pf.RET();
   
-  //main function (m19) is being defined, functions to be declared are extern
-  // if(isMain) 
-  //   for(std::string s: _functions_to_declare)
-  //     _pf.EXTERN(s);
+  main function (m19) is being defined, functions to be declared are extern
+  if(isMain) 
+    for(std::string s: _functions_to_declare)
+      _pf.EXTERN(s);
 }
