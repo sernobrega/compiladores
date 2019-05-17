@@ -314,8 +314,8 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _functions_to_declare.erase(_function->name());
   reset_new_symbol();
 
-  // _offset = 8; //FP IP
-  // _symtab.push();
+  _offset = 8; //FP IP
+  _symtab.push();
   // if(node->arguments()) {
   //   for(size_t ix = 0; ix < node->arguments()->size(); ix++) {
   //     cdk::basic_node * arg = node->arguments()->node(ix);
@@ -341,7 +341,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   //SOMETHING FOR ENTER
   _pf.ENTER(0);
 
-  // _offset = -_function->type()->size(); //retval
+  _offset = -_function->type()->size(); //retval
 
   //sections
   if(node->init()) node->init()->accept(this, lvl + 4);
