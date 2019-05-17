@@ -360,7 +360,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _pf.LEAVE();
   _pf.RET();
   
-  main function (m19) is being defined, functions to be declared are extern
+  //main function (m19) is being defined, functions to be declared are extern
   if(isMain) 
     for(std::string s: _functions_to_declare)
       _pf.EXTERN(s);
