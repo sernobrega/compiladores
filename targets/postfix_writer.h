@@ -18,6 +18,11 @@ namespace m19 {
     cdk::basic_postfix_emitter &_pf;
     int _lbl;
 
+  std::set<std::string> _functions_to_declare;
+  std::shared_ptr<m19::symbol> _function;
+
+  int _offset;
+  
   public:
     postfix_writer(std::shared_ptr<cdk::compiler> compiler, cdk::symbol_table<m19::symbol> &symtab,
                    cdk::basic_postfix_emitter &pf) :

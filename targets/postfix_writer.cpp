@@ -4,6 +4,7 @@
 #include "targets/type_checker.h"
 #include "targets/postfix_writer.h"
 #include "ast/all.h"  // all.h is automatically generated
+#include "m19_parser.tab.h"
 
 //---------------------------------------------------------------------------
 
@@ -215,7 +216,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
 void m19::postfix_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
   //ASSERT_SAFE;
   //FIXME: naive approach - what if functions are defined inside a block or in an argument
-  bool isMain = (node->identifier() == "m19");
+  bool isMain = (node->id() == "m19");
 
   _function = new_symbol();
   _functions_to_declare.erase(_function->name());
@@ -224,7 +225,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _offset = 8; //FP IP
   _symtab.push();
   if(node->arguments()) {
-    for(size_t ix = 0; ix < node->arguments(->size()); ix++) {
+    for(size_t ix = 0; ix < node->arguments()->size(); ix++) {
       cdk::basic_node * arg = node->arguments()->node(ix);
       if(arg == nullptr) break;
       arg->accept(this, 0);
@@ -236,7 +237,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   if(isMain) {
     _pf.GLOBAL("_main", _pf.FUNC());
     _pf.LABEL("_main");
-  } else if(node->qualifier() == tPUBLIC) {
+  } else if(node->scope() == tPUBLIC) {
     _pf.GLOBAL(_function->name(), _pf.FUNC());
     _pf.LABEL(_function->name());
   } else { //private function
@@ -254,21 +255,19 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   if(node->init()) node->init()->accept(this, lvl + 4);
   if(node->section()) {
     for(size_t ix = 0; ix < node->section()->size(); ix++) {
-      cdk::section_node * sec = node->section()->node(ix);
+      m19::section_node * sec = node->section()->node(ix);
       if(sec == nullptr) break;
       sec->accept(this, lvl + 6);
     }
   }
   if(node->end()) node->end()->accept(this, lvl + 4);
-  node->block()->accept(this, lvl+4);
-
 
   // end the main function
   _pf.INT(0);
   _pf.STFVAL32();
   _pf.LEAVE();
   _pf.RET();
-  
+
   // _pf.LEAVE();
   // _pf.RET();
   
