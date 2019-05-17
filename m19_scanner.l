@@ -15,6 +15,25 @@
 
 // output stream for building string literals
 static std::ostringstream strlit;
+
+double scinotation(const char * str, int n) {
+    char * total = new std::string(n);
+    char degree;
+    for (auto c = str.begin(); c!=str.end(); ++c)
+    {
+        if(isDigit(*c)) {
+            total.append(*c);
+        } else {
+            total.append('.');
+            degree = *c;
+        }
+    }
+
+
+
+    if(degree == NULL) yyerror("Error parsing double with scientific notation") 
+}
+
 %}
 %x X_STRING X_COMMENT X_ISLASH X_HEX
 %x X_a X_f X_p X_n X_u X_m X_k X_Me X_G X_T X_P X_E
