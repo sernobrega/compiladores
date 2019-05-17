@@ -135,7 +135,8 @@ secs            : sec                                                       { $$
                 | secs sec                                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 ;
 
-sec             : '[' expr ']' block                                        { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
+sec             : /* empty */                                               { $$ = nullptr; }
+                | '[' expr ']' block                                        { $$ = new m19::section_node(LINE, tEXCLUSIVE, $2, $4); }
                 | '(' expr ')' block                                        { $$ = new m19::section_node(LINE, tINCLUSIVE, $2, $4); }
                 | '['      ']' block                                        { $$ = new m19::section_node(LINE, tEXCLUSIVE, nullptr, $3); }
                 | '('      ')' block                                        { $$ = new m19::section_node(LINE, tINCLUSIVE, nullptr, $3); }
