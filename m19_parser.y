@@ -116,10 +116,10 @@ fundef			    : data_type tID 	  args             ini_sem secs end_sec	  { $$ = n
                 | '!'       tID			args '=' literal ini_sem secs end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $3, $5, $6, $7, $8); delete $2; }
                 | data_type tID '!' args '=' literal ini_sem secs end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC , $1, *$2, $4, $6, $7, $8, $9); delete $2; }
                 | '!'       tID '!' args '=' literal ini_sem secs end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC ,     *$2, $4, $6, $7, $8, $9); delete $2; }
-                | data_type tID 	  args                     secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $3, $4, nullptr, $5); delete $2;}
-                | '!'       tID			args                     secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $3, $4, nullptr, $5); delete $2; }
-                | data_type tID '!' args                     secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC , $1, *$2, $4, $5, nullptr, $6); delete $2; }
-                | '!'       tID '!' args                     secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC ,     *$2, $4, $5, nullptr, $6); delete $2; }
+                | data_type tID 	  args                     secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $3, nullptr, $4, $5); delete $2;}
+                | '!'       tID			args                     secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $3, nullptr, $4, $5); delete $2; }
+                | data_type tID '!' args                     secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC , $1, *$2, $4, nullptr, $5, $6); delete $2; }
+                | '!'       tID '!' args                     secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC ,     *$2, $4, nullptr, $5, $6); delete $2; }
                 | data_type tID 	  args '=' literal         secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE, $1, *$2, $3, $5, nullptr, $6, $7); delete $2; }
                 | '!'       tID			args '=' literal         secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPRIVATE,     *$2, $3, $5, nullptr, $6, $7); delete $2; }
                 | data_type tID '!' args '=' literal         secm end_sec	  { $$ = new m19::function_definition_node(LINE, tPUBLIC , $1, *$2, $4, $6, nullptr, $7, $8); delete $2; }
