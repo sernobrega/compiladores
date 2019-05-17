@@ -56,7 +56,7 @@
 %type <block> block
 %type <init> ini_sec ini_sem
 %type <end> end_sec end_sem
-%type <sec> sec
+%type <sec> sec secm
 %type <s> string
 
 %{
