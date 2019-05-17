@@ -357,6 +357,9 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   // end the main function
   _pf.INT(0);
   _pf.STFVAL32();
+
+  _symtab.pop(); 
+
   _pf.LEAVE();
   _pf.RET();
   
