@@ -127,9 +127,12 @@ literal			    : integer                                                   { $$ =
                 | string                                                    { $$ = new cdk::string_node(LINE, $1); }
                 ;
 
-ini_sec         : tBEGINS block                                             { $$ = new m19::section_init_node(LINE, $2); };
+ini_sec         : /* empty */                                               { $$ = nullptr; }
+                | tBEGINS block                                             { $$ = new m19::section_init_node(LINE, $2); }
+                ;
                 
-secs            : sec                                                       { $$ = new cdk::sequence_node(LINE, $1); }
+secs            : /* empty */                                               { $$ = nullptr; }
+                | sec                                                       { $$ = new cdk::sequence_node(LINE, $1); }
                 | secs sec                                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
                 ;
 
@@ -140,7 +143,8 @@ sec             : '[' expr ']' block                                        { $$
                 |              block                                        { $$ = new m19::section_node(LINE, tINCLUSIVE, $1    ); }
                 ;
 
-end_sec         : tENDS block                                               { $$ = new m19::section_end_node(LINE, $2); };
+end_sec         : /* empty */                                               { $$ = nullptr; }
+                | tENDS block                                               { $$ = new m19::section_end_node(LINE, $2); };
                 ;
 
 block           : '{' innerdecls opt_instructions '}'                       { $$ = new m19::block_node(LINE, $2, $3); }
