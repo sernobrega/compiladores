@@ -1,6 +1,7 @@
 #ifndef __M19_SEMANTICS_POSTFIX_WRITER_H__
 #define __M19_SEMANTICS_POSTFIX_WRITER_H__
 
+#include <set>
 #include <string>
 #include <iostream>
 #include <cdk/symbol_table.h>
