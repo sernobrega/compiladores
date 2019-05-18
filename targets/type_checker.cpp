@@ -182,49 +182,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
 
 //---------------------------------------------------------------------------
 
-void m19::type_checker::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
-  std::string id;
 
-  if(node->id() == "m19")
-    id = "_main";
-  else if(node->id() == "_main")
-    id = "._main";
-  else
-    id = node->id();
-
-  std::shared_ptr<m19::symbol> function = 
-      std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
-  function->set_offset(-node->type()->size()); //return val
-
-  std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
-
-  /* Symbol doesn't exist */
-  if(!previous) {
-    _symtab.insert(function->name(), function);
-    _parent->set_new_symbol(function);
-    return;
-  }
-
-  /* Not extern */
-  if(node->scope() == tEXTERN)
-    throw std::string("Function" + function->name() + " is extern and can't be defined! Invalid scope.");
-
-  /* Checking if previous declaration is not function */
-  if(previous != nullptr && !previous->isFunction())
-    throw std::string("Redefinition of function " + function->name() + " is invalid. Variable declared with same name.");
-
-  /* Checking if previous has been defined already */
-  if(previous != nullptr && !previous->fundecl())
-    throw std::string("Function " + function->name() + " has already been defined.");
-
-  /* Checking for conflicts with previous definitions */
-  if(previous->scope() != node->scope() || previous->type() != node->type()) {
-    throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible.");
-  }
-
-  _symtab.replace(function->name(), function);
-  _parent->set_new_symbol(function);
-}
 
 void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
   //
@@ -293,4 +251,49 @@ void m19::type_checker::do_if_node(m19::if_node * const node, int lvl) {
 
 void m19::type_checker::do_if_else_node(m19::if_else_node * const node, int lvl) {
   node->condition()->accept(this, lvl + 4);
+}
+
+/****************************************************************************************
+ *****************************       FUNCTION RELATED       *****************************
+ ****************************************************************************************/
+void m19::type_checker::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
+  std::string id;
+
+  if(node->id() == "m19")
+    id = "_main";
+  else if(node->id() == "_main")
+    id = "._main";
+  else
+    id = node->id();
+
+  std::shared_ptr<m19::symbol> function = 
+      std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
+  function->set_offset(-node->type()->size()); //return val
+
+  std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
+
+  /* Symbol doesn't exist */
+  if(!previous) {
+    _symtab.insert(function->name(), function);
+    _parent->set_new_symbol(function);
+    return;
+  }
+
+  /* Checking if previous declaration is not function */
+  if(previous != nullptr && !previous->isFunction())
+    throw std::string("Redefinition of function " + function->name() + " is invalid. Variable declared with same name.");
+
+  /* Checking if previous has been defined already */
+  if(previous != nullptr && !previous->fundecl())
+    throw std::string("Function " + function->name() + " has already been defined.");
+
+  /* Checking for conflicts with previous definitions */
+  if(previous->scope() != node->scope() || previous->type() != node->type()) {
+    throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible.");
+  }
+
+  //FIXME: check arguments?
+
+  _symtab.replace(function->name(), function);
+  _parent->set_new_symbol(function);
 }

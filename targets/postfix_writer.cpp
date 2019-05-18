@@ -50,10 +50,16 @@ void m19::postfix_writer::do_string_node(cdk::string_node * const node, int lvl)
   _pf.ALIGN(); // make sure we are aligned
   _pf.LABEL(mklbl(lbl1 = ++_lbl)); // give the string a name
   _pf.SSTRING(node->value()); // output string characters
-
-  /* leave the address on the stack */
-  _pf.TEXT(); // return to the TEXT segment
-  _pf.ADDR(mklbl(lbl1)); // the string to be printed
+  if(_function) {
+    /* local variable */
+    _pf.TEXT();
+    _pf.ADDR(mklbl(lbl1));
+  }
+  else {
+    /* global variable */
+    _pf.TEXT(); 
+    _pf.SADDR(mklbl(lbl1)); 
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -222,9 +228,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
   //
 }
 
-void m19::postfix_writer::do_block_node(m19::block_node * const node, int lvl) {
-  //
-}
+
 
 void m19::postfix_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
   //
@@ -235,18 +239,6 @@ void m19::postfix_writer::do_address_node(m19::address_node * const node, int lv
 }
 
 void m19::postfix_writer::do_index_node(m19::index_node * const node, int lvl) {
-  //
-}
-
-void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
-  //
-}
-
-void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
-  //
-}
-
-void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
   //
 }
 
@@ -305,7 +297,9 @@ void m19::postfix_writer::do_if_else_node(m19::if_else_node * const node, int lv
 }
 
 
-//--
+/****************************************************************************************
+ *****************************       FUNCTION RELATED       *****************************
+ ****************************************************************************************/
 void m19::postfix_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
 
@@ -351,7 +345,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
     for(size_t ix = 0; ix < node->section()->size(); ix++) {
       m19::section_node * sec = (m19::section_node *)node->section()->node(ix);
       if(sec == nullptr) break;
-      sec->accept(this, lvl + 6);
+      sec->accept(this, lvl + 8);
     }
   }
   if(node->end()) node->end()->accept(this, lvl + 4);
@@ -366,4 +360,30 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   if(isMain) 
     for(std::string s: _functions_to_declare)
       _pf.EXTERN(s);
+}
+
+void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
+  //
+  if(node->qualifier() == tINCLUSIVE && node->expr() == nullptr) {
+    os() << "        ;; hey " << std::endl;
+    node->block()->accept(this, lvl + 2);
+  }
+  else if(node->qualifier() == tINCLUSIVE) {
+    os() << "        ;; hey2 " << std::endl;
+  }
+}
+
+void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
+  //
+}
+
+void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
+  //
+}
+
+void m19::postfix_writer::do_block_node(m19::block_node * const node, int lvl) {
+  _symtab.push(); // for block-local vars
+  if (node->declarations()) node->declarations()->accept(this, lvl + 2);
+  if (node->instructions()) node->instructions()->accept(this, lvl + 2);
+  _symtab.pop();
 }
