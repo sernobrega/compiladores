@@ -120,10 +120,6 @@ void m19::frame_size_calculator::do_function_call_node(m19::function_call_node *
   // EMPTY
 }
 
-void m19::frame_size_calculator::do_block_node(m19::block_node * const node, int lvl) {
-  // EMPTY
-}
-
 void m19::frame_size_calculator::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
   // EMPTY
 }
@@ -155,36 +151,46 @@ void m19::frame_size_calculator::do_identity_node(m19::identity_node * const nod
 //---------------------------------------------------------------------------
 
 void m19::frame_size_calculator::do_for_node(m19::for_node * const node, int lvl) {
-  // EMPTY
+  node->instruction()->accept(this, lvl + 2);
 }
 
 
 void m19::frame_size_calculator::do_if_node(m19::if_node * const node, int lvl) {
-  // EMPTY
+  node->block()->accept(this, lvl + 2);
 }
 
 void m19::frame_size_calculator::do_if_else_node(m19::if_else_node * const node, int lvl) {
-  // EMPTY
+  node->thenblock()->accept(this, lvl + 2);
+  if (node->elseblock()) node->elseblock()->accept(this, lvl + 2);
 }
 
 void m19::frame_size_calculator::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
-  // EMPTY
+  _localsize += node->type()->size();
 }
 
 void m19::frame_size_calculator::do_sequence_node(cdk::sequence_node * const node, int lvl) {
-  // EMPTY
+  for (size_t i = 0; i < node->size(); i++) {
+    cdk::basic_node *n = node->node(i);
+    if (n == nullptr) break;
+    n->accept(this, lvl + 2);
+  }
+}
+
+void m19::frame_size_calculator::do_block_node(m19::block_node * const node, int lvl) {if (node->declarations()) node->declarations()->accept(this, lvl + 2);
+  if (node->declarations()) node->declarations()->accept(this, lvl + 2);
+  if (node->instructions()) node->instructions()->accept(this, lvl + 2);
 }
 
 void m19::frame_size_calculator::do_section_node(m19::section_node * const node, int lvl) {
-  // EMPTY
+	node->block()->accept(this, lvl + 2);
 }
 
 void m19::frame_size_calculator::do_section_end_node(m19::section_end_node * const node, int lvl) {
-  // EMPTY
+  node->block()->accept(this, lvl + 2);
 }
 
 void m19::frame_size_calculator::do_section_init_node(m19::section_init_node * const node, int lvl) {
-  // EMPTY
+ 	node->block()->accept(this, lvl + 2);
 }
 
 

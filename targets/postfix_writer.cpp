@@ -328,10 +328,9 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   _pf.TEXT();
   _pf.ALIGN();
-  if(isMain) {
+  if(isMain) { //m19
     _pf.GLOBAL("_main", _pf.FUNC());
-    _pf.LABEL("_main");
-    os() << "        ;; main " << std::endl;
+    _pf.LABEL("_main");0
   } else if(node->scope() == tPUBLIC) {
     _pf.GLOBAL(_function->name(), _pf.FUNC());
     _pf.LABEL(_function->name());
@@ -358,10 +357,6 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   }
   if(node->end()) node->end()->accept(this, lvl + 4);
   os() << "        ;; after body " << std::endl;
-
-  // end the main function FIXME from simple
-  _pf.INT(0);
-  _pf.STFVAL32();
 
   _symtab.pop(); 
 
