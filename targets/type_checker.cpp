@@ -1,6 +1,7 @@
 #include <string>
 #include "targets/type_checker.h"
 #include "ast/all.h"  // automatically generated
+#include "m19_parser.tab.h"
 
 #define ASSERT_UNSPEC \
     { if (node->type() != nullptr && \
@@ -191,11 +192,11 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
   else
     id = node->id();
 
-  std::shared_ptr<gr8::symbol> function = 
-      std::make_shared < gr8::symbol> (false, node->qualifier(), node->type(), id, false, true);
+  std::shared_ptr<m19::symbol> function = 
+      std::make_shared < m19::symbol> (false, node->qualifier(), node->type(), id, false, true);
   function->set_offset(-node->type()->size()); //return val
 
-  std::shared_ptr<gr8::symbol> previous = _symtab.find(function->name());
+  std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
 
   /* Symbol doesn't exist */
   if(!previous) {
