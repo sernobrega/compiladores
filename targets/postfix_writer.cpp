@@ -330,7 +330,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _pf.ALIGN();
   if(isMain) { //m19
     _pf.GLOBAL("_main", _pf.FUNC());
-    _pf.LABEL("_main");0
+    _pf.LABEL("_main");
   } else if(node->scope() == tPUBLIC) {
     _pf.GLOBAL(_function->name(), _pf.FUNC());
     _pf.LABEL(_function->name());
