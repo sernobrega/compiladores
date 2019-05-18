@@ -1,13 +1,12 @@
-for f in *.m19; do ../m19 --target asm $f; done
-for c in *.asm; do yasm -felf32 $c ; done
-for b in *.o;
+for f in *.m19; 
 do 
-	echo "Processing $b..."
-	ld -m elf_i386 -o "$bu" $b -lrts
+	FILE="${FILE%%.*}"
+	../m19 --target asm $f;
+	yasm -felf32 "$FILE.asm"
+	echo "Creating executable of $FILE"
+	ld -m elf_i386 -o "$FILE" "$FILE.o" -lrts
+	echo "Executing $FILE"
+	./$FILE > "$FILE.out"
+	diff "$FILE.out" excepted/"$FILE.out"
 done
-for e in *.ou
-do 
-	echo "Executing $e..."
-	./$e > "$et" 
-	diff "$et" expected/"$et"
-done
+
