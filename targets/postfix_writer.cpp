@@ -340,7 +340,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   
   frame_size_calculator lsc(_compiler, _symtab);
   node->accept(&lsc, lvl);
-  _pf.ENTER(0);
+  _pf.ENTER(lsc.localsize());
 
   _offset = -_function->type()->size(); //retval
 
