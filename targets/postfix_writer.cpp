@@ -190,18 +190,30 @@ void m19::postfix_writer::do_evaluation_node(m19::evaluation_node * const node, 
 
 void m19::postfix_writer::do_print_node(m19::print_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->argument()->accept(this, lvl); // determine the value to print
-  if (node->argument()->type()->name() == basic_type::TYPE_INT) {
+  
+  basic_type *etype = node->argument()->type();
+  node->argument()->accept(this, lvl); // expression to print
+  if (etype->name() == basic_type::TYPE_INT) {
+    _functions_to_declare.insert("printi");
     _pf.CALL("printi");
-    _pf.TRASH(4); // delete the printed value
-  } else if (node->argument()->type()->name() == basic_type::TYPE_STRING) {
+    _pf.TRASH(4); // trash int
+  } else if (etype->name() == basic_type::TYPE_DOUBLE) {
+    _functions_to_declare.insert("printd");
+    _pf.CALL("printd");
+    _pf.TRASH(8); // trash double
+  } else if (etype->name() == basic_type::TYPE_STRING) {
+    _functions_to_declare.insert("prints");
     _pf.CALL("prints");
-    _pf.TRASH(4); // delete the printed value's address
+    _pf.TRASH(4); // trash char pointer
   } else {
-    std::cerr << "ERROR: CANNOT HAPPEN!" << std::endl;
-    exit(1);
+    std::cerr << "cannot print expression of unknown type" << std::endl;
+    return;
   }
-  _pf.CALL("println"); // print a newline
+
+  if (node->newline()) {
+    _functions_to_declare.insert("println");
+    _pf.CALL("println");
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -363,7 +375,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 }
 
 void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
-  //
+  //FIXME: missign section inclusive and exclusive
   if(node->qualifier() == tINCLUSIVE && node->expr() == nullptr) {
     os() << "        ;; hey " << std::endl;
     node->block()->accept(this, lvl + 2);
