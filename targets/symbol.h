@@ -12,7 +12,7 @@ namespace m19 {
     int _value;
 
     bool _constant;
-    int _qualifier;
+    int _scope;
     basic_type *_type;
     bool _initialized;
     int _offset = 0; // 0 (zero) means global variable/function
@@ -20,9 +20,9 @@ namespace m19 {
     bool _fundecl = false;
 
   public:
-    symbol(bool constant, int qualifier, basic_type *type, const std::string &name, bool initialized, bool function, bool fundecl =
+    symbol(bool constant, int scope, basic_type *type, const std::string &name, bool initialized, bool function, bool fundecl =
                false) :
-        _name(name), _value(0), _constant(constant), _qualifier(qualifier), _type(type), _initialized(initialized), _function(
+        _name(name), _value(0), _constant(constant), _scope(scope), _type(type), _initialized(initialized), _function(
             function), _fundecl(fundecl) {
     }
 
@@ -42,8 +42,8 @@ namespace m19 {
     bool constant() const {
       return _constant;
     }
-    int qualifier() const {
-      return _qualifier;
+    int scope() const {
+      return _scope;
     }
     basic_type *type() {
       return _type;
