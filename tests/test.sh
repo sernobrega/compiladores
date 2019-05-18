@@ -3,7 +3,7 @@ for c in *.asm; do yasm -felf32 $c ; done
 for b in *.o;
 do 
 	echo "Processing $b..."
-	ld -m elf_i386 -o "$bu" $b
+	ld -m elf_i386 -o "$bu" $b -lrts
 done
 for e in *.ou
 do 
