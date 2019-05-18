@@ -331,6 +331,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   if(isMain) {
     _pf.GLOBAL("_main", _pf.FUNC());
     _pf.LABEL("_main");
+    os() << "        ;; main " << std::endl;
   } else if(node->scope() == tPUBLIC) {
     _pf.GLOBAL(_function->name(), _pf.FUNC());
     _pf.LABEL(_function->name());
@@ -341,10 +342,12 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   frame_size_calculator lsc(_compiler, _symtab);
   node->accept(&lsc, lvl);
   _pf.ENTER(lsc.localsize());
+  os() << "        ;; enter " + lsc.localsize() << std::endl;
 
   _offset = -_function->type()->size(); //retval
 
   //sections
+  os() << "        ;; before body " << std::endl;
   if(node->init()) node->init()->accept(this, lvl + 4);
   if(node->section()) {
     for(size_t ix = 0; ix < node->section()->size(); ix++) {
@@ -354,6 +357,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
     }
   }
   if(node->end()) node->end()->accept(this, lvl + 4);
+  os() << "        ;; after body " << std::endl;
 
   // end the main function FIXME from simple
   _pf.INT(0);

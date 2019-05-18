@@ -199,5 +199,4 @@ void m19::frame_size_calculator::do_function_definition_node(m19::function_defin
         }
     }
     if(node->end()) node->end()->accept(this, lvl + 2);
-
 }
