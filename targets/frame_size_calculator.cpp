@@ -41,7 +41,7 @@ void m19::frame_size_calculator::do_string_node(cdk::string_node * const node, i
 //---------------------------------------------------------------------------
 
 void m19::frame_size_calculator::do_neg_node(cdk::neg_node * const node, int lvl) {
-  processUnaryExpression(node, lvl);
+  // EMPTY
 }
 
 //---------------------------------------------------------------------------
@@ -107,11 +107,6 @@ void m19::frame_size_calculator::do_print_node(m19::print_node * const node, int
 //---------------------------------------------------------------------------
 
 void m19::frame_size_calculator::do_read_node(m19::read_node * const node, int lvl) {
-  // EMPTY
-}
-
-//---------------------------------------------------------------------------
-void m19::frame_size_calculator::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
   // EMPTY
 }
 
