@@ -176,7 +176,7 @@ void m19::frame_size_calculator::do_sequence_node(cdk::sequence_node * const nod
   }
 }
 
-void m19::frame_size_calculator::do_block_node(m19::block_node * const node, int lvl) {if (node->declarations()) node->declarations()->accept(this, lvl + 2);
+void m19::frame_size_calculator::do_block_node(m19::block_node * const node, int lvl) {
   if (node->declaration()) node->declaration()->accept(this, lvl + 2);
   if (node->instruction()) node->instruction()->accept(this, lvl + 2);
 }
