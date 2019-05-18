@@ -341,7 +341,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   //SOMETHING FOR ENTER
   _pf.ENTER(0);
 
-  _offset = -_function->type()->value(); //retval
+  _offset = -_function->type()->size(); //retval
 
   //sections
   if(node->init()) node->init()->accept(this, lvl + 4);
