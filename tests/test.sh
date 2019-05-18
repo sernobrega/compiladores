@@ -1,6 +1,6 @@
 for f in *.m19; 
 do 
-	FILE="${FILE%%.*}"
+	FILE="${f%%.*}"
 	../m19 --target asm $f;
 	yasm -felf32 "$FILE.asm"
 	echo "Creating executable of $FILE"
