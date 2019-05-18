@@ -132,26 +132,26 @@ void m19::type_checker::do_rvalue_node(cdk::rvalue_node * const node, int lvl) {
 }
 
 void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, int lvl) {
-  ASSERT_UNSPEC;
+  // ASSERT_UNSPEC;
 
-  try {
-    node->lvalue()->accept(this, lvl);
-  } catch (const std::string &id) {
-    std::shared_ptr<m19::symbol> symbol = std::make_shared<m19::symbol>(new basic_type(4, basic_type::TYPE_INT), id, 0);
-    _symtab.insert(id, symbol);
-    _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
-    node->lvalue()->accept(this, lvl);  //DAVID: bah!
-  }
+  // try {
+  //   node->lvalue()->accept(this, lvl);
+  // } catch (const std::string &id) {
+  //   std::shared_ptr<m19::symbol> symbol = std::make_shared<m19::symbol>(new basic_type(4, basic_type::TYPE_INT), id, 0);
+  //   _symtab.insert(id, symbol);
+  //   _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
+  //   node->lvalue()->accept(this, lvl);  //DAVID: bah!
+  // }
 
-  if (node->lvalue()->type()->name() != basic_type::TYPE_INT) throw std::string(
-      "wrong type in left argument of assignment expression");
+  // if (node->lvalue()->type()->name() != basic_type::TYPE_INT) throw std::string(
+  //     "wrong type in left argument of assignment expression");
 
-  node->rvalue()->accept(this, lvl + 2);
-  if (node->rvalue()->type()->name() != basic_type::TYPE_INT) throw std::string(
-      "wrong type in right argument of assignment expression");
+  // node->rvalue()->accept(this, lvl + 2);
+  // if (node->rvalue()->type()->name() != basic_type::TYPE_INT) throw std::string(
+  //     "wrong type in right argument of assignment expression");
 
-  // in Simple, expressions are always int
-  node->type(new basic_type(4, basic_type::TYPE_INT));
+  // // in Simple, expressions are always int
+  // node->type(new basic_type(4, basic_type::TYPE_INT));
 }
 
 //---------------------------------------------------------------------------
@@ -182,7 +182,47 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
 //---------------------------------------------------------------------------
 
 void m19::type_checker::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
-  //
+  std::string id;
+
+  if(node->id() == "m19")
+    id = "_main";
+  else if(node->id() == "_main")
+    id = "._main";
+  else
+    id = node->id();
+
+  std::shared_ptr<gr8::symbol> function = 
+      std::make_shared < gr8::symbol> (false, node->qualifier(), node->type(), id, false, true);
+  function->set_offset(-node->type()->size()); //return val
+
+  std::shared_ptr<gr8::symbol> previous = _symtab.find(function->name());
+
+  /* Symbol doesn't exist */
+  if(!previous) {
+    _symtab.insert(function->name(), function);
+    _parent->set_new_symbol(function);
+    return;
+  }
+
+  /* Not extern */
+  if(node->scope() == tEXTERN)
+    throw std::string("Function" + function->name() + " is extern and can't be defined! Invalid scope.");
+
+  /* Checking if previous declaration is not function */
+  if(previous != nullptr && !previous->isFunction())
+    throw std::string("Redefinition of function " + function->name() + " is invalid. Variable declared with same name.");
+
+  /* Checking if previous has been defined already */
+  if(previous != nullptr && !previous->fundecl())
+    throw std::string("Function " + function->name() + " has already been defined.");
+
+  /* Checking for conflicts with previous definitions */
+  if(previous->scope() != node->scope() || previous->type() != node->type()) {
+    throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible.");
+  }
+
+  _symtab.replace(function->name(), function);
+  _parent->set_new_symbol(function);
 }
 
 void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {

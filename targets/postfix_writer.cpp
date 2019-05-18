@@ -306,11 +306,11 @@ void m19::postfix_writer::do_if_else_node(m19::if_else_node * const node, int lv
 
 //--
 void m19::postfix_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
-  //ASSERT_SAFE;
+  ASSERT_SAFE;
   //FIXME: naive approach - what if functions are defined inside a block or in an argument
   bool isMain = (node->id() == "m19");
 
-  _function = new_symbol();
+  _function = new_symbol(); //gets symbol set by type checker
   _functions_to_declare.erase(_function->name());
   reset_new_symbol();
 
@@ -341,7 +341,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   //SOMETHING FOR ENTER
   _pf.ENTER(0);
 
-  _offset = -node->type()->size(); //retval
+  _offset = -_function->type()->value(); //retval
 
   //sections
   if(node->init()) node->init()->accept(this, lvl + 4);
@@ -354,7 +354,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   }
   if(node->end()) node->end()->accept(this, lvl + 4);
 
-  // end the main function
+  // end the main function FIXME from simple
   _pf.INT(0);
   _pf.STFVAL32();
 
