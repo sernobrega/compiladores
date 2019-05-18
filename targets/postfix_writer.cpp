@@ -194,6 +194,7 @@ void m19::postfix_writer::do_print_node(m19::print_node * const node, int lvl) {
   basic_type *etype = node->argument()->type();
   node->argument()->accept(this, lvl); // expression to print
   if (etype->name() == basic_type::TYPE_INT) {
+    os() << "        ;; int " << std::endl;
     _functions_to_declare.insert("printi");
     _pf.CALL("printi");
     _pf.TRASH(4); // trash int
