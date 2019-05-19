@@ -252,7 +252,7 @@ void m19::type_checker::do_IDExpression(cdk::binary_expression_node * const node
     throw std::string("wrong types in binary expression");
 }
 
-void gr8::type_checker::do_PIDExpression(cdk::binary_expression_node * const node, int lvl) {
+void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const node, int lvl) {
   ASSERT_UNSPEC;
   node->left()->accept(this, lvl + 2);
   node->right()->accept(this, lvl + 2);
