@@ -136,7 +136,6 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
 
   std::shared_ptr<m19::symbol> symbol = new_symbol();
   if (symbol) {
-    std::cout << "symbol exists" << std::endl;
     symbol->set_offset(offset);
     reset_new_symbol();
   }
