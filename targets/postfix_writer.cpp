@@ -24,8 +24,15 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  // simplified generation: all variables are global
-  _pf.ADDR(node->name());
+
+  const std::string &id = node->name();
+  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
+  if (symbol->global()) {
+    _pf.ADDR(symbol->name());
+  }
+  else {
+    _pf.LOCAL(symbol->offset());
+  }
 }
 
 void m19::postfix_writer::do_rvalue_node(cdk::rvalue_node * const node, int lvl) {
