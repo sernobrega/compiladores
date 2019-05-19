@@ -127,7 +127,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
     offset = 0; // global variable
   }
 
-  std::shared_ptr<gr8::symbol> symbol = new_symbol();
+  std::shared_ptr<m19::symbol> symbol = new_symbol();
   if (symbol) {
     symbol->set_offset(offset);
     reset_new_symbol();
@@ -136,8 +136,8 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
   if (_inFunctionBody) {
     // if we are dealing with local variables, then no action is needed
     // unless an initializer exists
-    if (node->initializer()) {
-      node->initializer()->accept(this, lvl);
+    if (node->expr()) {
+      node->expr()->accept(this, lvl);
       if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
           || node->type()->name() == basic_type::TYPE_POINTER) {
         _pf.LOCAL(symbol->offset());
@@ -151,7 +151,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
     }
   } else {
     if (!_function) {
-      if (node->initializer() == nullptr) {
+      if (node->expr() == nullptr) {
         _pf.BSS();
         _pf.ALIGN();
         _pf.LABEL(id);
@@ -171,14 +171,14 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
           _pf.LABEL(id);
 
           if (node->type()->name() == basic_type::TYPE_INT) {
-            node->initializer()->accept(this, lvl);
+            node->expr()->accept(this, lvl);
           } else if (node->type()->name() == basic_type::TYPE_POINTER) {
-            node->initializer()->accept(this, lvl);
+            node->expr()->accept(this, lvl);
           } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
-            if (node->initializer()->type()->name() == basic_type::TYPE_DOUBLE) {
-              node->initializer()->accept(this, lvl);
-            } else if (node->initializer()->type()->name() == basic_type::TYPE_INT) {
-              cdk::integer_node *dclini = dynamic_cast<cdk::integer_node *>(node->initializer());
+            if (node->expr()->type()->name() == basic_type::TYPE_DOUBLE) {
+              node->expr()->accept(this, lvl);
+            } else if (node->expr()->type()->name() == basic_type::TYPE_INT) {
+              cdk::integer_node *dclini = dynamic_cast<cdk::integer_node *>(node->expr());
               cdk::double_node ddi(dclini->lineno(), dclini->value());
               ddi.accept(this, lvl);
             } else {
@@ -193,7 +193,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
             _pf.RODATA();
             _pf.ALIGN();
             _pf.LABEL(mklbl(litlbl = ++_lbl));
-            _pf.SSTRING(dynamic_cast<cdk::string_node *>(node->initializer())->value());
+            _pf.SSTRING(dynamic_cast<cdk::string_node *>(node->expr())->value());
             _pf.ALIGN();
             _pf.LABEL(id);
             _pf.SADDR(mklbl(litlbl));
@@ -201,7 +201,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
             _pf.DATA();
             _pf.ALIGN();
             _pf.LABEL(id);
-            node->initializer()->accept(this, lvl);
+            node->expr()->accept(this, lvl);
           }
         } else {
           std::cerr << node->lineno() << ": '" << id << "' has unexpected initializer\n";
