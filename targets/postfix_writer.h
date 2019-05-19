@@ -19,15 +19,17 @@ namespace m19 {
     cdk::basic_postfix_emitter &_pf;
     int _lbl;
 
-  std::set<std::string> _functions_to_declare;
-  std::shared_ptr<m19::symbol> _function;
+    bool _errors, _inFunction, _inFunctionName, _inFunctionArgs, _inFunctionBody;
+    std::set<std::string> _functions_to_declare;
+    std::shared_ptr<m19::symbol> _function;
 
-  int _offset;
+    int _offset;
   
   public:
     postfix_writer(std::shared_ptr<cdk::compiler> compiler, cdk::symbol_table<m19::symbol> &symtab,
                    cdk::basic_postfix_emitter &pf) :
-        basic_ast_visitor(compiler), _symtab(symtab), _pf(pf), _lbl(0) {
+        basic_ast_visitor(compiler), _symtab(symtab), _pf(pf), _lbl(0), _errors(false), _inFunction(false), 
+        _inFunctionName(false), _inFunctionArgs(false), _inFunctionBody(false) {
     }
 
   public:

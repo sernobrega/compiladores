@@ -111,7 +111,107 @@ void m19::postfix_writer::do_read_node(m19::read_node * const node, int lvl) {
 //---------------------------------------------------------------------------
 
 void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
-  //
+  ASSERT_SAFE_EXPRESSIONS;
+
+  auto id = node->id();
+
+  int offset = 0, typesize = node->type()->size();
+  std::cout << "ARG: " << id << ", " << typesize << std::endl;
+  if (_inFunctionBody) {
+    _offset -= typesize;
+    offset = _offset;
+  } else if (_inFunctionArgs) {
+    offset = _offset;
+    _offset += typesize;
+  } else {
+    offset = 0; // global variable
+  }
+
+  std::shared_ptr<gr8::symbol> symbol = new_symbol();
+  if (symbol) {
+    symbol->set_offset(offset);
+    reset_new_symbol();
+  }
+
+  if (_inFunctionBody) {
+    // if we are dealing with local variables, then no action is needed
+    // unless an initializer exists
+    if (node->initializer()) {
+      node->initializer()->accept(this, lvl);
+      if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
+          || node->type()->name() == basic_type::TYPE_POINTER) {
+        _pf.LOCAL(symbol->offset());
+        _pf.STINT();
+      } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
+        _pf.LOCAL(symbol->offset());
+        _pf.STDOUBLE();
+      } else {
+        std::cerr << "cannot initialize" << std::endl;
+      }
+    }
+  } else {
+    if (!_function) {
+      if (node->initializer() == nullptr) {
+        _pf.BSS();
+        _pf.ALIGN();
+        _pf.LABEL(id);
+        _pf.SALLOC(typesize);
+      } else {
+
+        if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_DOUBLE
+            || node->type()->name() == basic_type::TYPE_POINTER) {
+
+          if (node->constant()) {
+            _pf.RODATA();
+          }
+          else {
+            _pf.DATA();
+          }
+          _pf.ALIGN();
+          _pf.LABEL(id);
+
+          if (node->type()->name() == basic_type::TYPE_INT) {
+            node->initializer()->accept(this, lvl);
+          } else if (node->type()->name() == basic_type::TYPE_POINTER) {
+            node->initializer()->accept(this, lvl);
+          } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
+            if (node->initializer()->type()->name() == basic_type::TYPE_DOUBLE) {
+              node->initializer()->accept(this, lvl);
+            } else if (node->initializer()->type()->name() == basic_type::TYPE_INT) {
+              cdk::integer_node *dclini = dynamic_cast<cdk::integer_node *>(node->initializer());
+              cdk::double_node ddi(dclini->lineno(), dclini->value());
+              ddi.accept(this, lvl);
+            } else {
+              std::cerr << node->lineno() << ": '" << id << "' has bad initializer for real value\n";
+              _errors = true;
+            }
+          }
+        } else if (node->type()->name() == basic_type::TYPE_STRING) {
+          if (node->constant()) {
+            int litlbl;
+            // HACK!!! string literal initializers must be emitted before the string identifier
+            _pf.RODATA();
+            _pf.ALIGN();
+            _pf.LABEL(mklbl(litlbl = ++_lbl));
+            _pf.SSTRING(dynamic_cast<cdk::string_node *>(node->initializer())->value());
+            _pf.ALIGN();
+            _pf.LABEL(id);
+            _pf.SADDR(mklbl(litlbl));
+          } else {
+            _pf.DATA();
+            _pf.ALIGN();
+            _pf.LABEL(id);
+            node->initializer()->accept(this, lvl);
+          }
+        } else {
+          std::cerr << node->lineno() << ": '" << id << "' has unexpected initializer\n";
+          _errors = true;
+        }
+
+      }
+
+    }
+  }
 }
 
 void m19::postfix_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
@@ -314,6 +414,11 @@ void m19::postfix_writer::do_string_node(cdk::string_node * const node, int lvl)
 void m19::postfix_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
 
+  if (_inFunctionBody || _inFunctionArgs) {
+    error(node->lineno(), "cannot define function in body or in arguments");
+    return;
+  }
+
   //FIXME: naive approach - what if functions are defined inside a block or in an argument
   bool isMain = (node->id() == "m19");
 
@@ -324,11 +429,13 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _offset = 8; //FP IP
   _symtab.push();
   if(node->arguments()) {
+    _inFunctionArgs = true;
     for(size_t ix = 0; ix < node->arguments()->size(); ix++) {
       cdk::basic_node * arg = node->arguments()->node(ix);
       if(arg == nullptr) break;
       arg->accept(this, 0);
     }
+     _inFunctionArgs = false;
   }
 
   _pf.TEXT();
@@ -347,6 +454,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   node->accept(&lsc, lvl);
   _pf.ENTER(lsc.localsize());
 
+  _inFunctionBody = true;
   _offset = -_function->type()->size(); //retval
 
   //sections
@@ -361,7 +469,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   }
   if(node->end()) node->end()->accept(this, lvl + 4);
   os() << "        ;; after body " << std::endl;
-
+  _inFunctionBody = false;
   _symtab.pop(); 
 
   _pf.LEAVE();
