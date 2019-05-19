@@ -65,8 +65,8 @@ void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, 
 
 void m19::postfix_writer::do_evaluation_node(m19::evaluation_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  basic_type *type = node->expression()->type();
-  node->expression()->accept(this, lvl);
+  basic_type *type = node->argument()->type();
+  node->argument()->accept(this, lvl);
   _pf.TRASH(type->size());
 }
 
