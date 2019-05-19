@@ -221,7 +221,7 @@ static std::ostringstream strlit;
 <X_ISLASH>r                 strlit << '\r'; yy_pop_state();
 <X_ISLASH>t                 strlit << '\t'; yy_pop_state();
 <X_ISLASH>"\""              strlit << '"'; yy_pop_state();
-<X_ISLASH>"\\"              strlit << '~'; yy_pop_state();
+<X_ISLASH>"\\"              strlit << '\\'; yy_pop_state();
 <X_ISLASH>[0-9A-Fa-f]{1,2}  {
                             strlit << (char)(unsigned char)strtoul(yytext, NULL, 16);
                             yy_pop_state();

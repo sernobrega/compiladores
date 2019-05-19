@@ -154,7 +154,6 @@ void m19::frame_size_calculator::do_for_node(m19::for_node * const node, int lvl
   node->instruction()->accept(this, lvl + 2);
 }
 
-
 void m19::frame_size_calculator::do_if_node(m19::if_node * const node, int lvl) {
   node->block()->accept(this, lvl + 2);
 }
