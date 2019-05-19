@@ -57,6 +57,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
   id, // identifier
   (bool)node->expr(), // initialized?
   false); // is it a function?
+  std::cout << "going to insert variable" << symbol->name() << std::endl;
   if (_symtab.insert(id, symbol)) {
     std::cout << "just inserted new variable" << symbol->name() << std::endl;
     _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
