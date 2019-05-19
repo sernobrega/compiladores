@@ -22,66 +22,16 @@ void m19::type_checker::do_data_node(cdk::data_node * const node, int lvl) {
   // EMPTY
 }
 
-void m19::type_checker::do_not_node(cdk::not_node * const node, int lvl) {
-  processUnaryExpression(node, lvl);
-}
-void m19::type_checker::do_and_node(cdk::and_node * const node, int lvl) {
-  processBinaryExpression(node, lvl);
-}
-void m19::type_checker::do_or_node(cdk::or_node * const node, int lvl) {
-  processBinaryExpression(node, lvl);
-}
+
 
 //---------------------------------------------------------------------------
 
 
 //---------------------------------------------------------------------------
 
-void m19::type_checker::processUnaryExpression(cdk::unary_expression_node * const node, int lvl) {
-  node->argument()->accept(this, lvl + 2);
-  if (node->argument()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type in argument of unary expression");
 
-  // in Simple, expressions are always int
-  node->type(new basic_type(4, basic_type::TYPE_INT));
-}
-
-void m19::type_checker::do_neg_node(cdk::neg_node * const node, int lvl) {
-  processUnaryExpression(node, lvl);
-}
 
 //---------------------------------------------------------------------------
-
-void m19::type_checker::processBinaryExpression(cdk::binary_expression_node * const node, int lvl) {
-  ASSERT_UNSPEC;
-  node->left()->accept(this, lvl + 2);
-  if (node->left()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type in left argument of binary expression");
-
-  node->right()->accept(this, lvl + 2);
-  if (node->right()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type in right argument of binary expression");
-
-  // in Simple, expressions are always int
-  node->type(new basic_type(4, basic_type::TYPE_INT));
-}
-
-
-void m19::type_checker::do_lt_node(cdk::lt_node * const node, int lvl) {
-  processBinaryExpression(node, lvl);
-}
-void m19::type_checker::do_le_node(cdk::le_node * const node, int lvl) {
-  processBinaryExpression(node, lvl);
-}
-void m19::type_checker::do_ge_node(cdk::ge_node * const node, int lvl) {
-  processBinaryExpression(node, lvl);
-}
-void m19::type_checker::do_gt_node(cdk::gt_node * const node, int lvl) {
-  processBinaryExpression(node, lvl);
-}
-void m19::type_checker::do_ne_node(cdk::ne_node * const node, int lvl) {
-  processBinaryExpression(node, lvl);
-}
-void m19::type_checker::do_eq_node(cdk::eq_node * const node, int lvl) {
-  processBinaryExpression(node, lvl);
-}
 
 //---------------------------------------------------------------------------
 
@@ -229,8 +179,97 @@ void m19::type_checker::do_if_else_node(m19::if_else_node * const node, int lvl)
 }
 
 /****************************************************************************************
- *****************************     EXPRESSIONS RELATED      *****************************
+ *****************************       LOGICAL RELATED        *****************************
  ****************************************************************************************/
+void m19::type_checker::do_ScalarLogicalExpression(cdk::binary_expression_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() != basic_type::TYPE_INT || node->left()->type()->name() != basic_type::TYPE_DOUBLE) throw std::string(
+      "integer or double expression expected in binary logical expression (left)");
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() != basic_type::TYPE_INT || node->left()->type()->name() != basic_type::TYPE_DOUBLE) throw std::string(
+      "integer expression expected in binary logical expression (right)");
+
+  if(node->right()->type()->name() == basic_type::TYPE_DOUBLE || node->left()->type()->name() == basic_type::TYPE_DOUBLE)
+    node->type(new basic_type(8, basic_type::TYPE_DOUBLE));
+  else
+    node->type(new basic_type(4, basic_type::TYPE_INT));
+}
+
+void m19::type_checker::do_lt_node(cdk::lt_node * const node, int lvl) {
+  do_ScalarLogicalExpression(node, lvl);
+}
+void m19::type_checker::do_le_node(cdk::le_node * const node, int lvl) {
+  do_ScalarLogicalExpression(node, lvl);
+}
+void m19::type_checker::do_ge_node(cdk::ge_node * const node, int lvl) {
+  do_ScalarLogicalExpression(node, lvl);
+}
+void m19::type_checker::do_gt_node(cdk::gt_node * const node, int lvl) {
+  do_ScalarLogicalExpression(node, lvl);
+}
+
+void m19::type_checker::do_GeneralLogicalExpression(cdk::binary_expression_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->left()->accept(this, lvl + 2);
+  node->right()->accept(this, lvl + 2);
+  if (node->left()->type()->name() != node->right()->type()->name()) throw std::string(
+      "same type expected on both sides of equality operator");
+  node->type(new basic_type(4, basic_type::TYPE_INT));
+}
+
+void m19::type_checker::do_ne_node(cdk::ne_node * const node, int lvl) {
+  do_GeneralLogicalExpression(node, lvl);
+}
+void m19::type_checker::do_eq_node(cdk::eq_node * const node, int lvl) {
+  do_GeneralLogicalExpression(node, lvl);
+}
+
+void m19::type_checker::do_BooleanLogicalExpression(cdk::binary_expression_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() != basic_type::TYPE_INT) throw std::string("integer expression expected in binary expression");
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() != basic_type::TYPE_INT) throw std::string("integer expression expected in binary expression");
+
+  node->type(new basic_type(4, basic_type::TYPE_INT));
+}
+
+void m19::type_checker::do_and_node(cdk::and_node * const node, int lvl) {
+  do_BooleanLogicalExpression(node, lvl);
+}
+void m19::type_checker::do_or_node(cdk::or_node * const node, int lvl) {
+  do_BooleanLogicalExpression(node, lvl);
+}
+void m19::type_checker::do_not_node(cdk::not_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->argument()->accept(this, lvl + 2);
+  if (node->argument()->type()->name() == basic_type::TYPE_INT)
+    node->type(new basic_type(4, basic_type::TYPE_INT));
+  else if (node->argument()->type()->name() == basic_type::TYPE_UNSPEC) {
+    node->type(new basic_type(4, basic_type::TYPE_INT));
+    node->argument()->type(new basic_type(4, basic_type::TYPE_INT));
+  } else
+    throw std::string("wrong type in unary logical expression");
+}
+/****************************************************************************************
+ *****************************     ARITHMETIC RELATED       *****************************
+ ****************************************************************************************/
+void m19::type_checker::do_IntOnlyExpression(cdk::binary_expression_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() != basic_type::TYPE_INT) throw std::string(
+      "integer expression expected in binary operator (left)");
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() != basic_type::TYPE_INT) throw std::string(
+      "integer expression expected in binary operator (right)");
+
+  node->type(new basic_type(4, basic_type::TYPE_INT));
+}
+
 void m19::type_checker::do_IDExpression(cdk::binary_expression_node * const node, int lvl) {
   ASSERT_UNSPEC;
   node->left()->accept(this, lvl + 2);
@@ -290,7 +329,15 @@ void m19::type_checker::do_div_node(cdk::div_node * const node, int lvl) {
   do_IDExpression(node, lvl);
 }
 void m19::type_checker::do_mod_node(cdk::mod_node * const node, int lvl) {
-  do_IDExpression(node, lvl);
+  do_IntOnlyExpression(node, lvl);
+}
+void m19::type_checker::do_neg_node(cdk::neg_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->argument()->accept(this, lvl);
+  if (node->argument()->type()->name() == basic_type::TYPE_INT || node->argument()->type()->name() == basic_type::TYPE_DOUBLE)
+    node->type(node->argument()->type());
+  else
+    throw std::string("integer or vector expressions expected");
 }
 
 /****************************************************************************************
@@ -309,7 +356,6 @@ void m19::type_checker::do_string_node(cdk::string_node * const node, int lvl) {
   ASSERT_UNSPEC;
   node->type(new basic_type(4, basic_type::TYPE_STRING));
 }
-
 
 /****************************************************************************************
  *****************************       FUNCTION RELATED       *****************************
