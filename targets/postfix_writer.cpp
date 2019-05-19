@@ -179,6 +179,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
 
           if (node->type()->name() == basic_type::TYPE_INT) {
             node->expr()->accept(this, lvl);
+            _pf.STINT();
           } else if (node->type()->name() == basic_type::TYPE_POINTER) {
             node->expr()->accept(this, lvl);
           } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -192,6 +193,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
               std::cerr << node->lineno() << ": '" << id << "' has bad initializer for real value\n";
               _errors = true;
             }
+            _pf.STDOUBLE();
           }
         } else if (node->type()->name() == basic_type::TYPE_STRING) {
           if (node->constant()) {
