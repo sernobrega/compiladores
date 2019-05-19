@@ -7,8 +7,7 @@
 #include "ast/all.h"  // all.h is automatically generated
 #include "m19_parser.tab.h"
 
-//---------------------------------------------------------------------------
-
+/*****************************           NOT USED           *****************************/
 void m19::postfix_writer::do_nil_node(cdk::nil_node * const node, int lvl) {
   // EMPTY
 }
@@ -16,126 +15,12 @@ void m19::postfix_writer::do_data_node(cdk::data_node * const node, int lvl) {
   // EMPTY
 }
 
-void m19::postfix_writer::do_not_node(cdk::not_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->argument()->accept(this, lvl + 2);
-  _pf.INT(0);
-  _pf.EQ();
-  //_pf.NOT();
-}
-void m19::postfix_writer::do_and_node(cdk::and_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  int lbl = ++_lbl;
-  node->left()->accept(this, lvl + 2);
-  _pf.DUP32();
-  _pf.JZ(mklbl(lbl));
-  node->right()->accept(this, lvl + 2);
-  _pf.AND();
-  _pf.ALIGN();
-  _pf.LABEL(mklbl(lbl));
-}
-void m19::postfix_writer::do_or_node(cdk::or_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  int lbl = ++_lbl;
-  node->left()->accept(this, lvl + 2);
-  _pf.DUP32();
-  _pf.JNZ(mklbl(lbl));
-  node->right()->accept(this, lvl + 2);
-  _pf.OR();
-  _pf.ALIGN();
-  _pf.LABEL(mklbl(lbl));
-}
-
-//---------------------------------------------------------------------------
-
+/*****************************           SEQUENCE           *****************************/
 void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int lvl) {
   for (size_t i = 0; i < node->size(); i++) {
     node->node(i)->accept(this, lvl);
   }
 }
-
-//---------------------------------------------------------------------------
-
-
-
-//---------------------------------------------------------------------------
-
-void m19::postfix_writer::do_neg_node(cdk::neg_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->argument()->accept(this, lvl); // determine the value
-  _pf.NEG(); // 2-complement
-}
-
-//---------------------------------------------------------------------------
-
-void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.ADD();
-}
-void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.SUB();
-}
-void m19::postfix_writer::do_mul_node(cdk::mul_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.MUL();
-}
-void m19::postfix_writer::do_div_node(cdk::div_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.DIV();
-}
-void m19::postfix_writer::do_mod_node(cdk::mod_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.MOD();
-}
-void m19::postfix_writer::do_lt_node(cdk::lt_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.LT();
-}
-void m19::postfix_writer::do_le_node(cdk::le_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.LE();
-}
-void m19::postfix_writer::do_ge_node(cdk::ge_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.GE();
-}
-void m19::postfix_writer::do_gt_node(cdk::gt_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.GT();
-}
-void m19::postfix_writer::do_ne_node(cdk::ne_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.NE();
-}
-void m19::postfix_writer::do_eq_node(cdk::eq_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
-  _pf.EQ();
-}
-
-//---------------------------------------------------------------------------
 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
@@ -229,16 +114,6 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
   //
 }
 
-void m19::postfix_writer::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
-  //
-}
-
-void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
-  //
-}
-
-
-
 void m19::postfix_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
   //
 }
@@ -251,25 +126,10 @@ void m19::postfix_writer::do_index_node(m19::index_node * const node, int lvl) {
   //
 }
 
-void m19::postfix_writer::do_continue_node(m19::continue_node * const node, int lvl) {
-  //
-}
-
-void m19::postfix_writer::do_return_node(m19::return_node * const node, int lvl) {
-  //
-}
-
-void m19::postfix_writer::do_stop_node(m19::stop_node * const node, int lvl) {
-  //
-}
-
-void m19::postfix_writer::do_identity_node(m19::identity_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-  node->argument()->accept(this, lvl); // determine the value
-}
-
-//---------------------------------------------------------------------------
-
+/****************************************************************************************
+ *****************************       ITERATION RELATED       ****************************
+ *****************************        IF-ELSE RELATED       *****************************
+ ****************************************************************************************/
 void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   // ASSERT_SAFE_EXPRESSIONS;
   // int lbl1, lbl2;
@@ -281,8 +141,6 @@ void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   // _pf.LABEL(mklbl(lbl2));
 }
 
-//---------------------------------------------------------------------------
-
 void m19::postfix_writer::do_if_node(m19::if_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   int lbl1;
@@ -291,8 +149,6 @@ void m19::postfix_writer::do_if_node(m19::if_node * const node, int lvl) {
   node->block()->accept(this, lvl + 2);
   _pf.LABEL(mklbl(lbl1));
 }
-
-//---------------------------------------------------------------------------
 
 void m19::postfix_writer::do_if_else_node(m19::if_else_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
@@ -305,6 +161,122 @@ void m19::postfix_writer::do_if_else_node(m19::if_else_node * const node, int lv
   node->elseblock()->accept(this, lvl + 2);
   _pf.LABEL(mklbl(lbl1 = lbl2));
 }
+
+/****************************************************************************************
+ *****************************       LOGICAL RELATED        *****************************
+ ****************************************************************************************/
+void m19::postfix_writer::do_lt_node(cdk::lt_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.LT();
+}
+void m19::postfix_writer::do_le_node(cdk::le_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.LE();
+}
+void m19::postfix_writer::do_ge_node(cdk::ge_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.GE();
+}
+void m19::postfix_writer::do_gt_node(cdk::gt_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.GT();
+}
+void m19::postfix_writer::do_ne_node(cdk::ne_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.NE();
+}
+void m19::postfix_writer::do_eq_node(cdk::eq_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.EQ();
+}
+
+void m19::postfix_writer::do_not_node(cdk::not_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->argument()->accept(this, lvl + 2);
+  _pf.INT(0);
+  _pf.EQ();
+  //_pf.NOT();
+}
+void m19::postfix_writer::do_and_node(cdk::and_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  int lbl = ++_lbl;
+  node->left()->accept(this, lvl + 2);
+  _pf.DUP32();
+  _pf.JZ(mklbl(lbl));
+  node->right()->accept(this, lvl + 2);
+  _pf.AND();
+  _pf.ALIGN();
+  _pf.LABEL(mklbl(lbl));
+}
+void m19::postfix_writer::do_or_node(cdk::or_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  int lbl = ++_lbl;
+  node->left()->accept(this, lvl + 2);
+  _pf.DUP32();
+  _pf.JNZ(mklbl(lbl));
+  node->right()->accept(this, lvl + 2);
+  _pf.OR();
+  _pf.ALIGN();
+  _pf.LABEL(mklbl(lbl));
+}
+
+/****************************************************************************************
+ *****************************     ARITHMETIC RELATED       *****************************
+ ****************************************************************************************/
+void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.ADD();
+}
+void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.SUB();
+}
+void m19::postfix_writer::do_mul_node(cdk::mul_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.MUL();
+}
+void m19::postfix_writer::do_div_node(cdk::div_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.DIV();
+}
+void m19::postfix_writer::do_mod_node(cdk::mod_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->left()->accept(this, lvl);
+  node->right()->accept(this, lvl);
+  _pf.MOD();
+}
+
+void m19::postfix_writer::do_neg_node(cdk::neg_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->argument()->accept(this, lvl); // determine the value
+  _pf.NEG(); // 2-complement
+}
+
+void m19::postfix_writer::do_identity_node(m19::identity_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->argument()->accept(this, lvl);
+}
+
 /****************************************************************************************
  *****************************        TYPES RELATED         *****************************
  ****************************************************************************************/
@@ -425,4 +397,24 @@ void m19::postfix_writer::do_block_node(m19::block_node * const node, int lvl) {
   if (node->declaration()) node->declaration()->accept(this, lvl + 2);
   if (node->instruction()) node->instruction()->accept(this, lvl + 2);
   _symtab.pop();
+}
+
+void m19::postfix_writer::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
+  //
+}
+
+void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
+  //
+}
+
+void m19::postfix_writer::do_continue_node(m19::continue_node * const node, int lvl) {
+  //
+}
+
+void m19::postfix_writer::do_return_node(m19::return_node * const node, int lvl) {
+  //
+}
+
+void m19::postfix_writer::do_stop_node(m19::stop_node * const node, int lvl) {
+  //
 }

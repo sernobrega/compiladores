@@ -7,13 +7,11 @@
     { if (node->type() != nullptr && \
           node->type()->name() != basic_type::TYPE_UNSPEC) return; }
 
-//---------------------------------------------------------------------------
-
-void m19::type_checker::do_sequence_node(cdk::sequence_node * const node, int lvl) {
-  // EMPTY
+m19::type_checker::~type_checker() {
+  os().flush();
 }
 
-//---------------------------------------------------------------------------
+/*****************************           NOT USED           *****************************/
 
 void m19::type_checker::do_nil_node(cdk::nil_node * const node, int lvl) {
   // EMPTY
@@ -22,28 +20,62 @@ void m19::type_checker::do_data_node(cdk::data_node * const node, int lvl) {
   // EMPTY
 }
 
+/*****************************           SEQUENCE           *****************************/
+void m19::type_checker::do_sequence_node(cdk::sequence_node * const node, int lvl) {
+  for (size_t i = 0; i < node->size(); i++)
+    node->node(i)->accept(this, lvl);
+}
 
+/****************************************************************************************
+ *****************************       VARIABLE RELATED       *****************************
+ ****************************************************************************************/
+void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  
+  if(node->expr() != nullptr) {
+    node->expr()->accept(this, lvl+2);
 
-//---------------------------------------------------------------------------
+    if (node->type()->name() == basic_type::TYPE_INT) {
+      if (node->expr()->type()->name() != basic_type::TYPE_INT) throw std::string(
+          "wrong type for expr (integer expected).");
+    } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
+      if (node->expr()->type()->name() != basic_type::TYPE_INT
+          && node->expr()->type()->name() != basic_type::TYPE_DOUBLE) throw std::string(
+          "wrong type for expr (integer or double expected).");
+    } else if (node->type()->name() == basic_type::TYPE_STRING) {
+      if (node->expr()->type()->name() != basic_type::TYPE_STRING) throw std::string(
+          "wrong type for expr (string expected).");
+    } else if (node->type()->name() == basic_type::TYPE_POINTER) {
+      //DAVID: FIXME: trouble!!!
+      if (node->expr()->type()->name() != basic_type::TYPE_POINTER) throw std::string(
+          "wrong type for expr (pointer expected).");
+    } else {
+      throw std::string("unknown type for expr.");
+    }
+  }
 
-
-//---------------------------------------------------------------------------
-
-
-
-//---------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------
+  const std::string &id = node->id();
+  std::shared_ptr<m19::symbol> symbol = std::make_shared < m19::symbol > (node->type() == node->type()->subtype(), // is it a constant?
+  node->qualifier(), // qualifiers: public, forward, "private" (i.e., none)
+  node->type(), // type (type id + type size)
+  id, // identifier
+  (bool)node->expr(), // initialized?
+  false); // is it a function?
+  if (_symtab.insert(id, symbol)) {
+    _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
+  } else {
+    throw std::string("variable '" + id + "' redeclared");
+  }
+}
 
 void m19::type_checker::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_UNSPEC;
   const std::string &id = node->name();
-  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
-
-  if (symbol != nullptr) {
+  std::shared_ptr<gr8::symbol> symbol = _symtab.find(id);
+  if (symbol) {
     node->type(symbol->type());
   } else {
-    throw id;
+    throw std::string("undeclared variable '" + id + "'");
   }
 }
 
@@ -101,13 +133,9 @@ void m19::type_checker::do_read_node(m19::read_node * const node, int lvl) {
 }
 
 //---------------------------------------------------------------------------
-void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
-  //
-}
+
 
 //---------------------------------------------------------------------------
-
-
 
 void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
   //
@@ -133,44 +161,20 @@ void m19::type_checker::do_index_node(m19::index_node * const node, int lvl) {
   //
 }
 
-void m19::type_checker::do_section_node(m19::section_node * const node, int lvl) {
-  //
-}
-
-void m19::type_checker::do_section_end_node(m19::section_end_node * const node, int lvl) {
-  //
-}
-
-void m19::type_checker::do_section_init_node(m19::section_init_node * const node, int lvl) {
-  //
-}
-
-void m19::type_checker::do_continue_node(m19::continue_node * const node, int lvl) {
-  //
-}
-
-void m19::type_checker::do_return_node(m19::return_node * const node, int lvl) {
-  //
-}
-
-void m19::type_checker::do_stop_node(m19::stop_node * const node, int lvl) {
-  //
-}
-
-//---------------------------------------------------------------------------
-
-void m19::type_checker::do_for_node(m19::for_node * const node, int lvl) {
-  // node->condition()->accept(this, lvl + 4);
-}
-
-//---------------------------------------------------------------------------
-
+/****************************************************************************************
+ *****************************       ITERATION RELATED       ****************************
+ *****************************        IF-ELSE RELATED       *****************************
+ ****************************************************************************************/
 void m19::type_checker::do_if_node(m19::if_node * const node, int lvl) {
   node->condition()->accept(this, lvl + 4);
 }
 
 void m19::type_checker::do_if_else_node(m19::if_else_node * const node, int lvl) {
   node->condition()->accept(this, lvl + 4);
+}
+
+void m19::type_checker::do_for_node(m19::for_node * const node, int lvl) {
+  // node->condition()->accept(this, lvl + 4);
 }
 
 /****************************************************************************************
@@ -402,4 +406,28 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
 
   _symtab.replace(function->name(), function);
   _parent->set_new_symbol(function);
+}
+
+void m19::type_checker::do_section_node(m19::section_node * const node, int lvl) {
+  //
+}
+
+void m19::type_checker::do_section_end_node(m19::section_end_node * const node, int lvl) {
+  //
+}
+
+void m19::type_checker::do_section_init_node(m19::section_init_node * const node, int lvl) {
+  //
+}
+
+void m19::type_checker::do_continue_node(m19::continue_node * const node, int lvl) {
+  //
+}
+
+void m19::type_checker::do_return_node(m19::return_node * const node, int lvl) {
+  //
+}
+
+void m19::type_checker::do_stop_node(m19::stop_node * const node, int lvl) {
+  //
 }
