@@ -35,7 +35,7 @@ void m19::postfix_writer::do_and_node(cdk::and_node * const node, int lvl) {
   _pf.LABEL(mklbl(lbl));
 }
 void m19::postfix_writer::do_or_node(cdk::or_node * const node, int lvl) {
-  ASSERT_SAFE;
+  ASSERT_SAFE_EXPRESSIONS;
   int lbl = ++_lbl;
   node->left()->accept(this, lvl + 2);
   _pf.DUP32();
