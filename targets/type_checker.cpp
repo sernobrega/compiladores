@@ -26,7 +26,7 @@ void m19::type_checker::do_sequence_node(cdk::sequence_node * const node, int lv
  *****************************       VARIABLE RELATED       *****************************
  ****************************************************************************************/
 void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_node * const node, int lvl) {
-  ASSERT_UNSPEC;
+  std::cout <<"hey" << std::endl;
   
   if(node->expr() != nullptr) {
     node->expr()->accept(this, lvl+2);
