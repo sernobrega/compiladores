@@ -7,6 +7,6 @@ do
 	ld -m elf_i386 -o "$FILE" "$FILE.o" -lrts
 	echo "==== Executing $FILE ====="
 	./$FILE > "$FILE.out"
-	diff -I [ \n\t] "$FILE.out" expected/"$FILE.out"
+	diff -I '[ \n\t]' "$FILE.out" expected/"$FILE.out"
 done
 
