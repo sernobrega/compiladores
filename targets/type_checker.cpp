@@ -52,7 +52,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
 
   const std::string &id = node->id();
   std::shared_ptr<m19::symbol> symbol = std::make_shared < m19::symbol > (node->type() == node->type()->subtype(), // is it a constant?
-  node->qualifier(), // qualifiers: public, forward, "private" (i.e., none)
+  node->scope(), // scope: public, forward, "private" (i.e., none)
   node->type(), // type (type id + type size)
   id, // identifier
   (bool)node->expr(), // initialized?
