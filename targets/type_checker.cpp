@@ -7,10 +7,6 @@
     { if (node->type() != nullptr && \
           node->type()->name() != basic_type::TYPE_UNSPEC) return; }
 
-m19::type_checker::~type_checker() {
-  os().flush();
-}
-
 /*****************************           NOT USED           *****************************/
 
 void m19::type_checker::do_nil_node(cdk::nil_node * const node, int lvl) {
@@ -71,7 +67,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
 void m19::type_checker::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_UNSPEC;
   const std::string &id = node->name();
-  std::shared_ptr<gr8::symbol> symbol = _symtab.find(id);
+  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
   if (symbol) {
     node->type(symbol->type());
   } else {
