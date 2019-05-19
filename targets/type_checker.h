@@ -35,6 +35,8 @@ namespace m19 {
     template<typename T>
     void process_literal(cdk::literal_node<T> * const node, int lvl) {
     }
+    void do_PIDExpression(cdk::binary_expression_node * const node, int lvl);
+    void do_IDExpression(cdk::binary_expression_node * const node, int lvl);
 
   public:
   // do not edit these lines
