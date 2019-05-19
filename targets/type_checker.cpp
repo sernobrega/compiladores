@@ -65,7 +65,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
   }
 }
 
-void m19::type_checker::do_variable_node(cdk::variable_node * const node, int lvl) {
+void m19::type_checker::do_identifier_node(cdk::identifier_node * const node, int lvl) {
   ASSERT_UNSPEC;
   const std::string &id = node->name();
   std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
