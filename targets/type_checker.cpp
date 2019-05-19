@@ -157,11 +157,6 @@ void m19::type_checker::do_stop_node(m19::stop_node * const node, int lvl) {
   //
 }
 
-void m19::type_checker::do_identity_node(m19::identity_node * const node, int lvl) {
-  //
-}
-
-
 //---------------------------------------------------------------------------
 
 void m19::type_checker::do_for_node(m19::for_node * const node, int lvl) {
@@ -331,13 +326,20 @@ void m19::type_checker::do_div_node(cdk::div_node * const node, int lvl) {
 void m19::type_checker::do_mod_node(cdk::mod_node * const node, int lvl) {
   do_IntOnlyExpression(node, lvl);
 }
-void m19::type_checker::do_neg_node(cdk::neg_node * const node, int lvl) {
+
+void m19::type_checker::do_unaryIDExpression(cdk::unary_expression_node * const node, int lvl) {
   ASSERT_UNSPEC;
   node->argument()->accept(this, lvl);
   if (node->argument()->type()->name() == basic_type::TYPE_INT || node->argument()->type()->name() == basic_type::TYPE_DOUBLE)
     node->type(node->argument()->type());
   else
     throw std::string("integer or vector expressions expected");
+}
+void m19::type_checker::do_neg_node(cdk::neg_node * const node, int lvl) {
+  do_unaryIDExpression(node, lvl);
+}
+void m19::type_checker::do_identity_node(m19::identity_node * const node, int lvl) {
+  do_unaryIDExpression(node, lvl);
 }
 
 /****************************************************************************************

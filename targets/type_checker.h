@@ -38,6 +38,7 @@ namespace m19 {
     void do_IntOnlyExpression(cdk::binary_expression_node * const node, int lvl);
     void do_PIDExpression(cdk::binary_expression_node * const node, int lvl);
     void do_IDExpression(cdk::binary_expression_node * const node, int lvl);
+    void do_unaryIDExpression(cdk::unary_expression_node * const node, int lvl);
     void do_ScalarLogicalExpression(cdk::binary_expression_node * const node, int lvl);
     void do_GeneralLogicalExpression(cdk::binary_expression_node * const node, int lvl);
     void do_BooleanLogicalExpression(cdk::binary_expression_node * const node, int lvl);
