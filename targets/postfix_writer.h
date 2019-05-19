@@ -48,6 +48,10 @@ namespace m19 {
       return oss.str();
     }
 
+    void error(int lineno, std::string s) {
+      std::cerr << "error: " << lineno << ": " << s << std::endl;
+    }
+
   public:
   // do not edit these lines
 #define __IN_VISITOR_HEADER__

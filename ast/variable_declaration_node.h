@@ -23,6 +23,10 @@ namespace m19 {
     }
 
   public:
+    bool constant() {
+      return _type == _type->subtype(); // HACK!
+    }
+
     inline int scope() {
       return _scope;
     }
