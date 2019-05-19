@@ -65,15 +65,9 @@ void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, 
 
 void m19::postfix_writer::do_evaluation_node(m19::evaluation_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->argument()->accept(this, lvl); // determine the value
-  if (node->argument()->type()->name() == basic_type::TYPE_INT) {
-    _pf.TRASH(4); // delete the evaluated value
-  } else if (node->argument()->type()->name() == basic_type::TYPE_STRING) {
-    _pf.TRASH(4); // delete the evaluated value's address
-  } else {
-    std::cerr << "ERROR: CANNOT HAPPEN!" << std::endl;
-    exit(1);
-  }
+  basic_type *type = node->expression()->type();
+  node->expression()->accept(this, lvl);
+  _pf.TRASH(type->size());
 }
 
 void m19::postfix_writer::do_print_node(m19::print_node * const node, int lvl) {
@@ -123,7 +117,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
   auto id = node->id();
 
   int offset = 0, typesize = node->type()->size();
-
+  std::cout << "ARG: " << id << ", " << typesize << std::endl;
   if (_inFunctionBody) {
     _offset -= typesize;
     offset = _offset;
@@ -147,6 +141,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
       node->expr()->accept(this, lvl);
       if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
           || node->type()->name() == basic_type::TYPE_POINTER) {
+            
         _pf.LOCAL(symbol->offset());
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -179,7 +174,8 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
 
           if (node->type()->name() == basic_type::TYPE_INT) {
             node->expr()->accept(this, lvl);
-            _pf.SINT(node->expr()->value());
+              std::cout << "BOO: " << std::endl;
+            _pf.STINT();
           } else if (node->type()->name() == basic_type::TYPE_POINTER) {
             node->expr()->accept(this, lvl);
           } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -193,7 +189,8 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
               std::cerr << node->lineno() << ": '" << id << "' has bad initializer for real value\n";
               _errors = true;
             }
-            _pf.SDOUBLE(node->expr()->value());
+            _pf.STDOUBLE();
+            
           }
         } else if (node->type()->name() == basic_type::TYPE_STRING) {
           if (node->constant()) {
@@ -216,9 +213,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
           std::cerr << node->lineno() << ": '" << id << "' has unexpected initializer\n";
           _errors = true;
         }
-
       }
-
     }
   }
 }
