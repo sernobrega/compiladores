@@ -22,7 +22,7 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
   }
 }
 
-void m19::postfix_writer::do_identifier_node(cdk::identifier_node * const node, int lvl) {
+void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
 
   const std::string &id = node->name();

@@ -143,7 +143,7 @@ void m19::xml_writer::do_or_node(cdk::or_node * const node, int lvl) {
 
 //---------------------------------------------------------------------------
 
-void m19::xml_writer::do_identifier_node(cdk::identifier_node * const node, int lvl) {
+void m19::xml_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   //ASSERT_SAFE_EXPRESSIONS;
   os() << std::string(lvl, ' ') << "<" << node->label() << ">" << node->name() << "</" << node->label() << ">" << std::endl;
 }
