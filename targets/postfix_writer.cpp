@@ -15,17 +15,35 @@ void m19::postfix_writer::do_nil_node(cdk::nil_node * const node, int lvl) {
 void m19::postfix_writer::do_data_node(cdk::data_node * const node, int lvl) {
   // EMPTY
 }
-void m19::postfix_writer::do_double_node(cdk::double_node * const node, int lvl) {
-  // EMPTY
-}
+
 void m19::postfix_writer::do_not_node(cdk::not_node * const node, int lvl) {
-  // EMPTY
+  ASSERT_SAFE_EXPRESSIONS;
+  node->argument()->accept(this, lvl + 2);
+  _pf.INT(0);
+  _pf.EQ();
+  //_pf.NOT();
 }
 void m19::postfix_writer::do_and_node(cdk::and_node * const node, int lvl) {
-  // EMPTY
+  ASSERT_SAFE_EXPRESSIONS;
+  int lbl = ++_lbl;
+  node->left()->accept(this, lvl + 2);
+  _pf.DUP32();
+  _pf.JZ(mklbl(lbl));
+  node->right()->accept(this, lvl + 2);
+  _pf.AND();
+  _pf.ALIGN();
+  _pf.LABEL(mklbl(lbl));
 }
 void m19::postfix_writer::do_or_node(cdk::or_node * const node, int lvl) {
-  // EMPTY
+  ASSERT_SAFE;
+  int lbl = ++_lbl;
+  node->left()->accept(this, lvl + 2);
+  _pf.DUP32();
+  _pf.JNZ(mklbl(lbl));
+  node->right()->accept(this, lvl + 2);
+  _pf.OR();
+  _pf.ALIGN();
+  _pf.LABEL(mklbl(lbl));
 }
 
 //---------------------------------------------------------------------------
@@ -38,29 +56,7 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 
 //---------------------------------------------------------------------------
 
-void m19::postfix_writer::do_integer_node(cdk::integer_node * const node, int lvl) {
-  _pf.INT(node->value()); // push an integer
-}
 
-void m19::postfix_writer::do_string_node(cdk::string_node * const node, int lvl) {
-  int lbl1;
-
-  /* generate the string */
-  _pf.RODATA(); // strings are DATA readonly
-  _pf.ALIGN(); // make sure we are aligned
-  _pf.LABEL(mklbl(lbl1 = ++_lbl)); // give the string a name
-  _pf.SSTRING(node->value()); // output string characters
-  if(_function) {
-    /* local variable */
-    _pf.TEXT();
-    _pf.ADDR(mklbl(lbl1));
-  }
-  else {
-    /* global variable */
-    _pf.TEXT(); 
-    _pf.SADDR(mklbl(lbl1)); 
-  }
-}
 
 //---------------------------------------------------------------------------
 
@@ -308,7 +304,36 @@ void m19::postfix_writer::do_if_else_node(m19::if_else_node * const node, int lv
   node->elseblock()->accept(this, lvl + 2);
   _pf.LABEL(mklbl(lbl1 = lbl2));
 }
+/****************************************************************************************
+ *****************************        TYPES RELATED         *****************************
+ ****************************************************************************************/
+void m19::postfix_writer::do_integer_node(cdk::integer_node * const node, int lvl) {
+  _pf.INT(node->value()); // push an integer
+}
 
+void m19::postfix_writer::do_double_node(cdk::double_node * const node, int lvl) {
+  // EMPTY
+}
+
+void m19::postfix_writer::do_string_node(cdk::string_node * const node, int lvl) {
+  int lbl1;
+
+  /* generate the string */
+  _pf.RODATA(); // strings are DATA readonly
+  _pf.ALIGN(); // make sure we are aligned
+  _pf.LABEL(mklbl(lbl1 = ++_lbl)); // give the string a name
+  _pf.SSTRING(node->value()); // output string characters
+  if(_function) {
+    /* local variable */
+    _pf.TEXT();
+    _pf.ADDR(mklbl(lbl1));
+  }
+  else {
+    /* global variable */
+    _pf.TEXT(); 
+    _pf.SADDR(mklbl(lbl1)); 
+  }
+}
 
 /****************************************************************************************
  *****************************       FUNCTION RELATED       *****************************

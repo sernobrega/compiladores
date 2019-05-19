@@ -21,30 +21,19 @@ void m19::type_checker::do_nil_node(cdk::nil_node * const node, int lvl) {
 void m19::type_checker::do_data_node(cdk::data_node * const node, int lvl) {
   // EMPTY
 }
-void m19::type_checker::do_double_node(cdk::double_node * const node, int lvl) {
-  // EMPTY
-}
+
 void m19::type_checker::do_not_node(cdk::not_node * const node, int lvl) {
-  // EMPTY
+  processUnaryExpression(node, lvl);
 }
 void m19::type_checker::do_and_node(cdk::and_node * const node, int lvl) {
-  // EMPTY
+  processBinaryExpression(node, lvl);
 }
 void m19::type_checker::do_or_node(cdk::or_node * const node, int lvl) {
-  // EMPTY
+  processBinaryExpression(node, lvl);
 }
 
 //---------------------------------------------------------------------------
 
-void m19::type_checker::do_integer_node(cdk::integer_node * const node, int lvl) {
-  ASSERT_UNSPEC;
-  node->type(new basic_type(4, basic_type::TYPE_INT));
-}
-
-void m19::type_checker::do_string_node(cdk::string_node * const node, int lvl) {
-  ASSERT_UNSPEC;
-  node->type(new basic_type(4, basic_type::TYPE_STRING));
-}
 
 //---------------------------------------------------------------------------
 
@@ -252,6 +241,24 @@ void m19::type_checker::do_if_node(m19::if_node * const node, int lvl) {
 void m19::type_checker::do_if_else_node(m19::if_else_node * const node, int lvl) {
   node->condition()->accept(this, lvl + 4);
 }
+
+/****************************************************************************************
+ *****************************        TYPES RELATED         *****************************
+ ****************************************************************************************/
+void m19::type_checker::do_integer_node(cdk::integer_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->type(new basic_type(4, basic_type::TYPE_INT));
+}
+
+void m19::type_checker::do_double_node(cdk::double_node * const node, int lvl) {
+  // EMPTY
+}
+
+void m19::type_checker::do_string_node(cdk::string_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->type(new basic_type(4, basic_type::TYPE_STRING));
+}
+
 
 /****************************************************************************************
  *****************************       FUNCTION RELATED       *****************************
