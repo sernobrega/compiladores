@@ -128,6 +128,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
     offset = 0; // global variable
   }
 
+  //Fetch symbol inserted by type checker
   std::shared_ptr<m19::symbol> symbol = new_symbol();
   if (symbol) {
     symbol->set_offset(offset);
@@ -141,8 +142,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
       node->expr()->accept(this, lvl);
       if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
           || node->type()->name() == basic_type::TYPE_POINTER) {
-            
-        _pf.LOCAL(symbol->offset());
+        _pf.LOCAL(symbol->offset()); //FIXME: check forr string
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
         _pf.LOCAL(symbol->offset());
@@ -167,6 +167,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
             _pf.RODATA();
           }
           else {
+            std::cout << "BOO: " << std::endl;
             _pf.DATA();
           }
           _pf.ALIGN();
