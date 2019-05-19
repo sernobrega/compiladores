@@ -184,11 +184,11 @@ void m19::type_checker::do_if_else_node(m19::if_else_node * const node, int lvl)
 void m19::type_checker::do_ScalarLogicalExpression(cdk::binary_expression_node * const node, int lvl) {
   ASSERT_UNSPEC;
   node->left()->accept(this, lvl + 2);
-  if (node->left()->type()->name() != basic_type::TYPE_INT || node->left()->type()->name() != basic_type::TYPE_DOUBLE) throw std::string(
+  if (node->left()->type()->name() != basic_type::TYPE_INT && node->left()->type()->name() != basic_type::TYPE_DOUBLE) throw std::string(
       "integer or double expression expected in binary logical expression (left)");
 
   node->right()->accept(this, lvl + 2);
-  if (node->right()->type()->name() != basic_type::TYPE_INT || node->left()->type()->name() != basic_type::TYPE_DOUBLE) throw std::string(
+  if (node->right()->type()->name() != basic_type::TYPE_INT && node->left()->type()->name() != basic_type::TYPE_DOUBLE) throw std::string(
       "integer expression expected in binary logical expression (right)");
 
   if(node->right()->type()->name() == basic_type::TYPE_DOUBLE || node->left()->type()->name() == basic_type::TYPE_DOUBLE)
