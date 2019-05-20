@@ -194,9 +194,9 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
       
     }
   } else if (node->type()->name() == basic_type::TYPE_STRING) {
-    std::cout << "STRING" << std::endl;
+    //std::cout << "STRING" << std::endl;
     // if (node->constant()) {
-      std::cout << "CONSTANT" << std::endl;
+      //std::cout << "CONSTANT" << std::endl;
       int litlbl;
       // HACK!!! string literal initializers must be emitted before the string identifier
       _pf.RODATA();
@@ -236,8 +236,6 @@ void m19::postfix_writer::do_index_node(m19::index_node * const node, int lvl) {
  *****************************        IF-ELSE RELATED       *****************************
  ****************************************************************************************/
 void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
-  //ASSERT_SAFE_EXPRESSIONS;
-
   _forIni.push(++_lbl); // after init, before body
   _forStep.push(++_lbl);// after intruction
   _forEnd.push(++_lbl);// after for
