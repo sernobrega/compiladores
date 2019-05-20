@@ -388,7 +388,11 @@ void m19::postfix_writer::do_integer_node(cdk::integer_node * const node, int lv
 }
 
 void m19::postfix_writer::do_double_node(cdk::double_node * const node, int lvl) {
-  // EMPTY
+  if (_inFunctionBody) {
+    _pf.DOUBLE(node->value()); // load number to the stack
+  } else {
+    _pf.SDOUBLE(node->value());    // double is on the DATA segment
+  }
 }
 
 void m19::postfix_writer::do_string_node(cdk::string_node * const node, int lvl) {
