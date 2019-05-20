@@ -464,13 +464,13 @@ void m19::type_checker::do_section_init_node(m19::section_init_node * const node
 }
 
 void m19::type_checker::do_continue_node(m19::continue_node * const node, int lvl) {
-  //
+  // NOTHING TO TYPE CHECK
 }
 
 void m19::type_checker::do_return_node(m19::return_node * const node, int lvl) {
-  //
+  // NOTHING TO TYPE CHECK
 }
 
 void m19::type_checker::do_stop_node(m19::stop_node * const node, int lvl) {
-  //
+  // NOTHING TO TYPE CHECK
 }
