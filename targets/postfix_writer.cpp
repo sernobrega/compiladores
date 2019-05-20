@@ -237,15 +237,44 @@ void m19::postfix_writer::do_index_node(m19::index_node * const node, int lvl) {
  ****************************************************************************************/
 void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
+
+  _forIni.push(++_lbl); // after init, before body
+  _forStep.push(++_lbl);// after intruction
+  _forEnd.push(++_lbl);// after for
+
+  int stepelsejmp = ++_lbl;
+  int stepjmp = ++_lbl;
   int lbl1, lbl2;
+
+  os() << "        ;; FOR initialize" << std::endl;
+  _inForInit = true;
   node->init()->accept(this, lvl);
-  _pf.LABEL(mklbl(lbl1 = ++_lbl));
+
+  os() << "        ;; FOR test" << std::endl;
+  _pf.LABEL(mklbl(_forIni.top()));
   node->stop()->accept(this, lvl);
-  _pf.JZ(mklbl(lbl2 = ++_lbl));
+  _pf.JZ(mklbl(_forEnd.top()));
+  os() << "        ;; FOR instruction" << std::endl;
+  // execute instruction
   node->instruction()->accept(this, lvl + 2);
+
+  os() << "        ;; FOR increment" << std::endl;
+  _pf.LABEL(mklbl(_forStep.top()));
   node->step()->accept(this, lvl);
-  _pf.JMP(mklbl(lbl1));
-  _pf.LABEL(mklbl(lbl2));
+  _pf.DUP(32);
+  _pf.INT(1);
+  _pf.ADD();
+  _pf.STINT();
+  os() << "        ;; FOR jump to test" << std::endl;
+  _pf.JMP(mklbl(_forIni.top()));
+  os() << "        ;; FOR end" << std::endl;
+  _pf.LABEL(mklbl(_forEnd.top()));
+
+  _inForInit = false;// remember this for local declarations
+
+  _forIni.pop();
+  _forStep.pop();
+  _forEnd.pop();
 }
 
 void m19::postfix_writer::do_if_node(m19::if_node * const node, int lvl) {
@@ -544,5 +573,8 @@ void m19::postfix_writer::do_return_node(m19::return_node * const node, int lvl)
 }
 
 void m19::postfix_writer::do_stop_node(m19::stop_node * const node, int lvl) {
-  //
+  if (_forIni.size() != 0) {
+    _pf.JMP(mklbl(_forEnd.top())); // jump to for end
+  } else
+    error(node->lineno(), "'break' outside 'for'");
 }

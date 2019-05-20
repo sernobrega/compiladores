@@ -20,6 +20,7 @@ namespace m19 {
     int _lbl;
 
     bool _errors, _inFunction, _inFunctionName, _inFunctionArgs, _inFunctionBody;
+    std::stack<int> _forIni, _forStep, _forEnd; // for break/repeat
     std::set<std::string> _functions_to_declare;
     std::shared_ptr<m19::symbol> _function;
 
