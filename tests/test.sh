@@ -9,11 +9,12 @@ do
 	ld -m elf_i386 -o "$FILE" "$FILE.o" -lrts
 	./$FILE > "$FILE.out"
 
-	DIFF=$(diff -Z  "$FILE.out" expected/"$FILE.out") 
+	DIFF=$(diff -Z  "$FILE.out" expected/"$FILE.out")
 
 	if [ "$DIFF" != "" ]
 	then
 		echo "!!!!! Test $FILE didn't pass."
+		echo "$DIFF"
 	else
 		passed=$((passed+1))
 	fi
