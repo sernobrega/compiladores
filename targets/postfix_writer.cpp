@@ -152,70 +152,65 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
         std::cerr << "cannot initialize" << std::endl;
       }
     }
+    return;
+  }
+
+  if(_function)
+    return;
+  
+  if (node->expr() == nullptr) {
+    _pf.BSS();
+    _pf.ALIGN();
+    _pf.GLOBAL(id, _pf.OBJ());
+    _pf.LABEL(id);
+    _pf.SALLOC(typesize);
   } else {
-    if (!_function) {
-      if (node->expr() == nullptr) {
-        _pf.BSS();
-        _pf.ALIGN();
-        _pf.LABEL(id);
-        _pf.SALLOC(typesize);
-      } else {
 
-        if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_DOUBLE
-            || node->type()->name() == basic_type::TYPE_POINTER) {
+    if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_DOUBLE
+        || node->type()->name() == basic_type::TYPE_POINTER) {
 
-          if (node->constant()) {
-            _pf.RODATA();
-          }
-          else {
-            _pf.DATA();
-          }
-          _pf.ALIGN();
-          _pf.LABEL(id);
+      node->constant() ? _pf.RODATA() : _pf.DATA();
+      _pf.ALIGN();
+      _pf.GLOBAL(id, _pf.OBJ());
+      _pf.LABEL(id);
 
-          if (node->type()->name() == basic_type::TYPE_INT) {
-            node->expr()->accept(this, lvl);
-              std::cout << "BOO: " << std::endl;
-            _pf.LDINT();
-            _pf.STINT();
-          } else if (node->type()->name() == basic_type::TYPE_POINTER) {
-            node->expr()->accept(this, lvl);
-          } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
-            if (node->expr()->type()->name() == basic_type::TYPE_DOUBLE) {
-              node->expr()->accept(this, lvl);
-            } else if (node->expr()->type()->name() == basic_type::TYPE_INT) {
-              cdk::integer_node *dclini = dynamic_cast<cdk::integer_node *>(node->expr());
-              cdk::double_node ddi(dclini->lineno(), dclini->value());
-              ddi.accept(this, lvl);
-            } else {
-              std::cerr << node->lineno() << ": '" << id << "' has bad initializer for real value\n";
-              _errors = true;
-            }
-            _pf.STDOUBLE();
-            
-          }
-        } else if (node->type()->name() == basic_type::TYPE_STRING) {
-          if (node->constant()) {
-            int litlbl;
-            // HACK!!! string literal initializers must be emitted before the string identifier
-            _pf.RODATA();
-            _pf.ALIGN();
-            _pf.LABEL(mklbl(litlbl = ++_lbl));
-            _pf.SSTRING(dynamic_cast<cdk::string_node *>(node->expr())->value());
-            _pf.ALIGN();
-            _pf.LABEL(id);
-            _pf.SADDR(mklbl(litlbl));
-          } else {
-            _pf.DATA();
-            _pf.ALIGN();
-            _pf.LABEL(id);
-            node->expr()->accept(this, lvl);
-          }
+      if (node->type()->name() == basic_type::TYPE_INT) {
+        node->expr()->accept(this, lvl);
+      } else if (node->type()->name() == basic_type::TYPE_POINTER) {
+        node->expr()->accept(this, lvl);
+      } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
+        if (node->expr()->type()->name() == basic_type::TYPE_DOUBLE) {
+          node->expr()->accept(this, lvl);
+        } else if (node->expr()->type()->name() == basic_type::TYPE_INT) {
+          cdk::integer_node *dclini = dynamic_cast<cdk::integer_node *>(node->expr());
+          cdk::double_node ddi(dclini->lineno(), dclini->value());
+          ddi.accept(this, lvl);
         } else {
-          std::cerr << node->lineno() << ": '" << id << "' has unexpected initializer\n";
+          std::cerr << node->lineno() << ": '" << id << "' has bad initializer for real value\n";
           _errors = true;
         }
+        
       }
+    } else if (node->type()->name() == basic_type::TYPE_STRING) {
+      if (node->constant()) {
+        int litlbl;
+        // HACK!!! string literal initializers must be emitted before the string identifier
+        _pf.RODATA();
+        _pf.ALIGN();
+        _pf.LABEL(mklbl(litlbl = ++_lbl));
+        _pf.SSTRING(dynamic_cast<cdk::string_node *>(node->expr())->value());
+        _pf.ALIGN();
+        _pf.LABEL(id);
+        _pf.SADDR(mklbl(litlbl));
+      } else {
+        _pf.DATA();
+        _pf.ALIGN();
+        _pf.LABEL(id);
+        node->expr()->accept(this, lvl);
+      }
+    } else {
+      std::cerr << node->lineno() << ": '" << id << "' has unexpected initializer\n";
+      _errors = true;
     }
   }
 }
