@@ -10,14 +10,10 @@ do
 	./$FILE > "$FILE.out"
 
 	DIFF=$(diff -Z  "$FILE.out" expected/"$FILE.out") 
-	if [ "$DIFF" != "" ] 
-	then
-		echo "Test $FILE didn't pass."
-	fi
 
 	if [ "$DIFF" != "" ]
 	then
-		echo "Test $FILE didn't pass."
+		echo "!!!!! Test $FILE didn't pass."
 	else
 		passed=$((passed+1))
 	fi
@@ -25,4 +21,4 @@ do
 	total=$((total+1))
 done
 
-echo "Passed: $passed/$topass"
+echo "Passed: $passed/$total"
