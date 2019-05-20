@@ -84,26 +84,58 @@ void m19::type_checker::do_rvalue_node(cdk::rvalue_node * const node, int lvl) {
 }
 
 void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, int lvl) {
-  // ASSERT_UNSPEC;
+  ASSERT_UNSPEC;
+  node->lvalue()->accept(this, lvl + 4);
+  node->rvalue()->accept(this, lvl + 4);
 
-  // try {
-  //   node->lvalue()->accept(this, lvl);
-  // } catch (const std::string &id) {
-  //   std::shared_ptr<m19::symbol> symbol = std::make_shared<m19::symbol>(new basic_type(4, basic_type::TYPE_INT), id, 0);
-  //   _symtab.insert(id, symbol);
-  //   _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
-  //   node->lvalue()->accept(this, lvl);  //DAVID: bah!
-  // }
+  //Integer
+  if (node->lvalue()->type()->name() == basic_type::TYPE_INT) {
+    if (node->rvalue()->type()->name() == basic_type::TYPE_INT) {
+      node->type(new basic_type(4, basic_type::TYPE_INT));
+    } else if (node->rvalue()->type()->name() == basic_type::TYPE_UNSPEC) {
+      node->type(new basic_type(4, basic_type::TYPE_INT));
+      node->rvalue()->type(new basic_type(4, basic_type::TYPE_INT));
+    } else
+      throw std::string("wrong assignment to integer");
+  //Pointer
+  } else if (node->lvalue()->type()->name() == basic_type::TYPE_POINTER) {
 
-  // if (node->lvalue()->type()->name() != basic_type::TYPE_INT) throw std::string(
-  //     "wrong type in left argument of assignment expression");
+//TODO: check pointer level
 
-  // node->rvalue()->accept(this, lvl + 2);
-  // if (node->rvalue()->type()->name() != basic_type::TYPE_INT) throw std::string(
-  //     "wrong type in right argument of assignment expression");
+    if (node->rvalue()->type()->name() == basic_type::TYPE_POINTER) {
+      node->type(new basic_type(4, basic_type::TYPE_POINTER));
+    } else if (node->rvalue()->type()->name() == basic_type::TYPE_INT) {
+      //TODO: check that the integer is a literal and that it is zero
+      node->type(new basic_type(4, basic_type::TYPE_POINTER));
+    } else if (node->rvalue()->type()->name() == basic_type::TYPE_UNSPEC) {
+      node->type(new basic_type(4, basic_type::TYPE_ERROR));
+      node->rvalue()->type(new basic_type(4, basic_type::TYPE_ERROR));
+    } else
+      throw std::string("wrong assignment to pointer");
+  //Double
+  } else if (node->lvalue()->type()->name() == basic_type::TYPE_DOUBLE) {
 
-  // // in Simple, expressions are always int
-  // node->type(new basic_type(4, basic_type::TYPE_INT));
+    if (node->rvalue()->type()->name() == basic_type::TYPE_DOUBLE || node->rvalue()->type()->name() == basic_type::TYPE_INT) {
+      node->type(new basic_type(8, basic_type::TYPE_DOUBLE));
+    } else if (node->rvalue()->type()->name() == basic_type::TYPE_UNSPEC) {
+      node->type(new basic_type(8, basic_type::TYPE_DOUBLE));
+      node->rvalue()->type(new basic_type(8, basic_type::TYPE_DOUBLE));
+    } else
+      throw std::string("wrong assignment to real");
+
+  //String
+  } else if (node->lvalue()->type()->name() == basic_type::TYPE_STRING) {
+    if (node->rvalue()->type()->name() == basic_type::TYPE_STRING) {
+      node->type(new basic_type(4, basic_type::TYPE_STRING));
+    } else if (node->rvalue()->type()->name() == basic_type::TYPE_UNSPEC) {
+      node->type(new basic_type(4, basic_type::TYPE_STRING));
+      node->rvalue()->type(new basic_type(4, basic_type::TYPE_STRING));
+    } else
+      throw std::string("wrong assignment to string");
+
+  } else {
+    throw std::string("wrong types in assignment");
+  }
 }
 
 //---------------------------------------------------------------------------
