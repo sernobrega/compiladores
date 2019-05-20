@@ -198,8 +198,8 @@ cond_i          : '[' expr ']' '#' instruction                              { $$
                 | '[' expr ']' '?' instruction ':' instruction              { $$ = new m19::if_else_node(LINE, $2, $5, $7); }
                 ;
 
-iter_i          : '[' args  ';' exprs ';' exprs ']' instruction             { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
-                | '[' exprs ';' exprs ';' exprs ']' instruction             { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
+iter_i          : '[' vardecls  ';' exprs ';' exprs ']' instruction         { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
+                | '[' exprs     ';' exprs ';' exprs ']' instruction         { $$ = new m19::for_node(LINE, $2, $4, $6, $8); }
                 ;
 
 exprs           : /* empty */                                               { $$ = new cdk::sequence_node(LINE); }
