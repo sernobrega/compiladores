@@ -203,7 +203,10 @@ iter_i          : '[' args  ';' exprs ';' exprs ']' instruction             { $$
                 ;
 
 exprs           : /* empty */                                               { $$ = new cdk::sequence_node(LINE); }
-                | expr                                                      { $$ = new cdk::sequence_node(LINE, $1); }
+                | exprs_in                                                  { $$ = $1; }
+                ;
+
+exprs_in        : expr                                                      { $$ = new cdk::sequence_node(LINE, $1); }
                 | exprs ',' expr                                            { $$ = new cdk::sequence_node(LINE, $3, $1); }
                 ;
 
