@@ -28,7 +28,6 @@ void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int 
   const std::string &id = node->name();
   std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
   if (symbol->global()) {
-    std::cout << symbol->name() << " is global." << std::endl;
     _pf.ADDR(symbol->name());
   }
   else {
@@ -118,7 +117,6 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
   auto id = node->id();
 
   int offset = 0, typesize = node->type()->size();
-  std::cout << "ARG: " << id << ", " << typesize << std::endl;
   if (_inFunctionBody) {
     _offset -= typesize;
     offset = _offset;
