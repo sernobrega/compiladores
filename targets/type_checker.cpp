@@ -202,14 +202,21 @@ void m19::type_checker::do_if_else_node(m19::if_else_node * const node, int lvl)
 }
 
 void m19::type_checker::do_for_node(m19::for_node * const node, int lvl) {
-  node->init()->accept(this, lvl + 2);
-  if (node->init()->type()->name() != basic_type::TYPE_INT) throw std::string("expected integer in init for cycle");
-  node->stop()->accept(this, lvl + 4);
-  if (node->stop()->type()->name() != basic_type::TYPE_INT) throw std::string(
+  for (size_t i = 0; i < node->init()->size(); i++) {
+      node->init()->node(i)->accept(this, lvl);
+      if (node->init()->type()->name() != basic_type::TYPE_INT) throw std::string(
+      "expected integer expression as init of for cycle");
+  }
+  for (size_t i = 0; i < node->stop()->size(); i++) {
+      node->stop()->node(i)->accept(this, lvl);
+      if (node->stop()->type()->name() != basic_type::TYPE_INT) throw std::string(
       "expected integer expression as stop condition of for cycle");
-  node->step()->accept(this, lvl + 4);
-  if (node->end()->type()->name() != basic_type::TYPE_INT) throw std::string(
-      "expected integer expression as step of for cycle");
+  }
+  for (size_t i = 0; i < node->step()->size(); i++) {
+      node->step()->node(i)->accept(this, lvl);
+      if (node->step()->type()->name() != basic_type::TYPE_INT) throw std::string(
+      "expected integer expression as step condition of for cycle");
+  }
 }
 
 /****************************************************************************************
