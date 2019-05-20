@@ -236,7 +236,7 @@ void m19::postfix_writer::do_index_node(m19::index_node * const node, int lvl) {
  *****************************        IF-ELSE RELATED       *****************************
  ****************************************************************************************/
 void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
+  //ASSERT_SAFE_EXPRESSIONS;
 
   _forIni.push(++_lbl); // after init, before body
   _forStep.push(++_lbl);// after intruction
