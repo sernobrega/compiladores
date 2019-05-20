@@ -257,10 +257,6 @@ void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   os() << "        ;; FOR increment" << std::endl;
   _pf.LABEL(mklbl(_forStep.top()));
   node->step()->accept(this, lvl);
-  _pf.DUP32();
-  _pf.INT(1);
-  _pf.ADD();
-  _pf.STINT();
   os() << "        ;; FOR jump to test" << std::endl;
   _pf.JMP(mklbl(_forIni.top()));
   os() << "        ;; FOR end" << std::endl;
