@@ -202,13 +202,8 @@ void m19::type_checker::do_if_else_node(m19::if_else_node * const node, int lvl)
 }
 
 void m19::type_checker::do_for_node(m19::for_node * const node, int lvl) {
-  for (size_t i = 0; i < node->init()->size(); i++) {
-      cdk::expression_node * expr = (cdk::expression_node *)node->init()->node(i);
-      if(expr == nullptr) break;
-      expr->accept(this, lvl + 4);
-      if (expr->type()->name() != basic_type::TYPE_INT) throw std::string(
-      "expected integer expression as init of for cycle");
-  }
+  node->init()->accept(this, lvl + 4);
+
   for (size_t i = 0; i < node->stop()->size(); i++) {
       cdk::expression_node * expr = (cdk::expression_node *)node->stop()->node(i);
       if(expr == nullptr) break;
