@@ -174,7 +174,6 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
 
       if (node->type()->name() == basic_type::TYPE_INT) {
         node->expr()->accept(this, lvl);
-        _pf.SINT(2);
       } else if (node->type()->name() == basic_type::TYPE_POINTER) {
         node->expr()->accept(this, lvl);
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -381,7 +380,11 @@ void m19::postfix_writer::do_identity_node(m19::identity_node * const node, int 
  *****************************        TYPES RELATED         *****************************
  ****************************************************************************************/
 void m19::postfix_writer::do_integer_node(cdk::integer_node * const node, int lvl) {
-  _pf.INT(node->value()); // push an integer
+  if (_inFunctionBody) {
+    _pf.INT(node->value()); // integer literal is on the stack: push an integer
+  } else {
+    _pf.SINT(node->value()); // integer literal is on the DATA segment
+  }
 }
 
 void m19::postfix_writer::do_double_node(cdk::double_node * const node, int lvl) {
