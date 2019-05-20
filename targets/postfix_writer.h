@@ -4,6 +4,7 @@
 #include <set>
 #include <string>
 #include <iostream>
+#include <stack>
 #include <cdk/symbol_table.h>
 #include <cdk/emitters/basic_postfix_emitter.h>
 #include "targets/basic_ast_visitor.h"
@@ -18,7 +19,7 @@ namespace m19 {
     cdk::symbol_table<m19::symbol> &_symtab;
     cdk::basic_postfix_emitter &_pf;
     int _lbl;
-
+    bool _inForInit;
     bool _errors, _inFunction, _inFunctionName, _inFunctionArgs, _inFunctionBody;
     std::stack<int> _forIni, _forStep, _forEnd; // for break/repeat
     std::set<std::string> _functions_to_declare;
