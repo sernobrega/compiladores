@@ -28,6 +28,7 @@ void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int 
   const std::string &id = node->name();
   std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
   if (symbol->global()) {
+    std::cout << symbol->name() << " is global." << std::endl;
     _pf.ADDR(symbol->name());
   }
   else {
@@ -167,7 +168,6 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
             _pf.RODATA();
           }
           else {
-            std::cout << "BOO: " << std::endl;
             _pf.DATA();
           }
           _pf.ALIGN();
@@ -176,6 +176,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
           if (node->type()->name() == basic_type::TYPE_INT) {
             node->expr()->accept(this, lvl);
               std::cout << "BOO: " << std::endl;
+            _pf.LDINT();
             _pf.STINT();
           } else if (node->type()->name() == basic_type::TYPE_POINTER) {
             node->expr()->accept(this, lvl);
