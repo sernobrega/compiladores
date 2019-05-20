@@ -48,7 +48,7 @@
 
 %type <node> declaration vardecl func fundecl
 %type <node> cond_i iter_i instruction fundef
-%type <sequence> args secs declarations innerdecls vardecls
+%type <sequence> args secs declarations innerdecls vardecls exprs_in
 %type <sequence> opt_instructions instructions exprs file secm
 %type <expression> expr literal integer real
 %type <lvalue> lval
