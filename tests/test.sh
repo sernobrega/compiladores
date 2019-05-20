@@ -15,12 +15,13 @@ do
 		echo "Test $FILE didn't pass."
 	fi
 
-	if [ "$seconds" -eq 0 ]; then
+	if [ "$DIFF" != "" ]
+	then
 		echo "Test $FILE didn't pass."
 	else
 		passed=$((passed+1))
 	fi
-	
+
 	total=$((total+1))
 done
 
