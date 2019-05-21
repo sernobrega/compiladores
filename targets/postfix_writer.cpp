@@ -532,24 +532,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       _pf.EXTERN(s);
 }
 
-void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
-  //FIXME: missign section inclusive and exclusive
-  if(node->qualifier() == tINCLUSIVE && node->expr() == nullptr) {
-    os() << "        ;; section block only " << std::endl;
-    node->block()->accept(this, lvl + 2);
-  }
-  else if(node->qualifier() == tINCLUSIVE) {
-    os() << "        ;; hey2 " << std::endl;
-  }
-}
 
-void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
-  //
-}
-
-void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
-  //
-}
 
 void m19::postfix_writer::do_block_node(m19::block_node * const node, int lvl) {
   _symtab.push(); // for block-local vars
@@ -595,6 +578,34 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
   }
 }
 
+/****************************************************************************************
+ *****************************       SECTIONS RELATED       *****************************
+ ****************************************************************************************/
+void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  //FIXME: missign section inclusive and exclusive
+  if(node->qualifier() == tINCLUSIVE && node->expr() == nullptr) {
+    os() << "        ;; section block only " << std::endl;
+    node->block()->accept(this, lvl + 2);
+  }
+  else if(node->qualifier() == tINCLUSIVE) {
+    os() << "        ;; hey2 " << std::endl;
+  } else if(node->qualifier())
+}
+
+void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->block()->accept(this, lvl + 2);
+}
+
+void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
+  node->block()->accept(this, lvl + 2);
+}
+
+/****************************************************************************************
+ *****************************    CONTINUE, RETURN, STOP    *****************************
+ ****************************************************************************************/
 void m19::postfix_writer::do_continue_node(m19::continue_node * const node, int lvl) {
   //
 }
@@ -609,3 +620,4 @@ void m19::postfix_writer::do_stop_node(m19::stop_node * const node, int lvl) {
   } else
     error(node->lineno(), "'break' outside 'for'");
 }
+

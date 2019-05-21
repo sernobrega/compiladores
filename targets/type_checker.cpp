@@ -109,9 +109,7 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
       throw std::string("wrong assignment to integer");
   //Pointer
   } else if (node->lvalue()->type()->name() == basic_type::TYPE_POINTER) {
-
-//TODO: check pointer level
-
+    //TODO: check pointer level
     if (node->rvalue()->type()->name() == basic_type::TYPE_POINTER) {
       node->type(new basic_type(4, basic_type::TYPE_POINTER));
     } else if (node->rvalue()->type()->name() == basic_type::TYPE_INT) {
@@ -454,7 +452,6 @@ void m19::type_checker::do_section_node(m19::section_node * const node, int lvl)
     node->expr()->accept(this, lvl + 2);
     if (node->expr()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type for expr (integer expected).");
   }
-
   node->block()->accept(this, lvl + 2);
 }
 
