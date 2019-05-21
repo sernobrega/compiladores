@@ -588,7 +588,9 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
   else if (type->name() == basic_type::TYPE_DOUBLE) {
     _pf.LDFVAL64();
   }
-  else {
+  else if(type->name() == basic_type::TYPE_VOID) {
+    //NOTHING
+  } else {
      error(node->lineno(), "unexpected error in function call");
   }
 }
