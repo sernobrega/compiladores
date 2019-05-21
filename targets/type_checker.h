@@ -58,9 +58,9 @@ namespace m19 {
 //     HELPER MACRO FOR TYPE CHECKING
 //---------------------------------------------------------------------------
 
-#define CHECK_TYPES(compiler, symtab, node) { \
+#define CHECK_TYPES(compiler, symtab, function, node) { \
   try { \
-    m19::type_checker checker(compiler, symtab, this); \
+    m19::type_checker checker(compiler, symtab, function, this); \
     (node)->accept(&checker, 0); \
   } \
   catch (const std::string &problem) { \
@@ -69,6 +69,6 @@ namespace m19 {
   } \
 }
 
-#define ASSERT_SAFE_EXPRESSIONS CHECK_TYPES(_compiler, _symtab, node)
+#define ASSERT_SAFE_EXPRESSIONS CHECK_TYPES(_compiler, _symtab, function, node)
 
 #endif
