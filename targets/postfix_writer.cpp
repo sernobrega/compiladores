@@ -492,8 +492,9 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   if(_function->type()->name() != basic_type::TYPE_VOID) {
       node->retval()->accept(this, lvl);
-     _offset = -_function->type()->size(); //retval
   } 
+  
+  _offset = -_function->type()->size(); //retval
 
   //sections
   os() << "        ;; before body " << std::endl;
