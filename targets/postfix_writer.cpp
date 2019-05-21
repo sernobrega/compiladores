@@ -510,7 +510,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   os() << "        ;; after body " << std::endl;
   _inFunctionBody = false;
 
-  if(node->retval()) {
+  if(node->retval() != nullptr) {
     node->retval()->accept(this, lvl + 4);
     if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
       _pf.STFVAL32();
