@@ -490,7 +490,8 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   _inFunctionBody = true;
 
-  node->retval()->accept(this, lvl);
+  if(node->retval())
+    node->retval()->accept(this, lvl);
 
   _offset = -_function->type()->size(); //retval
 
