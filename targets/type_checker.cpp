@@ -70,7 +70,6 @@ void m19::type_checker::do_variable_node(cdk::variable_node * const node, int lv
     return;
   }
     
-    
   const std::string &id = node->name();
   std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
   if (symbol) {
