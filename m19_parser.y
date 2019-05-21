@@ -238,7 +238,7 @@ expr            : integer                                                   { $$
                 
                 | lval                                                      { $$ = new cdk::rvalue_node(LINE, $1); }
                 | lval '=' expr                                             { $$ = new cdk::assignment_node(LINE, $1, $3); }    
-                | '@'  '=' expr                                             { $$ = new cdk::assignment_node(LINE, $1, $3); delete $1; }                               
+                | '@'  '=' expr                                             { $$ = new cdk::assignment_node(LINE, new cdk::variable_node(LINE, $1), $3); delete $1; }                               
                 | lval '?'                                                  { $$ = new m19::address_node(LINE, $1); }
                 ;
 
