@@ -25,6 +25,7 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   if(node->name() == "@") {
+
     _pf.LOCAL(_function->offset());
     return;
   }
@@ -244,9 +245,6 @@ void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   _forStep.push(++_lbl);// after intruction
   _forEnd.push(++_lbl);// after for
 
-  int stepelsejmp = ++_lbl;
-  int stepjmp = ++_lbl;
-
   os() << "        ;; FOR initialize" << std::endl;
   _inForInit = true;
   node->init()->accept(this, lvl);
@@ -262,15 +260,6 @@ void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   os() << "        ;; FOR increment" << std::endl;
   _pf.LABEL(mklbl(_forStep.top()));
   node->step()->accept(this, lvl);
-  _pf.INT(0);
-  _pf.LT();
-  _pf.JZ(mklbl(stepelsejmp));
-  _pf.GE();
-  _pf.JMP(mklbl(stepjmp));
-  _pf.LABEL(mklbl(stepelsejmp));
-  _pf.LE();// default (go up)
-  _pf.LABEL(mklbl(stepjmp));
-  _pf.JZ(mklbl(_forEnd.top()));
   os() << "        ;; FOR jump to test" << std::endl;
   _pf.JMP(mklbl(_forIni.top()));
   os() << "        ;; FOR end" << std::endl;
