@@ -26,7 +26,7 @@ void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int 
   ASSERT_SAFE_EXPRESSIONS;
 
   if(node->name() == "@") {
-    _pf.ADDR(_function->name();
+    _pf.ADDR(_function->name());
     _pf.LOCAL(_function->offset());
     return;
   }
