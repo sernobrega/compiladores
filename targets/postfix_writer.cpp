@@ -23,6 +23,10 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 }
 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
+  if (node->name() == "@") {
+    node->type(_function->type());
+  }
+  
   ASSERT_SAFE_EXPRESSIONS;
   os() << "        ;; variable node" << std::endl;
   if(node->name() == "@") {
