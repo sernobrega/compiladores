@@ -4,6 +4,7 @@
 
 #include <string>
 #include <iostream>
+#include <cdk/basic_type.h>
 #include <cdk/symbol_table.h>
 #include <cdk/ast/basic_node.h>
 #include "targets/symbol.h"
@@ -69,6 +70,6 @@ namespace m19 {
   } \
 }
 
-#define ASSERT_SAFE_EXPRESSIONS CHECK_TYPES(_compiler, _symtab, function, node)
+#define ASSERT_SAFE_EXPRESSIONS CHECK_TYPES(_compiler, _symtab, _function, node)
 
 #endif
