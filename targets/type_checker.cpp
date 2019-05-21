@@ -96,10 +96,10 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
   node->lvalue()->accept(this, lvl + 4);
   node->rvalue()->accept(this, lvl + 4);
 
-  std::cout << " ;; assigment node" << std::endl;
+  bool at = node->lvalue()->name() == "@";
 
   //Integer
-  if (node->lvalue()->type()->name() == basic_type::TYPE_INT) {
+  if ((at && _function->type()->name() == basic_type::TYPE_INT) || node->lvalue()->type()->name() == basic_type::TYPE_INT) {
     if (node->rvalue()->type()->name() == basic_type::TYPE_INT) {
       node->type(new basic_type(4, basic_type::TYPE_INT));
     } else if (node->rvalue()->type()->name() == basic_type::TYPE_UNSPEC) {
@@ -123,7 +123,7 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
     } else
       throw std::string("wrong assignment to pointer");
   //Double
-  } else if (node->lvalue()->type()->name() == basic_type::TYPE_DOUBLE) {
+  } else if ((at && _function->type()->name() == basic_type::TYPE_DOUBLE) || node->lvalue()->type()->name() == basic_type::TYPE_DOUBLE) {
 
     if (node->rvalue()->type()->name() == basic_type::TYPE_DOUBLE || node->rvalue()->type()->name() == basic_type::TYPE_INT) {
       node->type(new basic_type(8, basic_type::TYPE_DOUBLE));
@@ -134,7 +134,7 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
       throw std::string("wrong assignment to real");
 
   //String
-  } else if (node->lvalue()->type()->name() == basic_type::TYPE_STRING) {
+  } else if ((at && _function->type()->name() == basic_type::TYPE_STRING) ||node->lvalue()->type()->name() == basic_type::TYPE_STRING) {
     if (node->rvalue()->type()->name() == basic_type::TYPE_STRING) {
       node->type(new basic_type(4, basic_type::TYPE_STRING));
     } else if (node->rvalue()->type()->name() == basic_type::TYPE_UNSPEC) {
