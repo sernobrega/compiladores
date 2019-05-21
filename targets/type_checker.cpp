@@ -154,7 +154,7 @@ void m19::type_checker::do_evaluation_node(m19::evaluation_node * const node, in
 
 void m19::type_checker::do_print_node(m19::print_node * const node, int lvl) {
   node->argument()->accept(this, lvl + 2);
-  if (node->argument()->type()->name() == basic_type::TYPE_VOID) {
+  if (node->argument()->type()->name() == basic_type::TYPE_VOID)
     throw std::string("wrong type in print argument");
 }
 
@@ -454,7 +454,7 @@ void m19::type_checker::do_section_node(m19::section_node * const node, int lvl)
     node->expr()->accept(this, lvl + 2);
     if (node->expr()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type for expr (integer expected).");
   }
-  
+
   node->block()->accept(this, lvl + 2);
 }
 
