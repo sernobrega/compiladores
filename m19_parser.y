@@ -237,12 +237,12 @@ expr            : integer                                                   { $$
                 | '@' '(' exprs ')'                                         { $$ = new m19::function_call_node(LINE, *$1, $3); delete $1; }
                 
                 | lval                                                      { $$ = new cdk::rvalue_node(LINE, $1); }
-                | lval '=' expr                                             { $$ = new cdk::assignment_node(LINE, $1, $3); }                                 
+                | lval '=' expr                                             { $$ = new cdk::assignment_node(LINE, $1, $3); }    
+                | '@' '='                                                   { $$ = new cdk::assignment_node(LINE, $1, $3); delete $1; }                               
                 | lval '?'                                                  { $$ = new m19::address_node(LINE, $1); }
                 ;
 
 lval            : tID                                                       { $$ = new cdk::variable_node(LINE, $1); delete $1; }  
-                | '@' '='                                                   { $$ = new cdk::variable_node(LINE, $1); delete $1; }  
                 | lval              '[' expr ']'                            { $$ = new m19::index_node(LINE, new cdk::rvalue_node(LINE, $1), $3); }
                 |     '(' expr  ')' '[' expr ']'                            { $$ = new m19::index_node(LINE, $2, $5); }
                 | tID '(' exprs ')' '[' expr ']'                            { $$ = new m19::index_node(LINE, new m19::function_call_node(LINE, *$1, $3), $6); delete $1; }
