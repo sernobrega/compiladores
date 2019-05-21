@@ -532,8 +532,6 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       _pf.EXTERN(s);
 }
 
-
-
 void m19::postfix_writer::do_block_node(m19::block_node * const node, int lvl) {
   _symtab.push(); // for block-local vars
   if (node->declaration()) node->declaration()->accept(this, lvl + 2);
@@ -584,15 +582,23 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
 void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   //FIXME: missign section inclusive and exclusive
-  if(node->qualifier() == tINCLUSIVE && node->expr() == nullptr) {
+  if((node->qualifier() == tINCLUSIVE || node->qualifier() == tEXCLUSIVE) && node->expr() == nullptr) {
     os() << "        ;; section block only " << std::endl;
     node->block()->accept(this, lvl + 2);
   }
   else if(node->qualifier() == tINCLUSIVE) {
-    os() << "        ;; hey2 " << std::endl;
+    os() << "        ;; section inclusive with condition " << std::endl;
     node->block()->accept(this, lvl + 2);
   } else {
+    os() << "        ;; section exclusive " << std::endl;
+    int lbl = ++_lbl;
+    node->expr()->accept(this, lvl + 2);
+    _pf.INT(0);
+    _pf.GT();
+    _pf.JZ(mklbl(lbl));
     node->block()->accept(this, lvl + 2);
+    _pf.ALIGN();
+    _pf.LABEL(mklbl(lbl));
   }
 }
 
