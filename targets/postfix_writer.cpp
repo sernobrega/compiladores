@@ -511,7 +511,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       sec->accept(this, lvl + 8);
     }
   }
-  _pf.LABEL(std::string("end_section"));
+  _pf.LABEL(std::string(_function->name() + "end_section"));
   if(node->end()) node->end()->accept(this, lvl + 4);
   os() << "        ;; after body " << std::endl;
   _inFunctionBody = false;
@@ -606,7 +606,7 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
     _pf.JZ(mklbl(lbl));
     node->block()->accept(this, lvl + 2);
     _pf.ALIGN();
-    _pf.JMP("end_section");
+    _pf.JMP(_function->name() + "end_section");
     _pf.LABEL(mklbl(lbl));
   }
 }
