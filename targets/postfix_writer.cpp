@@ -59,8 +59,8 @@ void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, 
   }
 
   node->lvalue()->accept(this, lvl);
-  if(node->lvalue()->id() == '@') {
-
+  if(node->name() == "@") {
+    
   }
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {
     _pf.STDOUBLE();
