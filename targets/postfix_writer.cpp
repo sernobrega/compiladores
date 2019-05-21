@@ -559,7 +559,33 @@ void m19::postfix_writer::do_function_declaration_node(m19::function_declaration
 }
 
 void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
-  //
+  ASSERT_SAFE_EXPRESSIONS;
+
+  size_t argsSize = 0;
+  if (node->arguments()) {
+    for (int ax = node->arguments()->size(); ax > 0; ax--) {
+      cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
+      arg->accept(this, lvl + 2);
+      argsSize += arg->type()->size();
+    }
+  }
+  _pf.CALL(node->identifier());
+  if (argsSize != 0) {
+    _pf.TRASH(argsSize);
+  }
+
+  std::shared_ptr<m19::symbol> symbol = _symtab.find(node->identifier());
+
+  basic_type *type = symbol->type();
+  if (type->name() == basic_type::TYPE_INT || type->name() == basic_type::TYPE_POINTER || type->name() == basic_type::TYPE_STRING) {
+    _pf.LDFVAL32();
+  }
+  else if (type->name() == basic_type::TYPE_DOUBLE) {
+    _pf.LDFVAL64();
+  }
+  else {
+     error(node->lineno(), "unexpected error in function call");
+  }
 }
 
 void m19::postfix_writer::do_continue_node(m19::continue_node * const node, int lvl) {
