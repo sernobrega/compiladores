@@ -433,13 +433,9 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
   else
     id = node->id();
 
-  if(!node->type()) {
-    node->type(new basic_type(0, basic_type::TYPE_VOID));
-  }
-
   std::shared_ptr<m19::symbol> function = 
       std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
-
+      
   function->set_offset(-node->type()->size()); //return val
 
   std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
