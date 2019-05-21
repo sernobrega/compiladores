@@ -24,9 +24,7 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  std::cout << "OI" << std::endl;
   if(node->name() == "@") {
-    std::cout << "GUGU" << std::endl;
     _pf.LOCAL(_function->offset());
     return;
   }
