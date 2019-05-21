@@ -50,6 +50,7 @@ void m19::postfix_writer::do_rvalue_node(cdk::rvalue_node * const node, int lvl)
 void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   
+  std::cout << ";; assignment" << std::endl;
   //FIXME: if string or pointer
   node->rvalue()->accept(this, lvl + 2);
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -536,7 +537,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
   //FIXME: missign section inclusive and exclusive
   if(node->qualifier() == tINCLUSIVE && node->expr() == nullptr) {
-    os() << "        ;; hey " << std::endl;
+    os() << "        ;; section block only " << std::endl;
     node->block()->accept(this, lvl + 2);
   }
   else if(node->qualifier() == tINCLUSIVE) {
