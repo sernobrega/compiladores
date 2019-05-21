@@ -16,7 +16,7 @@ namespace m19 {
    */
   class type_checker: public basic_ast_visitor {
     cdk::symbol_table<m19::symbol> &_symtab;
-    std::shared_ptr<gr8::symbol> _function;
+    std::shared_ptr<m19::symbol> _function;
     basic_ast_visitor *_parent;
 
   public:
