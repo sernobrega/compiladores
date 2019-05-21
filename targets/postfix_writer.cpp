@@ -509,17 +509,15 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   if(node->end()) node->end()->accept(this, lvl + 4);
   os() << "        ;; after body " << std::endl;
   _inFunctionBody = false;
-  _symtab.pop(); 
 
+  node->retval()->accept(this, lvl + 4);
   if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
-    _pf.LOCAL(_offset);
-    _pf.LDINT();
     _pf.STFVAL32();
   } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
-    _pf.LOCAL(_offset);
-    _pf.LDDOUBLE();
     _pf.STFVAL64();
   }
+
+  _symtab.pop(); 
 
   _pf.LEAVE();
   _pf.RET();
@@ -579,7 +577,6 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
 
   std::shared_ptr<m19::symbol> symbol = _symtab.find(node->id());
   
-
   basic_type *type = symbol->type();
   if (type->name() == basic_type::TYPE_INT || type->name() == basic_type::TYPE_POINTER || type->name() == basic_type::TYPE_STRING) {
     _pf.LDFVAL32();
