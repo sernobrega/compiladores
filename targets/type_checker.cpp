@@ -80,7 +80,9 @@ void m19::type_checker::do_variable_node(cdk::variable_node * const node, int lv
 void m19::type_checker::do_rvalue_node(cdk::rvalue_node * const node, int lvl) {
   ASSERT_UNSPEC;
   try {
+    std::cout << "Assingment" << std::endl;
     node->lvalue()->accept(this, lvl);
+    std::cout << "Assingment" << std::endl;
     node->type(node->lvalue()->type());
   } catch (const std::string &id) {
     throw "undeclared variable '" + id + "'";
