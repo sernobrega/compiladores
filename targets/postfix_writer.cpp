@@ -516,17 +516,17 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   os() << "        ;; after body " << std::endl;
   _inFunctionBody = false;
 
-  _symtab.pop(); 
-
   if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
     _pf.STFVAL32();
   } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
     _pf.STFVAL64();
   }
 
+  _symtab.pop(); 
   _pf.LEAVE();
   _pf.RET();
-  
+
+  _function = nullptr;
   //main function (m19) is being defined, functions to be declared are extern
   if(isMain) 
     for(std::string s: _functions_to_declare)
