@@ -94,7 +94,7 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
   node->lvalue()->accept(this, lvl + 4);
   node->rvalue()->accept(this, lvl + 4);
 
-  
+  std::cout << "Assingment" << std::endl;
 
   //Integer
   if (node->lvalue()->type()->name() == basic_type::TYPE_INT) {
