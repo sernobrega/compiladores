@@ -48,8 +48,6 @@ void m19::postfix_writer::do_rvalue_node(cdk::rvalue_node * const node, int lvl)
 void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   
-  
-
   //FIXME: if string or pointer
   node->rvalue()->accept(this, lvl + 2);
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -62,7 +60,7 @@ void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, 
 
   node->lvalue()->accept(this, lvl);
   if(node->lvalue()->id() == '@') {
-    
+
   }
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {
     _pf.STDOUBLE();
