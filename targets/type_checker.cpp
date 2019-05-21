@@ -170,7 +170,7 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
 
 void m19::type_checker::do_function_call_node(m19::function_call_node * const node, int lvl) {
   ASSERT_UNSPEC;
-  const std::string &id = node->identifier();
+  const std::string &id = node->id();
   std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
 
   if (symbol == nullptr) throw std::string("symbol '" + id + "' is undeclared.");

@@ -569,12 +569,12 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
       argsSize += arg->type()->size();
     }
   }
-  _pf.CALL(node->identifier());
+  _pf.CALL(node->id());
   if (argsSize != 0) {
     _pf.TRASH(argsSize);
   }
 
-  std::shared_ptr<m19::symbol> symbol = _symtab.find(node->identifier());
+  std::shared_ptr<m19::symbol> symbol = _symtab.find(node->id());
 
   basic_type *type = symbol->type();
   if (type->name() == basic_type::TYPE_INT || type->name() == basic_type::TYPE_POINTER || type->name() == basic_type::TYPE_STRING) {
