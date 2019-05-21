@@ -52,6 +52,10 @@ void m19::postfix_writer::do_rvalue_node(cdk::rvalue_node * const node, int lvl)
 }
 
 void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, int lvl) {
+  if (node->lvalue()->name() == "@") {
+    node->type(_function->type());
+  }
+  
   ASSERT_SAFE_EXPRESSIONS;
   
   os() << "        ;; assignment node" << std::endl;
