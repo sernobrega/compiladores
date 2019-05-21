@@ -597,12 +597,10 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
 }
 
 void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
   node->block()->accept(this, lvl + 2);
 }
 
 void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
   node->block()->accept(this, lvl + 2);
 }
 
