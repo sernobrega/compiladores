@@ -89,11 +89,15 @@ void m19::type_checker::do_rvalue_node(cdk::rvalue_node * const node, int lvl) {
   }
 }
 
+
+
 void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, int lvl) {
   ASSERT_UNSPEC;
   node->lvalue()->accept(this, lvl + 4);
   node->rvalue()->accept(this, lvl + 4);
 
+  std::cout << " ;; assigment node" << std::endl;
+  
   //Integer
   if (node->lvalue()->type()->name() == basic_type::TYPE_INT) {
     if (node->rvalue()->type()->name() == basic_type::TYPE_INT) {
