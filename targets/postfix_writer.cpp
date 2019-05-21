@@ -578,9 +578,12 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
   }
 
   std::shared_ptr<m19::symbol> symbol = _symtab.find(node->id());
+  
 
   basic_type *type = symbol->type();
+  _pf.LOCAL(symbol->offset());
   if (type->name() == basic_type::TYPE_INT || type->name() == basic_type::TYPE_POINTER || type->name() == basic_type::TYPE_STRING) {
+    
     _pf.LDFVAL32();
   }
   else if (type->name() == basic_type::TYPE_DOUBLE) {
