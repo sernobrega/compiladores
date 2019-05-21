@@ -25,7 +25,7 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
 
-  if(node->name() == '@') {
+  if(node->name() == "@") {
     _pf.ADDR(_function->name());
   }
 
