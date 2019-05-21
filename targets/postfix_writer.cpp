@@ -559,8 +559,9 @@ void m19::postfix_writer::do_function_declaration_node(m19::function_declaration
 }
 
 void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
 
+  ASSERT_SAFE_EXPRESSIONS;
+  os() << "        ;; function call node " << std::endl;
   size_t argsSize = 0;
   if (node->arguments()) {
     for (int ax = node->arguments()->size(); ax > 0; ax--) {
