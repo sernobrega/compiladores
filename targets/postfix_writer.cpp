@@ -23,14 +23,10 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 }
 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
-  if (node->name() == "@") {
-    node->type(_function->type());
-  }
-  
   ASSERT_SAFE_EXPRESSIONS;
-  os() << "        ;; variable node" << std::endl;
+  std::cout << "OI" << std::endl;
   if(node->name() == "@") {
-    os() << "        ;; gugu node" << std::endl;
+    std::cout << "GUGU" << std::endl;
     _pf.LOCAL(_function->offset());
     return;
   }
@@ -52,13 +48,8 @@ void m19::postfix_writer::do_rvalue_node(cdk::rvalue_node * const node, int lvl)
 }
 
 void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, int lvl) {
-  if (node->lvalue()->name() == "@") {
-    node->type(_function->type());
-  }
-  
   ASSERT_SAFE_EXPRESSIONS;
   
-  os() << "        ;; assignment node" << std::endl;
   //FIXME: if string or pointer
   node->rvalue()->accept(this, lvl + 2);
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {

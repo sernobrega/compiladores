@@ -16,12 +16,12 @@ namespace m19 {
    */
   class type_checker: public basic_ast_visitor {
     cdk::symbol_table<m19::symbol> &_symtab;
-
+    std::shared_ptr<gr8::symbol> _function;
     basic_ast_visitor *_parent;
 
   public:
-    type_checker(std::shared_ptr<cdk::compiler> compiler, cdk::symbol_table<m19::symbol> &symtab, basic_ast_visitor *parent) :
-        basic_ast_visitor(compiler), _symtab(symtab), _parent(parent) {
+    type_checker(std::shared_ptr<cdk::compiler> compiler, cdk::symbol_table<m19::symbol> &symtab, std::shared_ptr<gr8::symbol> func, basic_ast_visitor *parent) :
+        basic_ast_visitor(compiler), _symtab(symtab), _function(func), _parent(parent) {
     }
 
   public:
