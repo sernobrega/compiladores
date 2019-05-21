@@ -35,10 +35,7 @@ namespace m19 {
     function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments, m19::section_init_node * init, cdk::sequence_node * section, m19::section_end_node * end) :
         cdk::basic_node(lineno), _scope(scope), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _init(init), _section(section), _end(end) {
     }
-
-    function_definition_node(int lineno, int scope, const std::string &id, cdk::sequence_node *arguments, cdk::expression_node * retval, m19::section_init_node * init, cdk::sequence_node * section, m19::section_end_node * end) :
-        cdk::basic_node(lineno), _scope(scope), _type(new basic_type(0, basic_type::TYPE_VOID)), _id(id), _arguments(arguments), _init(init), _section(section), _end(end), _retval(retval) {
-    }
+    
   public:
     inline int scope() {
       return _scope;
