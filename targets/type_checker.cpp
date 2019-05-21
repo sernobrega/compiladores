@@ -434,7 +434,7 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
     id = node->id();
 
   if(!node->type()) {
-    node->type(new basic_type(4, TYPE_VOID));
+    node->type(new basic_type(0, basic_type::TYPE_VOID));
   }
 
   std::shared_ptr<m19::symbol> function = 

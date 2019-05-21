@@ -517,6 +517,8 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
     _pf.LDDOUBLE();
     _pf.STFVAL64();
+  } else {
+    //VOID...
   }
   
 
