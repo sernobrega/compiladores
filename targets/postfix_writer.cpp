@@ -431,10 +431,10 @@ void m19::postfix_writer::do_string_node(cdk::string_node * const node, int lvl)
   int lbl1;
 
   /* generate the string */
-  _pf.RODATA(); // strings are DATA readonly
-  _pf.ALIGN(); // make sure we are aligned
-  _pf.LABEL(mklbl(lbl1 = ++_lbl)); // give the string a name
-  _pf.SSTRING(node->value()); // output string characters
+  _pf.RODATA();
+  _pf.ALIGN();
+  _pf.LABEL(mklbl(lbl1 = ++_lbl));
+  _pf.SSTRING(node->value());
   if(_function) {
     /* local variable */
     _pf.TEXT();
@@ -511,6 +511,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       sec->accept(this, lvl + 8);
     }
   }
+  _pf.LABEL(std::string("end_section"));
   if(node->end()) node->end()->accept(this, lvl + 4);
   os() << "        ;; after body " << std::endl;
   _inFunctionBody = false;
@@ -588,7 +589,14 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
   }
   else if(node->qualifier() == tINCLUSIVE) {
     os() << "        ;; section inclusive with condition " << std::endl;
+    int lbl = ++_lbl;
+    node->expr()->accept(this, lvl + 2);
+    _pf.INT(0);
+    _pf.GT();
+    _pf.JZ(mklbl(lbl));
     node->block()->accept(this, lvl + 2);
+    _pf.ALIGN();
+    _pf.LABEL(mklbl(lbl));
   } else {
     os() << "        ;; section exclusive " << std::endl;
     int lbl = ++_lbl;
@@ -598,6 +606,7 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
     _pf.JZ(mklbl(lbl));
     node->block()->accept(this, lvl + 2);
     _pf.ALIGN();
+    _pf.JMP("end_section");
     _pf.LABEL(mklbl(lbl));
   }
 }
