@@ -590,7 +590,7 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
   }
   else if(node->qualifier() == tINCLUSIVE) {
     os() << "        ;; hey2 " << std::endl;
-  } else if(node->qualifier())
+  }
 }
 
 void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
