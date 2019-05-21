@@ -20,6 +20,8 @@ do
 	fi
 
 	total=$((total+1))
+
+	rm "$FILE.asm" "$FILE.o" "$FILE.out" "$FILE"
 done
 
 echo "Passed: $passed/$total"
