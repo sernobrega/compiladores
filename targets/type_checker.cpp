@@ -8,7 +8,6 @@
           node->type()->name() != basic_type::TYPE_UNSPEC) return; }
 
 /*****************************           NOT USED           *****************************/
-
 void m19::type_checker::do_nil_node(cdk::nil_node * const node, int lvl) {
   // EMPTY
 }
@@ -20,6 +19,11 @@ void m19::type_checker::do_data_node(cdk::data_node * const node, int lvl) {
 void m19::type_checker::do_sequence_node(cdk::sequence_node * const node, int lvl) {
   for (size_t i = 0; i < node->size(); i++)
     node->node(i)->accept(this, lvl);
+}
+
+/*****************************           SEQUENCE           *****************************/
+void m19::type_checker::do_block_node(m19::block_node * const node, int lvl) {
+  // EMPTY
 }
 
 /****************************************************************************************
@@ -40,7 +44,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
       if (node->expr()->type()->name() != basic_type::TYPE_STRING) throw std::string(
           "wrong type for expr (string expected).");
     } else if (node->type()->name() == basic_type::TYPE_POINTER) {
-      //DAVID: FIXME: trouble!!!
+      //FIXME: ponteiros de ponteiros
       if (node->expr()->type()->name() != basic_type::TYPE_POINTER) throw std::string(
           "wrong type for expr (pointer expected).");
     } else {
@@ -88,8 +92,6 @@ void m19::type_checker::do_rvalue_node(cdk::rvalue_node * const node, int lvl) {
     throw "undeclared variable '" + id + "'";
   }
 }
-
-
 
 void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, int lvl) {
   ASSERT_UNSPEC;
@@ -144,10 +146,7 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
   } else {
     throw std::string("wrong types in assignment");
   }
-
 }
-
-//---------------------------------------------------------------------------
 
 void m19::type_checker::do_evaluation_node(m19::evaluation_node * const node, int lvl) {
   node->argument()->accept(this, lvl + 2);
@@ -155,46 +154,12 @@ void m19::type_checker::do_evaluation_node(m19::evaluation_node * const node, in
 
 void m19::type_checker::do_print_node(m19::print_node * const node, int lvl) {
   node->argument()->accept(this, lvl + 2);
+  if (node->argument()->type()->name() == basic_type::TYPE_VOID) {
+    throw std::string("wrong type in print argument");
 }
-
-//---------------------------------------------------------------------------
 
 void m19::type_checker::do_read_node(m19::read_node * const node, int lvl) {
-  // try {
-  //   node->argument()->accept(this, lvl);
-  // } catch (const std::string &id) {
-  //   throw "undeclared variable '" + id + "'";
-  // }
-}
-
-//---------------------------------------------------------------------------
-
-
-//---------------------------------------------------------------------------
-
-void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
-  //
-}
-
-void m19::type_checker::do_function_call_node(m19::function_call_node * const node, int lvl) {
-  ASSERT_UNSPEC;
-  const std::string &id = node->id();
-  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
-
-  if (symbol == nullptr) throw std::string("symbol '" + id + "' is undeclared.");
-
-  if (!symbol->isFunction()) throw std::string("symbol '" + id + "' is not a function.");
-
-  node->type(symbol->type());
-
-  //DAVID: FIXME: should also validate args against symbol
-  if (node->arguments()) {
-    node->arguments()->accept(this, lvl + 4);
-  }
-}
-
-void m19::type_checker::do_block_node(m19::block_node * const node, int lvl) {
-  //
+  node->type(new basic_type(0, basic_type::TYPE_UNSPEC));
 }
 
 void m19::type_checker::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
@@ -224,22 +189,7 @@ void m19::type_checker::do_if_else_node(m19::if_else_node * const node, int lvl)
 }
 
 void m19::type_checker::do_for_node(m19::for_node * const node, int lvl) {
-  node->init()->accept(this, lvl + 4);
-
-  for (size_t i = 0; i < node->stop()->size(); i++) {
-      cdk::expression_node * expr = (cdk::expression_node *)node->stop()->node(i);
-      if(expr == nullptr) break;
-      expr->accept(this, lvl + 4);
-      if (expr->type()->name() != basic_type::TYPE_INT) throw std::string(
-      "expected integer expression as stop condition of for cycle");
-  }
-  for (size_t i = 0; i < node->step()->size(); i++) {
-      cdk::expression_node * expr = (cdk::expression_node *)node->step()->node(i);
-      if(expr == nullptr) break;
-      expr->accept(this, lvl + 4);
-      if (expr->type()->name() != basic_type::TYPE_INT) throw std::string(
-      "expected integer expression as step condition of for cycle");
-  }
+  // EMPTY
 }
 
 /****************************************************************************************
@@ -355,6 +305,15 @@ void m19::type_checker::do_IDExpression(cdk::binary_expression_node * const node
     throw std::string("wrong types in binary expression");
 }
 
+void m19::type_checker::do_unaryIDExpression(cdk::unary_expression_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  node->argument()->accept(this, lvl);
+  if (node->argument()->type()->name() == basic_type::TYPE_INT || node->argument()->type()->name() == basic_type::TYPE_DOUBLE)
+    node->type(node->argument()->type());
+  else
+    throw std::string("integer or vector expressions expected");
+}
+
 void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const node, int lvl) {
   ASSERT_UNSPEC;
   node->left()->accept(this, lvl + 2);
@@ -395,15 +354,6 @@ void m19::type_checker::do_div_node(cdk::div_node * const node, int lvl) {
 void m19::type_checker::do_mod_node(cdk::mod_node * const node, int lvl) {
   do_IntOnlyExpression(node, lvl);
 }
-
-void m19::type_checker::do_unaryIDExpression(cdk::unary_expression_node * const node, int lvl) {
-  ASSERT_UNSPEC;
-  node->argument()->accept(this, lvl);
-  if (node->argument()->type()->name() == basic_type::TYPE_INT || node->argument()->type()->name() == basic_type::TYPE_DOUBLE)
-    node->type(node->argument()->type());
-  else
-    throw std::string("integer or vector expressions expected");
-}
 void m19::type_checker::do_neg_node(cdk::neg_node * const node, int lvl) {
   do_unaryIDExpression(node, lvl);
 }
@@ -420,7 +370,8 @@ void m19::type_checker::do_integer_node(cdk::integer_node * const node, int lvl)
 }
 
 void m19::type_checker::do_double_node(cdk::double_node * const node, int lvl) {
-  // EMPTY
+  ASSERT_UNSPEC;
+  node->type(new basic_type(8, basic_type::TYPE_DOUBLE));
 }
 
 void m19::type_checker::do_string_node(cdk::string_node * const node, int lvl) {
@@ -474,18 +425,50 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
   _parent->set_new_symbol(function);
 }
 
-void m19::type_checker::do_section_node(m19::section_node * const node, int lvl) {
+void m19::type_checker::do_function_call_node(m19::function_call_node * const node, int lvl) {
+  ASSERT_UNSPEC;
+  const std::string &id = node->id();
+  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
+
+  if (symbol == nullptr) throw std::string("symbol '" + id + "' is undeclared.");
+
+  if (!symbol->isFunction()) throw std::string("symbol '" + id + "' is not a function.");
+
+  node->type(symbol->type());
+
+  //DAVID: FIXME: should also validate args against symbol
+  if (node->arguments()) {
+    node->arguments()->accept(this, lvl + 4);
+  }
+}
+
+void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
   //
+}
+
+/****************************************************************************************
+ *****************************       SECTIONS RELATED       *****************************
+ ****************************************************************************************/
+void m19::type_checker::do_section_node(m19::section_node * const node, int lvl) {
+  if(node->expr())  {
+    node->expr()->accept(this, lvl + 2);
+    if (node->expr()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type for expr (integer expected).");
+  }
+  
+  node->block()->accept(this, lvl + 2);
 }
 
 void m19::type_checker::do_section_end_node(m19::section_end_node * const node, int lvl) {
-  //
+  node->block()->accept(this, lvl + 2);
 }
 
 void m19::type_checker::do_section_init_node(m19::section_init_node * const node, int lvl) {
-  //
+  node->block()->accept(this, lvl + 2);
 }
 
+/****************************************************************************************
+ *****************************    CONTINUE, RETURN, STOP    *****************************
+ ****************************************************************************************/
 void m19::type_checker::do_continue_node(m19::continue_node * const node, int lvl) {
   // NOTHING TO TYPE CHECK
 }
