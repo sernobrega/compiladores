@@ -448,6 +448,7 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
  *****************************       SECTIONS RELATED       *****************************
  ****************************************************************************************/
 void m19::type_checker::do_section_node(m19::section_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
   if(node->expr())  {
     node->expr()->accept(this, lvl + 2);
     if (node->expr()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type for expr (integer expected).");
@@ -456,10 +457,12 @@ void m19::type_checker::do_section_node(m19::section_node * const node, int lvl)
 }
 
 void m19::type_checker::do_section_end_node(m19::section_end_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
   node->block()->accept(this, lvl + 2);
 }
 
 void m19::type_checker::do_section_init_node(m19::section_init_node * const node, int lvl) {
+  ASSERT_SAFE_EXPRESSIONS;
   node->block()->accept(this, lvl + 2);
 }
 
