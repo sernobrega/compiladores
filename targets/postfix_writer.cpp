@@ -490,11 +490,9 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   _inFunctionBody = true;
 
+  _offset = -_function->type()->size(); //retval
   if(node->retval())
     node->retval()->accept(this, lvl);
-
-  _offset = -_function->type()->size(); //retval
-
 
   //sections
   os() << "        ;; before body " << std::endl;
@@ -510,14 +508,14 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   os() << "        ;; after body " << std::endl;
   _inFunctionBody = false;
 
-  if(node->retval() != nullptr) {
-    node->retval()->accept(this, lvl + 4);
-    if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
-      _pf.STFVAL32();
-    } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
-      _pf.STFVAL64();
-    }
+  if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
+    _pf.LOCAL(_offset);
+    _pf.STFVAL32();
+  } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
+    _pf.LOCAL(_offset);
+    _pf.STFVAL64();
   }
+
   _symtab.pop(); 
 
   _pf.LEAVE();
