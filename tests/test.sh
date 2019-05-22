@@ -71,23 +71,24 @@ do
 	else 
 		echo "LD: Failed.";
 	fi
+
 	{ ./"$N"exec > "$N.out"; } 
 	
-	# echo
-	# echo "<<<<< Esperado: >>>>>"
-	# echo "$(cat $EXPECTED$N.out)"
-	# echo
-	# echo "«««««  Obtido:  »»»»»"
-	# echo "$(cat $NAME.out)"
-	# echo
-	# DIFF=$(diff -w -E -B "$NAME.out" "$EXPECTED$N.out") 
-	# if [ "$DIFF" != "" ];
-	# then
-	# 	let FAILEDTESTS=FAILEDTESTS+1
-	# 	echo "#ERRODIFF"
-	# 	DIFFFAIL+=("$N")
-	# fi
-	# echo "-----------------------------------------------------"
+	echo
+	echo "<<<<< Esperado: >>>>>"
+	echo "$(cat $EXPECTED$N.out)"
+	echo
+	echo "«««««  Obtido:  »»»»»"
+	echo "$(cat $file.out)"
+	echo
+	DIFF=$(diff -w -E -B "$file.out" "$file.out") 
+	if [ "$DIFF" != "" ];
+	then
+		let FAILEDTESTS=FAILEDTESTS+1
+		echo "#ERRODIFF"
+		DIFFFAIL+=("$N")
+	fi
+	echo "-----------------------------------------------------"
 	
 	let COUNTER=COUNTER+1
 done
