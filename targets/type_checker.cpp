@@ -392,8 +392,13 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
     id = node->id();
 
   std::shared_ptr<m19::symbol> function = 
-      std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true, node->arguments());
+      std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
  
+  std::vector<basic_type*> args;
+  for(int ix = 0; ix < node->arguments()->size(); ix++) {
+    args.insert(node->arguments()->node(ix));
+  }
+  function->set_args(args);
   function->set_offset(-node->type()->size()); //return val
 
   std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
@@ -419,6 +424,15 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
   }
 
   //FIXME: check arguments?
+  std::vector<basic_type*> argsPrevious = previous->args()
+  for(int ix = 0; ix < node->arguments()->size() || ix < previous->args()->size(); ix++) {
+    if(argsPrevious.at(ix)->name() != node->arguments()->node(ix)->type()->name()) {
+      throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
+    }
+  }
+  if(ix < node->arguments()->size() || ix < previous->args()->size()) {
+    throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
+  }
 
   _symtab.replace(function->name(), function);
   _parent->set_new_symbol(function);
