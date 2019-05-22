@@ -143,15 +143,18 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
   }
 
   if (_inFunctionBody) {
+    std::cout << "Hey" << std::endl;
     // if we are dealing with local variables, then no action is needed
     // unless an initializer exists
     if (node->expr()) {
       node->expr()->accept(this, lvl);
       if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
           || node->type()->name() == basic_type::TYPE_POINTER) {
+            std::cout << "He2y" << std::endl;
         _pf.LOCAL(symbol->offset()); //FIXME: check forr string
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
+        std::cout << "Hey3" << std::endl;
         _pf.LOCAL(symbol->offset());
         _pf.STDOUBLE();
       } else {
@@ -593,34 +596,33 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
  *****************************       SECTIONS RELATED       *****************************
  ****************************************************************************************/
 void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
-  // ASSERT_SAFE_EXPRESSIONS;
-  //FIXME: missign section inclusive and exclusive
+  ASSERT_SAFE_EXPRESSIONS;
   if((node->qualifier() == tINCLUSIVE || node->qualifier() == tEXCLUSIVE) && node->expr() == nullptr) {
     os() << "        ;; section block only " << std::endl;
     node->block()->accept(this, lvl + 2);
   }
-  // else if(node->qualifier() == tINCLUSIVE) {
-  //   os() << "        ;; section inclusive with condition " << std::endl;
-  //   int lbl = ++_lbl;
-  //   node->expr()->accept(this, lvl + 2);
-  //   _pf.INT(0);
-  //   _pf.GT();
-  //   _pf.JZ(mklbl(lbl));
-  //   node->block()->accept(this, lvl + 2);
-  //   _pf.ALIGN();
-  //   _pf.LABEL(mklbl(lbl));
-  // } else {
-  //   os() << "        ;; section exclusive " << std::endl;
-  //   int lbl = ++_lbl;
-  //   node->expr()->accept(this, lvl + 2);
-  //   _pf.INT(0);
-  //   _pf.GT();
-  //   _pf.JZ(mklbl(lbl));
-  //   node->block()->accept(this, lvl + 2);
-  //   _pf.ALIGN();
-  //   _pf.JMP(_function->name() + "end_section");
-  //   _pf.LABEL(mklbl(lbl));
-  // }
+  else if(node->qualifier() == tINCLUSIVE) {
+    os() << "        ;; section inclusive with condition " << std::endl;
+    int lbl = ++_lbl;
+    node->expr()->accept(this, lvl + 2);
+    _pf.INT(0);
+    _pf.GT();
+    _pf.JZ(mklbl(lbl));
+    node->block()->accept(this, lvl + 2);
+    _pf.ALIGN();
+    _pf.LABEL(mklbl(lbl));
+  } else {
+    os() << "        ;; section exclusive " << std::endl;
+    int lbl = ++_lbl;
+    node->expr()->accept(this, lvl + 2);
+    _pf.INT(0);
+    _pf.GT();
+    _pf.JZ(mklbl(lbl));
+    node->block()->accept(this, lvl + 2);
+    _pf.ALIGN();
+    _pf.JMP(_function->name() + "end_section");
+    _pf.LABEL(mklbl(lbl));
+  }
 }
 
 void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
