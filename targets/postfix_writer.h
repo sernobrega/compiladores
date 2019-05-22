@@ -21,10 +21,11 @@ namespace m19 {
     int _lbl;
     bool _inForInit;
     bool _errors, _inFunction, _inFunctionName, _inFunctionArgs, _inFunctionBody;
-    bool _inMain;
+    bool _inMain, _inFinalSection;
     std::stack<int> _forIni, _forStep, _forEnd; // for break/repeat
     std::set<std::string> _functions_to_declare;
     std::shared_ptr<m19::symbol> _function;
+    int _endBodylbl, _endSectionlbl;
 
     int _offset;
   
@@ -32,7 +33,7 @@ namespace m19 {
     postfix_writer(std::shared_ptr<cdk::compiler> compiler, cdk::symbol_table<m19::symbol> &symtab,
                    cdk::basic_postfix_emitter &pf) :
         basic_ast_visitor(compiler), _symtab(symtab), _pf(pf), _lbl(0), _errors(false), _inFunction(false), 
-        _inFunctionName(false), _inFunctionArgs(false), _inFunctionBody(false) {
+        _inFunctionName(false), _inFunctionArgs(false), _inFunctionBody(false), _inMain(false), _inFinalSection() {
     }
 
   public:

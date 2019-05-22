@@ -459,6 +459,9 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
     return;
   }
 
+  _endSectionlbl = ++_lbl;
+  _endBodylbl = ++_lbl;
+
   //FIXME: naive approach - what if functions are defined inside a block or in an argument
   bool _inMain = (node->id() == "m19");
 
@@ -521,9 +524,10 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       sec->accept(this, lvl + 8);
     }
   }
-  // _pf.LABEL(std::string(_function->name() + "end_section"));
+  _pf.LABEL(mklbl(_endSectionlbl)));
   if(node->end()) node->end()->accept(this, lvl + 4);
   os() << "        ;; after body " << std::endl;
+  _pf.LABEL(mklbl(_endBodylbl)));
   _inFunctionBody = false;
 
   if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
@@ -630,13 +634,15 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
     _pf.JZ(mklbl(lbl));
     node->block()->accept(this, lvl + 2);
     _pf.ALIGN();
-    _pf.JMP(_function->name() + "end_section");
+    _pf.JMP(mklbl(_endSectionlbl));
     _pf.LABEL(mklbl(lbl));
   }
 }
 
 void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node, int lvl) {
+  _inFinalSection = true;
   node->block()->accept(this, lvl + 2);
+  _inFinalSection = false;
 }
 
 void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
@@ -651,7 +657,11 @@ void m19::postfix_writer::do_continue_node(m19::continue_node * const node, int 
 }
 
 void m19::postfix_writer::do_return_node(m19::return_node * const node, int lvl) {
-  //
+  if(_inFinalSection) {
+    _pf.JMP(mklbl(_endBodylbl))
+  } else {
+    _pf.JMP(mklbl(_endSectionlbl))
+  }
 }
 
 void m19::postfix_writer::do_stop_node(m19::stop_node * const node, int lvl) {
