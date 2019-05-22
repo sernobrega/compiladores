@@ -658,9 +658,9 @@ void m19::postfix_writer::do_continue_node(m19::continue_node * const node, int 
 
 void m19::postfix_writer::do_return_node(m19::return_node * const node, int lvl) {
   if(_inFinalSection) {
-    _pf.JMP(mklbl(_endBodylbl))
+    _pf.JMP(mklbl(_endBodylbl));
   } else {
-    _pf.JMP(mklbl(_endSectionlbl))
+    _pf.JMP(mklbl(_endSectionlbl));
   }
 }
 
