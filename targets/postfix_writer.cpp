@@ -147,16 +147,15 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
     // if we are dealing with local variables, then no action is needed
     // unless an initializer exists
     if (node->expr()) {
+      _offset -= node->type()->size();
       node->expr()->accept(this, lvl);
       if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
           || node->type()->name() == basic_type::TYPE_POINTER) {
             std::cout << "He2y" << std::endl;
-        _pf.DUP32();
         _pf.LOCAL(symbol->offset()); //FIXME: check forr string
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
         std::cout << "Hey3" << std::endl;
-        _pf.DUP64();
         _pf.LOCAL(symbol->offset());
         _pf.STDOUBLE();
       } else {
