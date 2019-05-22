@@ -450,10 +450,10 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
   else
     id = node->identifier();
 
-  std::shared_ptr<gr8::symbol> function = std::make_shared < gr8::symbol
+  std::shared_ptr<m19::symbol> function = std::make_shared < m19::symbol
       > (false, node->scope(), node->type(), id, false, true, true);
 
-  std::shared_ptr<gr8::symbol> previous = _symtab.find(function->name());
+  std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
   if (previous) {
     if (false /*DAVID: FIXME: should verify fields*/) {
       throw std::string("conflicting declaration for '" + function->name() + "'");
