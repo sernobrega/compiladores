@@ -45,8 +45,10 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
           "wrong type for expr (string expected).");
     } else if (node->type()->name() == basic_type::TYPE_POINTER) {
       int nodet = 0, exprt = 0;
-      for(basic_type * nodetype = node->type(); nodetype->name() == basic_type::TYPE_POINTER; nodet++, nodetype = nodetype->_subtype);
-      for(basic_type * exprtype = node->expr()->type(); exprtype->name() == basic_type::TYPE_POINTER; exprt++, exprtype = exprtype->_subtype);
+      basic_type * nodetype = node->type()
+      for(; nodetype->name() == basic_type::TYPE_POINTER; nodet++, nodetype = nodetype->_subtype);
+      basic_type * exprtype = node->expr()->type()
+      for(; exprtype->name() == basic_type::TYPE_POINTER; exprt++, exprtype = exprtype->_subtype);
 
       bool compatible = (nodet == exprt) && (exprtype == 0 || (exprtype != 0 && nodetype->name() == exprtype->name()));
       if (!compatible) throw std::string("wrong type for return expression (pointer expected).");
@@ -397,11 +399,11 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
   std::shared_ptr<m19::symbol> function = 
       std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
  
-  std::vector<basic_type*> args;
-  for(size_t ix = 0; ix < node->arguments()->size(); ix++) {
-    args.insert(node->arguments()->node(ix)->type());
-  }
-  function->set_args(args);
+  // std::vector<basic_type*> args;
+  // for(size_t ix = 0; ix < node->arguments()->size(); ix++) {
+  //   args.insert(node->arguments()->node(ix)->type());
+  // }
+  // function->set_args(args);
   function->set_offset(-node->type()->size()); //return val
 
   std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
@@ -427,15 +429,15 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
   }
 
   //FIXME: check arguments?
-  std::vector<basic_type*> argsPrevious = previous->args();
-  for(size_t ix = 0; ix < node->arguments()->size() || ix < previous->args()->size(); ix++) {
-    if(argsPrevious.at(ix)->name() != node->arguments()->node(ix)->type()->name()) {
-      throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
-    }
-  }
-  if(ix < node->arguments()->size() || ix < previous->args()->size()) {
-    throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
-  }
+  // std::vector<basic_type*> argsPrevious = previous->args();
+  // for(size_t ix = 0; ix < node->arguments()->size() || ix < previous->args()->size(); ix++) {
+  //   if(argsPrevious.at(ix)->name() != node->arguments()->node(ix)->type()->name()) {
+  //     throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
+  //   }
+  // }
+  // if(ix < node->arguments()->size() || ix < previous->args()->size()) {
+  //   throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
+  // }
 
   _symtab.replace(function->name(), function);
   _parent->set_new_symbol(function);
