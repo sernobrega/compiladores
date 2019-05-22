@@ -1,3 +1,4 @@
+#!/bin/bash
 COUNTER=1
 FAILED=0
 COMPILERFAIL=()
@@ -45,7 +46,7 @@ do
 	
 	# executar o compilador
 	printf "%s : %s " "$COUNTER" "$N"
-	{ ../m19 --target asm $file; } >& "$NAME.output";
+	{ ../m19 --target asm "$file"; } >& "$NAME.output";
 	if [[ "$?" -eq "0" ]]; then
 		printf "..... Compiler: OK, " 
 	else 
