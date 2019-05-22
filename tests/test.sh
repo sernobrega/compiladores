@@ -56,7 +56,7 @@ do
 	fi
 	
 	#  # produzir o ficheiro binario
-	{ yasm -felf32 "$NAME.asm"; } >& /dev/null
+	{ yasm -felf32 "$NAME.asm"; } 
 	if [[ "$?" -eq "0" ]]; then
 		printf "YASM: OK, " 
 	else 
@@ -65,14 +65,13 @@ do
 	fi
 
 	#  # gerar o executavel linkando a biblioteca RTS
-	{ ld -m elf_i386 -o "$N"exec "$N.o" -lrts; } >& /dev/null
+	{ ld -m elf_i386 -o "$N"exec "$N.o" -lrts; } 
 	if [[ "$?" -eq "0" ]]; then
 		echo "LD: OK." 
 	else 
 		echo "LD: Failed.";
 	fi
-	{ ./"$N"exec > "$N.out"; } >& /dev/null
-	{ cd ../..; } >& /dev/null
+	{ ./"$N"exec > "$N.out"; } 
 	
 	# echo
 	# echo "<<<<< Esperado: >>>>>"
