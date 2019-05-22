@@ -25,7 +25,6 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   if(node->name() == "@") {
-
     _pf.LOCAL(_function->offset());
     return;
   }
@@ -147,7 +146,6 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
     // if we are dealing with local variables, then no action is needed
     // unless an initializer exists
     if (node->expr()) {
-      _offset -= node->type()->size();
       node->expr()->accept(this, lvl);
       if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
           || node->type()->name() == basic_type::TYPE_POINTER) {
@@ -520,8 +518,6 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   os() << "        ;; after body " << std::endl;
   _inFunctionBody = false;
 
-  _symtab.pop(); 
-
   if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
     _pf.STFVAL32();
   } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -531,6 +527,9 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _pf.LEAVE();
   _pf.RET();
 
+
+  _symtab.pop(); 
+  
   _function = nullptr;
   //main function (m19) is being defined, functions to be declared are extern
   if(isMain) 
@@ -588,6 +587,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
   }
   else if(type->name() == basic_type::TYPE_VOID) {
     //NOTHING
+    std::cout << "nothing" << std::endl;
   } else {
      error(node->lineno(), "unexpected error in function call");
   }
