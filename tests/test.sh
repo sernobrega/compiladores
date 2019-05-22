@@ -55,12 +55,13 @@ do
 		let FAILED=FAILED+1
 	fi
 	
-	yasm -felf32 "$FILE.asm"
-	if [[ "$?" -eq "0" ]]
-	then
+	 # produzir o ficheiro binario
+	{ yasm -felf32 "$N.asm"; } >& /dev/null
+	if [[ "$?" -eq "0" ]]; then
 		printf "YASM: OK, " 
 	else 
-		printf "YASM: Failed, "
+		printf "YASM: Failed, ";
+		YASMFAIL+=("$N")
 	fi
 
 	ld -m elf_i386 -o "$FILE" "$FILE.o" -lrts
