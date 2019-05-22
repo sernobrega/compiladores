@@ -11,7 +11,7 @@ total=0
 for f in *.m19; 
 do 
 		# detecta numero do teste
-	FILENAME=$(basename $file)
+	FILENAME=$($file)
 	NUM=`echo "$FILENAME" | cut -d'-' -f3`
 	
 	# Se foi fornecido um intervalo
