@@ -441,7 +441,27 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
 }
 
 void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
-  //
+  std::string id;
+
+  if (node->identifier() == "m19")
+    id = "_main";
+  else if (node->identifier() == "_main")
+    id = "._main";
+  else
+    id = node->identifier();
+
+  std::shared_ptr<gr8::symbol> function = std::make_shared < gr8::symbol
+      > (false, node->scope(), node->type(), id, false, true, true);
+
+  std::shared_ptr<gr8::symbol> previous = _symtab.find(function->name());
+  if (previous) {
+    if (false /*DAVID: FIXME: should verify fields*/) {
+      throw std::string("conflicting declaration for '" + function->name() + "'");
+    }
+  } else {
+    _symtab.insert(function->name(), function);
+    _parent->set_new_symbol(function);
+  }
 }
 
 /****************************************************************************************
