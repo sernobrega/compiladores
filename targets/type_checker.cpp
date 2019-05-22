@@ -63,8 +63,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
   node->type(), // type (type id + type size)
   id, // identifier
   (bool)node->expr(), // initialized?
-  false,
-  nullptr); // is it a function?
+  false); // is it a function?
   if (_symtab.insert(id, symbol)) {
     _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
   } else {

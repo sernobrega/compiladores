@@ -18,7 +18,7 @@ namespace m19 {
     int _offset = 0; // 0 (zero) means global variable/function
     bool _function; // false for variables
     bool _fundecl = false;
-    
+    std::vector<basic_type *> _args;
 
   public:
     symbol(bool constant, int scope, basic_type *type, const std::string &name, bool initialized, bool function, bool fundecl =
@@ -61,7 +61,14 @@ namespace m19 {
       _offset = offset;
     }
 
-    
+    void set_args(std::vector<basic_type *> args) {
+      _args = args;
+    }
+
+    std::vector<basic_type *> args() {
+      return _args;
+    }
+
     bool isFunction() const {
       return _function;
     }
