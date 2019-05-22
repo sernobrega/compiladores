@@ -18,12 +18,13 @@ namespace m19 {
     int _offset = 0; // 0 (zero) means global variable/function
     bool _function; // false for variables
     bool _fundecl = false;
+    cdk::sequence_node * _args;
 
   public:
     symbol(bool constant, int scope, basic_type *type, const std::string &name, bool initialized, bool function, bool fundecl =
-               false) :
+               false, cdk::sequence_node * args) :
         _name(name), _value(0), _constant(constant), _scope(scope), _type(type), _initialized(initialized), _function(
-            function), _fundecl(fundecl) {
+            function), _fundecl(fundecl), _args(args) {
     }
 
     ~symbol() {
@@ -37,6 +38,10 @@ namespace m19 {
     }
     int value(int v) {
       return _value = v;
+    }
+
+    cdk::sequence_node * args() {
+      return _args;
     }
 
     bool constant() const {

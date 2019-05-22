@@ -58,7 +58,8 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
   node->type(), // type (type id + type size)
   id, // identifier
   (bool)node->expr(), // initialized?
-  false); // is it a function?
+  false,
+  nullptr); // is it a function?
   if (_symtab.insert(id, symbol)) {
     _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
   } else {
@@ -391,7 +392,7 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
     id = node->id();
 
   std::shared_ptr<m19::symbol> function = 
-      std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
+      std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true, node->arguments());
  
   function->set_offset(-node->type()->size()); //return val
 
@@ -436,9 +437,18 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
   node->type(symbol->type());
 
   //DAVID: FIXME: should also validate args against symbol
-  // if (node->arguments()) {
-  //   node->arguments()->accept(this, lvl + 4);
-  // }
+  if (node->arguments()) {
+    node->arguments()->accept(this, lvl + 4);
+  }
+
+  if (node->arguments()) {
+    for (int ax = node->arguments()->size(); ax > 0; ax--) {
+      for(int ix = symbol->arguments()->size())
+      cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
+      arg->accept(this, lvl + 4);
+      argsSize += arg->type()->size();
+    }
+  }
 }
 
 void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
