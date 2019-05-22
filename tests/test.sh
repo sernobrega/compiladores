@@ -1,15 +1,57 @@
+COUNTER=1
+FAILED=0
+COMPILERFAIL=()
+YASMFAIL=()
+LDFAIL=()
+DIFFFAIL=()
+
 passed=0
 total=0
 
 for f in *.m19; 
 do 
+	# detecta numero do teste
+	FILENAME=$(basename $file)
+	NUM=`echo "$FILENAME" | cut -d'-' -f3`
+	
+	# Se foi fornecido um intervalo
+	if [[ -n "$1" && -n "$2" ]]; then
+		# limite inferior
+		if [ "$NUM" -lt "$1" ]; then
+		continue
+		fi
+		
+		#limite superior
+		if [ "$NUM" -gt "$2" ]; then
+		break
+		fi
+	fi
+	
+	# apenas 1 argumento, numero de testes a correr
+	if [[ -n "$1" && -z "$2" ]]; then
+		if [ "$COUNTER" -gt "$1" ]; then
+			break
+		fi
+	fi
+	
 
-	FILE="${f%%.*}"
-	../m19 --target asm $f;
+	# comando a ser executado
+	NAME=`echo "$file" | cut -d'.' -f1`
+	N=`echo "$FILENAME" | cut -d'.' -f1`
+	
+	if [[ "$COUNTER" -eq "1" ]]; then
+		echo "-----------------------------------------------------"
+	fi
+	
+	# executar o compilador
+	printf "%s : %s " "$COUNTER" "$N"
+	{ ../m19 ../m19 --target asm $file; } >& "$NAME.output";
 	if [[ "$?" -eq "0" ]]; then
-	    printf "..... $FILE Compiler: OK, " 
-	  else 
-	    printf "..... Compiler: Failed, ";
+		printf "..... Compiler: OK, " 
+	else 
+		printf "..... Compiler: Failed, ";
+		COMPILERFAIL+=("$N")
+		let FAILED=FAILED+1
 	fi
 	
 	yasm -felf32 "$FILE.asm"
