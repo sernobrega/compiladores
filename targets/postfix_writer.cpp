@@ -517,18 +517,18 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   //sections
   os() << "        ;; before body " << std::endl;
   if(node->init()) node->init()->accept(this, lvl + 4);
-  if(node->section()) {
-    for(size_t ix = 0; ix < node->section()->size(); ix++) {
-      m19::section_node * sec = (m19::section_node *)node->section()->node(ix);
-      if(sec == nullptr) break;
-      std::cout << "section" << std::endl;
-      sec->accept(this, lvl + 8);
-    }
-  }
-  _pf.LABEL(mklbl(_endSectionlbl));
-  if(node->end()) node->end()->accept(this, lvl + 4);
-  os() << "        ;; after body " << std::endl;
-  _pf.LABEL(mklbl(_endBodylbl));
+  // if(node->section()) {
+    // for(size_t ix = 0; ix < node->section()->size(); ix++) {
+      // m19::section_node * sec = (m19::section_node *)node->section()->node(ix);
+      // if(sec == nullptr) break;
+      // std::cout << "section" << std::endl;
+      // sec->accept(this, lvl + 8);
+    // }
+  // }
+  // _pf.LABEL(mklbl(_endSectionlbl));
+  // if(node->end()) node->end()->accept(this, lvl + 4);
+  // os() << "        ;; after body " << std::endl;
+  // _pf.LABEL(mklbl(_endBodylbl));
   _inFunctionBody = false;
 
   if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
