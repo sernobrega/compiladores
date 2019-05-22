@@ -424,21 +424,21 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
 }
 
 void m19::type_checker::do_function_call_node(m19::function_call_node * const node, int lvl) {
-  ASSERT_UNSPEC;
+  // ASSERT_UNSPEC;
   
-  const std::string &id = node->id() == "@" ? _function->name() : node->id();
-  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
+  // const std::string &id = node->id() == "@" ? _function->name() : node->id();
+  // std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
 
-  if (symbol == nullptr) throw std::string("symbol '" + id + "' is undeclared.");
+  // if (symbol == nullptr) throw std::string("symbol '" + id + "' is undeclared.");
 
-  if (!symbol->isFunction()) throw std::string("symbol '" + id + "' is not a function.");
+  // if (!symbol->isFunction()) throw std::string("symbol '" + id + "' is not a function.");
 
-  node->type(symbol->type());
+  // node->type(symbol->type());
 
-  //DAVID: FIXME: should also validate args against symbol
-  if (node->arguments()) {
-    node->arguments()->accept(this, lvl + 4);
-  }
+  // //DAVID: FIXME: should also validate args against symbol
+  // if (node->arguments()) {
+  //   node->arguments()->accept(this, lvl + 4);
+  // }
 }
 
 void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
