@@ -3,10 +3,11 @@ total=0
 
 for f in *.m19; 
 do 
+
 	FILE="${f%%.*}"
 	../m19 --target asm $f;
 	if [[ "$?" -eq "0" ]]; then
-	    printf "..... Compiler: OK, " 
+	    printf "..... $FILE Compiler: OK, " 
 	  else 
 	    printf "..... Compiler: Failed, ";
 	fi
