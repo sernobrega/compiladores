@@ -425,7 +425,8 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
 
 void m19::type_checker::do_function_call_node(m19::function_call_node * const node, int lvl) {
   ASSERT_UNSPEC;
-  const std::string &id = node->id();
+  
+  const std::string &id = node->id() == "@" ? _function->name() : node->id();
   std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
 
   if (symbol == nullptr) throw std::string("symbol '" + id + "' is undeclared.");
