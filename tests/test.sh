@@ -64,29 +64,33 @@ do
 		YASMFAIL+=("$N")
 	fi
 
-	ld -m elf_i386 -o "$FILE" "$FILE.o" -lrts
-	if [[ "$?" -eq "0" ]]
-	then
+	 # gerar o executavel linkando a biblioteca RTS
+	{ ld -m elf_i386 -o "$N"exec "$N.o" -lrts; } >& /dev/null
+	if [[ "$?" -eq "0" ]]; then
 		echo "LD: OK." 
 	else 
-		echo "LD: Failed."
+		echo "LD: Failed.";
 	fi
-
-	./$FILE > "$FILE.out"
-
-	DIFF=$(diff -w -E -B  "$FILE.out" expected/"$FILE.out")
-
-	if [ "$DIFF" != "" ]
+	{ ./"$N"exec > "$N.out"; } >& /dev/null
+	{ cd ../..; } >& /dev/null
+	
+	echo
+	echo "<<<<< Esperado: >>>>>"
+	echo "$(cat $EXPECTED$N.out)"
+	echo
+	echo "«««««  Obtido:  »»»»»"
+	echo "$(cat $NAME.out)"
+	echo
+	DIFF=$(diff -w -E -B "$NAME.out" "$EXPECTED$N.out") 
+	if [ "$DIFF" != "" ];
 	then
-		echo "!!!!! Test $FILE didn't pass."
-		echo "$DIFF"
-	else
-		passed=$((passed+1))
+		let FAILEDTESTS=FAILEDTESTS+1
+		echo "#ERRODIFF"
+		DIFFFAIL+=("$N")
 	fi
-
-	total=$((total+1))
-
-	rm "$FILE.asm" "$FILE.o" "$FILE.out" "$FILE"
+	echo "-----------------------------------------------------"
+	
+	let COUNTER=COUNTER+1
 done
 
 echo "Passed: $passed/$total"
