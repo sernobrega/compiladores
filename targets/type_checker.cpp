@@ -425,7 +425,7 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
 
 void m19::type_checker::do_function_call_node(m19::function_call_node * const node, int lvl) {
   ASSERT_UNSPEC;
-
+  
   const std::string &id = node->id() == "@" ? _function->name() : node->id();
   std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
 
@@ -469,10 +469,10 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
  *****************************       SECTIONS RELATED       *****************************
  ****************************************************************************************/
 void m19::type_checker::do_section_node(m19::section_node * const node, int lvl) {
-  // if(node->expr())  {
-  //   node->expr()->accept(this, lvl + 2);
-  //   if (node->expr()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type for expr (integer expected).");
-  // }
+  if(node->expr())  {
+    node->expr()->accept(this, lvl + 2);
+    if (node->expr()->type()->name() != basic_type::TYPE_INT) throw std::string("wrong type for expr (integer expected).");
+  }
 }
 
 void m19::type_checker::do_section_end_node(m19::section_end_node * const node, int lvl) {

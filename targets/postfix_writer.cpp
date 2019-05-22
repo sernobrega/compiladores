@@ -492,7 +492,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   } else { //private function
     _pf.LABEL(_function->name());
   }
-  
+   
   frame_size_calculator lsc(_compiler, _symtab);
   node->accept(&lsc, lvl);
   _pf.ENTER(lsc.localsize());
@@ -525,6 +525,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       sec->accept(this, lvl + 8);
     }
   }
+  std::cout << "-" << std::endl;
   _pf.LABEL(mklbl(_endSectionlbl));
   if(node->end()) node->end()->accept(this, lvl + 4);
   os() << "        ;; after body " << std::endl;
