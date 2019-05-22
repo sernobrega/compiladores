@@ -45,7 +45,7 @@ do
 	
 	# executar o compilador
 	printf "%s : %s " "$COUNTER" "$N"
-	{ ../m19 ../m19 --target asm $file; } >& "$NAME.output";
+	{ ../m19 --target asm $file; } >& "$NAME.output";
 	if [[ "$?" -eq "0" ]]; then
 		printf "..... Compiler: OK, " 
 	else 
