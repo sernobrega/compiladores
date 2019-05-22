@@ -462,7 +462,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   }
 
   //FIXME: naive approach - what if functions are defined inside a block or in an argument
-  bool isMain = (node->id() == "m19");
+  bool _inMain = (node->id() == "m19");
 
   _function = new_symbol(); //gets symbol set by type checker
   _functions_to_declare.erase(_function->name());
@@ -482,7 +482,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   _pf.TEXT();
   _pf.ALIGN();
-  if(isMain) { //m19
+  if(_inMain) { //m19
     _pf.GLOBAL("_main", _pf.FUNC());
     _pf.LABEL("_main");
   } else if(node->scope() == tPUBLIC) {
@@ -561,8 +561,11 @@ void m19::postfix_writer::do_function_declaration_node(m19::function_declaration
 }
 
 void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
-
   ASSERT_SAFE_EXPRESSIONS;
+
+  if(!_inMain)
+    return;
+    
   os() << "        ;; function call node " << std::endl;
   size_t argsSize = 0;
   if (node->arguments()) {
