@@ -55,40 +55,40 @@ do
 		let FAILED=FAILED+1
 	fi
 	
-	 # produzir o ficheiro binario
-	{ yasm -felf32 "$N.asm"; } >& /dev/null
-	if [[ "$?" -eq "0" ]]; then
-		printf "YASM: OK, " 
-	else 
-		printf "YASM: Failed, ";
-		YASMFAIL+=("$N")
-	fi
+	#  # produzir o ficheiro binario
+	# { yasm -felf32 "$N.asm"; } >& /dev/null
+	# if [[ "$?" -eq "0" ]]; then
+	# 	printf "YASM: OK, " 
+	# else 
+	# 	printf "YASM: Failed, ";
+	# 	YASMFAIL+=("$N")
+	# fi
 
-	 # gerar o executavel linkando a biblioteca RTS
-	{ ld -m elf_i386 -o "$N"exec "$N.o" -lrts; } >& /dev/null
-	if [[ "$?" -eq "0" ]]; then
-		echo "LD: OK." 
-	else 
-		echo "LD: Failed.";
-	fi
-	{ ./"$N"exec > "$N.out"; } >& /dev/null
-	{ cd ../..; } >& /dev/null
+	#  # gerar o executavel linkando a biblioteca RTS
+	# { ld -m elf_i386 -o "$N"exec "$N.o" -lrts; } >& /dev/null
+	# if [[ "$?" -eq "0" ]]; then
+	# 	echo "LD: OK." 
+	# else 
+	# 	echo "LD: Failed.";
+	# fi
+	# { ./"$N"exec > "$N.out"; } >& /dev/null
+	# { cd ../..; } >& /dev/null
 	
-	echo
-	echo "<<<<< Esperado: >>>>>"
-	echo "$(cat $EXPECTED$N.out)"
-	echo
-	echo "«««««  Obtido:  »»»»»"
-	echo "$(cat $NAME.out)"
-	echo
-	DIFF=$(diff -w -E -B "$NAME.out" "$EXPECTED$N.out") 
-	if [ "$DIFF" != "" ];
-	then
-		let FAILEDTESTS=FAILEDTESTS+1
-		echo "#ERRODIFF"
-		DIFFFAIL+=("$N")
-	fi
-	echo "-----------------------------------------------------"
+	# echo
+	# echo "<<<<< Esperado: >>>>>"
+	# echo "$(cat $EXPECTED$N.out)"
+	# echo
+	# echo "«««««  Obtido:  »»»»»"
+	# echo "$(cat $NAME.out)"
+	# echo
+	# DIFF=$(diff -w -E -B "$NAME.out" "$EXPECTED$N.out") 
+	# if [ "$DIFF" != "" ];
+	# then
+	# 	let FAILEDTESTS=FAILEDTESTS+1
+	# 	echo "#ERRODIFF"
+	# 	DIFFFAIL+=("$N")
+	# fi
+	# echo "-----------------------------------------------------"
 	
 	let COUNTER=COUNTER+1
 done
