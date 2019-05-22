@@ -45,9 +45,9 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
           "wrong type for expr (string expected).");
     } else if (node->type()->name() == basic_type::TYPE_POINTER) {
       int nodet = 0, exprt = 0;
-      basic_type * nodetype = node->type()
+      basic_type * nodetype = node->type();
       for(; nodetype->name() == basic_type::TYPE_POINTER; nodet++, nodetype = nodetype->_subtype);
-      basic_type * exprtype = node->expr()->type()
+      basic_type * exprtype = node->expr()->type();
       for(; exprtype->name() == basic_type::TYPE_POINTER; exprt++, exprtype = exprtype->_subtype);
 
       bool compatible = (nodet == exprt) && (exprtype == 0 || (exprtype != 0 && nodetype->name() == exprtype->name()));
