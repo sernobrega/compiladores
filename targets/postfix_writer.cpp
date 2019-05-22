@@ -523,7 +523,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
     _pf.STFVAL64();
   }
-  
+
   _pf.LEAVE();
   _pf.RET();
 
@@ -542,7 +542,18 @@ void m19::postfix_writer::do_block_node(m19::block_node * const node, int lvl) {
 }
 
 void m19::postfix_writer::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
-  //
+  if (_inFunctionBody || _inFunctionArgs) {
+    error(node->lineno(), "cannot declare function in body or in args");
+    return;
+  }
+  
+  ASSERT_SAFE_EXPRESSIONS;
+
+  if (!new_symbol()) return;
+
+  std::shared_ptr<m19::symbol> function = new_symbol();
+  _functions_to_declare.insert(function->name());
+  reset_new_symbol();
 }
 
 void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
