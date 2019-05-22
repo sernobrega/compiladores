@@ -524,10 +524,10 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       sec->accept(this, lvl + 8);
     }
   }
-  _pf.LABEL(mklbl(_endSectionlbl)));
+  _pf.LABEL(mklbl(_endSectionlbl));
   if(node->end()) node->end()->accept(this, lvl + 4);
   os() << "        ;; after body " << std::endl;
-  _pf.LABEL(mklbl(_endBodylbl)));
+  _pf.LABEL(mklbl(_endBodylbl));
   _inFunctionBody = false;
 
   if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
