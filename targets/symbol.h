@@ -3,7 +3,7 @@
 
 #include <string>
 #include <cdk/basic_type.h>
-#include <cdk/sequence_node.h>
+#include <cdk/ast/sequence_node.h>
 
 namespace m19 {
 
