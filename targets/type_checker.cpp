@@ -21,7 +21,7 @@ void m19::type_checker::do_sequence_node(cdk::sequence_node * const node, int lv
     node->node(i)->accept(this, lvl);
 }
 
-/*****************************           SEQUENCE           *****************************/
+/*****************************             BLOCK            *****************************/
 void m19::type_checker::do_block_node(m19::block_node * const node, int lvl) {
   // EMPTY
 }
@@ -44,9 +44,12 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
       if (node->expr()->type()->name() != basic_type::TYPE_STRING) throw std::string(
           "wrong type for expr (string expected).");
     } else if (node->type()->name() == basic_type::TYPE_POINTER) {
-      //FIXME: ponteiros de ponteiros
-      if (node->expr()->type()->name() != basic_type::TYPE_POINTER) throw std::string(
-          "wrong type for expr (pointer expected).");
+      int nodet = 0, exprt = 0;
+      for(basic_type * nodetype = node->type(); nodetype->name() == basic_type::TYPE_POINTER; nodet++, nodetype = nodetype->_subtype);
+      for(basic_type * exprtype = node->expr()->type(); exprtype->name() == basic_type::TYPE_POINTER; exprt++, exprtype = exprtype->_subtype);
+
+      bool compatible = (nodet == exprt) && (exprtype == 0 || (exprtype != 0 && nodetype->name() == exprtype->name()));
+      if (!compatible) throw std::string("wrong type for return expression (pointer expected).");
     } else {
       throw std::string("unknown type for expr.");
     }
