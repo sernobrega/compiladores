@@ -414,7 +414,7 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
 
   /* Checking for conflicts with previous definitions */
   std::cout << previous->scope() << " " << node->scope() << std::endl;
-  if(previous->scope() != node->scope() || previous->type()->name() != node->type()->name()) {
+  if(previous->type()->name() != node->type()->name()) {
     throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible.");
   }
 
