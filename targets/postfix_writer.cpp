@@ -521,6 +521,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
     for(size_t ix = 0; ix < node->section()->size(); ix++) {
       m19::section_node * sec = (m19::section_node *)node->section()->node(ix);
       if(sec == nullptr) break;
+      std::cout << "section" std::endl;
       sec->accept(this, lvl + 8);
     }
   }
@@ -628,14 +629,11 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
   } else {
     os() << "        ;; section exclusive " << std::endl;
     int lbl = ++_lbl;
-    // node->expr()->accept(this, lvl + 2);
-    // _pf.INT(0);
-    // _pf.EQ();
-    // _pf.JNZ(mklbl(lbl));
-    // node->block()->accept(this, lvl + 2);
-    // _pf.ALIGN();
-    // _pf.JMP(mklbl(_endSectionlbl));
-    // _pf.LABEL(mklbl(lbl));
+    node->expr()->accept(this, lvl + 2);
+    _pf.JZ(mklbl(lbl));
+    node->block()->accept(this, lvl + 2);
+    _pf.JMP(mklbl(_endSectionlbl));
+    _pf.LABEL(mklbl(lbl));
   }
 }
 
