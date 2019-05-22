@@ -38,7 +38,7 @@ do
 
 	# comando a ser executado
 	NAME=`echo "$file" | cut -d'.' -f1`
-	N=`echo "$FILENAME" | cut -d'.' -f1`
+	N=`echo "$file" | cut -d'.' -f1`
 	
 	if [[ "$COUNTER" -eq "1" ]]; then
 		echo "-----------------------------------------------------"
@@ -65,14 +65,14 @@ do
 	fi
 
 	#  # gerar o executavel linkando a biblioteca RTS
-	# { ld -m elf_i386 -o "$N"exec "$N.o" -lrts; } >& /dev/null
-	# if [[ "$?" -eq "0" ]]; then
-	# 	echo "LD: OK." 
-	# else 
-	# 	echo "LD: Failed.";
-	# fi
-	# { ./"$N"exec > "$N.out"; } >& /dev/null
-	# { cd ../..; } >& /dev/null
+	{ ld -m elf_i386 -o "$N"exec "$N.o" -lrts; } >& /dev/null
+	if [[ "$?" -eq "0" ]]; then
+		echo "LD: OK." 
+	else 
+		echo "LD: Failed.";
+	fi
+	{ ./"$N"exec > "$N.out"; } >& /dev/null
+	{ cd ../..; } >& /dev/null
 	
 	# echo
 	# echo "<<<<< Esperado: >>>>>"
