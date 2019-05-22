@@ -150,6 +150,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
       if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
           || node->type()->name() == basic_type::TYPE_POINTER) {
             std::cout << "He2y" << std::endl;
+        _pf.DUP32();
         _pf.LOCAL(symbol->offset()); //FIXME: check forr string
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -529,7 +530,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
 
   _symtab.pop(); 
-  
+
   _function = nullptr;
   //main function (m19) is being defined, functions to be declared are extern
   if(isMain) 
@@ -587,7 +588,6 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
   }
   else if(type->name() == basic_type::TYPE_VOID) {
     //NOTHING
-    std::cout << "nothing" << std::endl;
   } else {
      error(node->lineno(), "unexpected error in function call");
   }
