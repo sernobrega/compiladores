@@ -395,8 +395,8 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
       std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
  
   std::vector<basic_type*> args;
-  for(int ix = 0; ix < node->arguments()->size(); ix++) {
-    args.insert(node->arguments()->node(ix));
+  for(size_t ix = 0; ix < node->arguments()->size(); ix++) {
+    args.insert(node->arguments()->node(ix)->type());
   }
   function->set_args(args);
   function->set_offset(-node->type()->size()); //return val
@@ -424,8 +424,8 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
   }
 
   //FIXME: check arguments?
-  std::vector<basic_type*> argsPrevious = previous->args()
-  for(int ix = 0; ix < node->arguments()->size() || ix < previous->args()->size(); ix++) {
+  std::vector<basic_type*> argsPrevious = previous->args();
+  for(size_t ix = 0; ix < node->arguments()->size() || ix < previous->args()->size(); ix++) {
     if(argsPrevious.at(ix)->name() != node->arguments()->node(ix)->type()->name()) {
       throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
     }
@@ -455,14 +455,14 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
     node->arguments()->accept(this, lvl + 4);
   }
 
-  if (node->arguments()) {
-    for (int ax = node->arguments()->size(); ax > 0; ax--) {
-      for(int ix = symbol->arguments()->size())
-      cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
-      arg->accept(this, lvl + 4);
-      argsSize += arg->type()->size();
-    }
-  }
+  // if (node->arguments()) {
+  //   for (int ax = node->arguments()->size(); ax > 0; ax--) {
+  //     for(int ix = symbol->arguments()->size())
+  //     cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
+  //     arg->accept(this, lvl + 4);
+  //     argsSize += arg->type()->size();
+  //   }
+  // }
 }
 
 void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
