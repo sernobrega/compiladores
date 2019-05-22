@@ -570,6 +570,8 @@ void m19::postfix_writer::do_function_declaration_node(m19::function_declaration
 void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
 
+  const std::string &id = node->id() == "@" ? _function->name() : node->id();
+
   os() << "        ;; function call node " << std::endl;
   size_t argsSize = 0;
   if (node->arguments()) {
@@ -579,12 +581,12 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
       argsSize += arg->type()->size();
     }
   }
-  _pf.CALL(node->id());
+  _pf.CALL(id);
   if (argsSize != 0) {
     _pf.TRASH(argsSize);
   }
 
-  std::shared_ptr<m19::symbol> symbol = _symtab.find(node->id());
+  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
   
   basic_type *type = symbol->type();
   if (type->name() == basic_type::TYPE_INT || type->name() == basic_type::TYPE_POINTER || type->name() == basic_type::TYPE_STRING) {
