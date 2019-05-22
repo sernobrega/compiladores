@@ -9,11 +9,11 @@ DIFFFAIL=()
 passed=0
 total=0
 
-for f in *.m19; 
+for file in *.m19; 
 do 
 	# detecta numero do teste
 	FILENAME=$($file)
-	NUM=`echo "$FILENAME" | cut -d'-' -f3`
+	NUM=`echo "$file" | cut -d'-' -f3`
 	
 	# Se foi fornecido um intervalo
 	if [[ -n "$1" && -n "$2" ]]; then
@@ -89,3 +89,38 @@ do
 done
 
 echo "Passed: $passed/$total"
+
+echo
+echo
+echo $(($COUNTER - 1)) " testes efectuados, falhas abaixo:"
+echo
+echo "COMPILADOR XPL:"
+for i in "${COMPILERFAIL[@]}"
+do
+   echo "    !falha : " $i
+done
+
+echo "YASM:"
+for i in "${YASMFAIL[@]}"
+do
+   echo "    !falha : " $i
+done
+
+echo "LD:"
+for i in "${LDFAIL[@]}"
+do
+   echo "    !falha : " $i
+done
+
+echo "DIFF:"
+for i in "${DIFFFAIL[@]}"
+do
+   echo "    !falha : " $i
+done
+
+echo
+echo "Passam " $(($(($COUNTER - 1)) - $FAILED)) "/" $(($COUNTER - 1))
+echo
+echo "Nota: Se precisares podes ver os .output gerados para ver o que aconteceu durante o ../xpl/xpl file.xpl"
+echo "Está tudo despachado, até à próxima!"
+echo
