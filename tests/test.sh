@@ -6,16 +6,20 @@ do
 	FILE="${f%%.*}"
 	../m19 --target asm $f;
 	yasm -felf32 "$FILE.asm"
-	if [[ "$?" -eq "0" ]]; then
+	if [[ "$?" -eq "0" ]]
+	then
 		printf "YASM: OK, " 
 	else 
-		printf "YASM: Failed, ";
+		printf "YASM: Failed, "
+	fi
 
 	ld -m elf_i386 -o "$FILE" "$FILE.o" -lrts
-	if [[ "$?" -eq "0" ]]; then
+	if [[ "$?" -eq "0" ]]
+	then
 		echo "LD: OK." 
 	else 
-		echo "LD: Failed.";
+		echo "LD: Failed."
+	fi
 
 	./$FILE > "$FILE.out"
 
