@@ -1,4 +1,3 @@
-#!/bin/bash
 COUNTER=1
 FAILED=0
 COMPILERFAIL=()
@@ -9,11 +8,11 @@ DIFFFAIL=()
 passed=0
 total=0
 
-for file in *.m19; 
+for f in *.m19; 
 do 
-	# detecta numero do teste
-	FILENAME=$($file)
-	NUM=`echo "$file" | cut -d'-' -f3`
+		# detecta numero do teste
+	FILENAME=$(basename $file)
+	NUM=`echo "$FILENAME" | cut -d'-' -f3`
 	
 	# Se foi fornecido um intervalo
 	if [[ -n "$1" && -n "$2" ]]; then
@@ -38,7 +37,7 @@ do
 
 	# comando a ser executado
 	NAME=`echo "$file" | cut -d'.' -f1`
-	N=`echo "$file" | cut -d'.' -f1`
+	N=`echo "$FILENAME" | cut -d'.' -f1`
 	
 	if [[ "$COUNTER" -eq "1" ]]; then
 		echo "-----------------------------------------------------"
@@ -46,86 +45,49 @@ do
 	
 	# executar o compilador
 	printf "%s : %s " "$COUNTER" "$N"
-	{ ../m19 --target asm "$file"; } >& "$NAME.output";
+
+	FILE="${f%%.*}"
+	../m19 --target asm $f;
 	if [[ "$?" -eq "0" ]]; then
-		printf "..... Compiler: OK, " 
-	else 
-		printf "..... Compiler: Failed, ";
-		COMPILERFAIL+=("$N")
-		let FAILED=FAILED+1
+	    printf "..... $FILE Compiler: OK, " 
+	  else 
+	    printf "..... Compiler: Failed, ";
 	fi
 	
-	#  # produzir o ficheiro binario
-	{ yasm -felf32 "$NAME.asm"; } 
-	if [[ "$?" -eq "0" ]]; then
+	yasm -felf32 "$FILE.asm"
+	if [[ "$?" -eq "0" ]]
+	then
 		printf "YASM: OK, " 
 	else 
-		printf "YASM: Failed, ";
-		YASMFAIL+=("$N")
+		printf "YASM: Failed, "
 	fi
 
-	#  # gerar o executavel linkando a biblioteca RTS
-	{ ld -m elf_i386 -o "$N"exec "$N.o" -lrts; } 
-	if [[ "$?" -eq "0" ]]; then
+	ld -m elf_i386 -o "$FILE" "$FILE.o" -lrts
+	if [[ "$?" -eq "0" ]]
+	then
 		echo "LD: OK." 
 	else 
-		echo "LD: Failed.";
+		echo "LD: Failed."
 	fi
 
-	{ ./"$N"exec > "$N.out"; } 
-	
-	echo
-	echo "<<<<< Esperado: >>>>>"
-	echo "$(cat $EXPECTED$N.out)"
-	echo
-	echo "«««««  Obtido:  »»»»»"
-	echo "$(cat $file.out)"
-	echo
-	DIFF=$(diff -w -E -B "$file.out" "$file.out") 
-	if [ "$DIFF" != "" ];
+	./$FILE > "$FILE.out"
+
+	DIFF=$(diff -w -E -B  "$FILE.out" expected/"$FILE.out")
+
+	if [ "$DIFF" != "" ]
 	then
-		let FAILEDTESTS=FAILEDTESTS+1
-		echo "#ERRODIFF"
-		DIFFFAIL+=("$N")
+		echo "!!!!! Test $FILE didn't pass."
+		echo "$DIFF"
+	else
+		passed=$((passed+1))
 	fi
-	echo "-----------------------------------------------------"
-	
+
+	total=$((total+1))
+
+	rm "$FILE.asm" "$FILE.o" "$FILE.out" "$FILE"
+	 echo "-----------------------------------------------------"
+  
 	let COUNTER=COUNTER+1
 done
 
 echo "Passed: $passed/$total"
-
-echo
-echo
-echo $(($COUNTER - 1)) " testes efectuados, falhas abaixo:"
-echo
-echo "COMPILADOR XPL:"
-for i in "${COMPILERFAIL[@]}"
-do
-   echo "    !falha : " $i
-done
-
-echo "YASM:"
-for i in "${YASMFAIL[@]}"
-do
-   echo "    !falha : " $i
-done
-
-echo "LD:"
-for i in "${LDFAIL[@]}"
-do
-   echo "    !falha : " $i
-done
-
-echo "DIFF:"
-for i in "${DIFFFAIL[@]}"
-do
-   echo "    !falha : " $i
-done
-
-echo
-echo "Passam " $(($(($COUNTER - 1)) - $FAILED)) "/" $(($COUNTER - 1))
-echo
-echo "Nota: Se precisares podes ver os .output gerados para ver o que aconteceu durante o ../xpl/xpl file.xpl"
-echo "Está tudo despachado, até à próxima!"
-echo
