@@ -451,7 +451,7 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
     id = node->id();
 
   std::shared_ptr<m19::symbol> function = std::make_shared < m19::symbol
-      > (false, node->scope(), node->type(), id, false, true, true);
+      > (false, node->qualifier(), node->type(), id, false, true, true);
 
   std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
   if (previous) {
