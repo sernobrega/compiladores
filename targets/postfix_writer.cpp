@@ -546,7 +546,7 @@ void m19::postfix_writer::do_function_declaration_node(m19::function_declaration
     error(node->lineno(), "cannot declare function in body or in args");
     return;
   }
-  
+
   ASSERT_SAFE_EXPRESSIONS;
 
   if (!new_symbol()) return;
