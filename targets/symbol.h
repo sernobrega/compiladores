@@ -22,9 +22,9 @@ namespace m19 {
 
   public:
     symbol(bool constant, int scope, basic_type *type, const std::string &name, bool initialized, bool function, bool fundecl =
-               false, std::vector<basic_type *> args) :
+               false) :
         _name(name), _value(0), _constant(constant), _scope(scope), _type(type), _initialized(initialized), _function(
-            function), _fundecl(fundecl), _args(args) {
+            function), _fundecl(fundecl) {
     }
 
     ~symbol() {
