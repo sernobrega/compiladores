@@ -513,8 +513,6 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   _function->set_offset(_offset);
     
-     
-
   //sections
   os() << "        ;; before body " << std::endl;
   if(node->init()) node->init()->accept(this, lvl + 4);
@@ -573,9 +571,6 @@ void m19::postfix_writer::do_function_declaration_node(m19::function_declaration
 
 void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-
-  if(!_inMain)
-    return;
 
   os() << "        ;; function call node " << std::endl;
   size_t argsSize = 0;
