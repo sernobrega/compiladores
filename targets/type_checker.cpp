@@ -59,7 +59,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
   id, // identifier
   (bool)node->expr(), // initialized?
   false); // is it a function?
-  if(scope == tPRIVATE)
+  if(node->scope() == tPRIVATE)
     symbol->set_offset(-node->type()->size());
   if (_symtab.insert(id, symbol)) {
     _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
