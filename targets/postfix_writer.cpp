@@ -533,7 +533,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   _function = nullptr;
   //main function (m19) is being defined, functions to be declared are extern
-  if(isMain) 
+  if(_inMain) 
     for(std::string s: _functions_to_declare)
       _pf.EXTERN(s);
 }
@@ -565,7 +565,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
 
   if(!_inMain)
     return;
-    
+
   os() << "        ;; function call node " << std::endl;
   size_t argsSize = 0;
   if (node->arguments()) {
