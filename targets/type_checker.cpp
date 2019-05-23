@@ -426,13 +426,13 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
       std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
  
   if (node->arguments()) {
-      for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
-        m19::variable_declaration_node *arg = (m19::variable_declaration_node*)(node->arguments()->node(ix));
-        if (arg == nullptr) break; // this means an empty sequence of arguments
-        
-        arg->accept(this, 0); // the function symbol is at the top of the stack
-        //std::cout << arg->type()->name() << std::endl;
-      }
+    std::vector<basic_type*> symargs;
+    for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
+      m19::variable_declaration_node *arg = dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix));
+      basic_type * new_type = new basic_type(arg->type()->size(), arg->type()->name());
+      symargs.push_back(new_type);
+    }
+    function->set_args(symargs);
   }
   function->set_offset(-node->type()->size()); //return val
 
@@ -524,9 +524,9 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
       for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
         m19::variable_declaration_node *arg = dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix));
         basic_type * new_type = new basic_type(arg->type()->size(), arg->type()->name());
-        std::cout << arg->id() << std::endl;
         symargs.push_back(new_type);
       }
+      function->set_args(symargs);
     }
     _symtab.insert(function->name(), function);
     _parent->set_new_symbol(function);
