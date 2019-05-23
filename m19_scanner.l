@@ -18,15 +18,50 @@ static std::ostringstream strlit;
 
 double doubleSciNot(char *yytext, int yyleng) {
     int i = 0;
+    double ret;
+    std::string * exponent;
+
     while (i < yyleng) {
         printf("%c\n", yytext[i]);
-        if(isDigit(yytext[i])) {
+        if(isdigit(yytext[i])) {
             strlit << yytext[i];
+        } else {
+            switch(yytext[i]) {
+                case 'a':
+                    exponent = new std::string("e-18");
+                case 'f':
+                    exponent = new std::string("e-15");
+                case 'p':
+                    exponent = new std::string("e-12");
+                case 'n':
+                    exponent = new std::string("e-9");
+                case 'u':
+                    exponent = new std::string("e-6");
+                case 'm':
+                    exponent = new std::string("e-3");
+                case 'k':
+                    exponent = new std::string("e+3");
+                case 'M':
+                    exponent = new std::string("e+6");
+                case 'G':
+                    exponent = new std::string("e+9");
+                case 'T':
+                    exponent = new std::string("e+12");
+                case 'P':
+                    exponent = new std::string("e+15");
+                case 'E':
+                    exponent = new std::string("e+18);
+            }
+            strlit << '.'
         }
         i++;
     }
-        
-    return 0;
+
+    strlit << exponent;
+    ret = strtod(strlit.str().c_str(), NULL); 
+    if(errno != 0) yyerror("Overflow strtod");
+    strlit.str("");
+    return ret;
 }
 
 %}
