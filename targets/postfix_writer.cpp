@@ -56,6 +56,10 @@ void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, 
     _pf.DUP32();
   }
 
+  if(node->lvalue()->type()->name() == basic_type::TYPE_DOUBLE && node->rvalue()->type()->name() == basic_type::TYPE_INT) {
+    _pf.I2D();
+  }
+
   node->lvalue()->accept(this, lvl);
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {
     _pf.STDOUBLE();
