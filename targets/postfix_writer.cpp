@@ -301,38 +301,74 @@ void m19::postfix_writer::do_if_else_node(m19::if_else_node * const node, int lv
  ****************************************************************************************/
 void m19::postfix_writer::do_lt_node(cdk::lt_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
   _pf.LT();
 }
 void m19::postfix_writer::do_le_node(cdk::le_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
   _pf.LE();
 }
 void m19::postfix_writer::do_ge_node(cdk::ge_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
   _pf.GE();
 }
 void m19::postfix_writer::do_gt_node(cdk::gt_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
   _pf.GT();
 }
 void m19::postfix_writer::do_ne_node(cdk::ne_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
   _pf.NE();
 }
 void m19::postfix_writer::do_eq_node(cdk::eq_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.I2D();
+
   _pf.EQ();
 }
 
@@ -394,26 +430,57 @@ void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
 }
 void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->type()->name() == basic_type::TYPE_DOUBLE && node->left()->type()->name() == basic_type::TYPE_INT)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->type()->name() == basic_type::TYPE_DOUBLE && node->right()->type()->name() == basic_type::TYPE_INT) {
+    _pf.I2D();
+  } else if (node->type()->name() == basic_type::TYPE_POINTER && node->right()->type()->name() == basic_type::TYPE_INT) {
+    _pf.INT(3);
+    _pf.SHTL();
+  }
+
+  if (node->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.DSUB();
+  else
   _pf.SUB();
 }
 void m19::postfix_writer::do_mul_node(cdk::mul_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->type()->name() == basic_type::TYPE_DOUBLE && node->left()->type()->name() == basic_type::TYPE_INT)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->type()->name() == basic_type::TYPE_DOUBLE && node->right()->type()->name() == basic_type::TYPE_INT)
+  _pf.I2D();
+
+  if (node->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.DMUL();
+  else
   _pf.MUL();
 }
 void m19::postfix_writer::do_div_node(cdk::div_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->type()->name() == basic_type::TYPE_DOUBLE && node->left()->type()->name() == basic_type::TYPE_INT)
+  _pf.I2D();
+
+  node->right()->accept(this, lvl + 2);
+  if (node->type()->name() == basic_type::TYPE_DOUBLE && node->right()->type()->name() == basic_type::TYPE_INT)
+  _pf.I2D();
+
+  if (node->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.DDIV();
+  else
   _pf.DIV();
 }
 void m19::postfix_writer::do_mod_node(cdk::mod_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  node->right()->accept(this, lvl + 2);
   _pf.MOD();
 }
 
@@ -523,7 +590,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       _pf.LOCAL(_offset);
       _pf.STINT();
     } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
-      _pf.I2D();
+      _pf.I2D(); //Couldn't figure how to fetch retval type, this is unnecessary in some cases but harmless
       _pf.LOCAL(_offset);
       _pf.STDOUBLE();
     }
