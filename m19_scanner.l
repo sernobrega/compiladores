@@ -28,26 +28,37 @@ double doubleSciNot(char *yytext, int yyleng) {
             switch(yytext[i]) {
                 case 'a':
                     exponent = new std::string("e-18");
+                    break;
                 case 'f':
                     exponent = new std::string("e-15");
+                    break;
                 case 'p':
                     exponent = new std::string("e-12");
+                    break;
                 case 'n':
                     exponent = new std::string("e-9");
+                    break;
                 case 'u':
                     exponent = new std::string("e-6");
+                    break;
                 case 'm':
                     exponent = new std::string("e-3");
+                    break;
                 case 'k':
                     exponent = new std::string("e+3");
+                    break;
                 case 'M':
                     exponent = new std::string("e+6");
+                    break;
                 case 'G':
                     exponent = new std::string("e+9");
+                    break;
                 case 'T':
                     exponent = new std::string("e+12");
+                    break;
                 case 'P':
                     exponent = new std::string("e+15");
+                    break;
                 case 'E':
                     exponent = new std::string("e+18");
             }
