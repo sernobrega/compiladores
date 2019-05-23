@@ -585,8 +585,8 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
     for (int ax = node->arguments()->size(); ax > 0; ax--) {
       cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
       arg->accept(this, lvl + 2);
-      argsSize += arg->type()->size();
-      if(do_int2double(symbol->args().at(ax - 1), arg->type())) argsSize += arg->type()->size();
+      argsSize += symbol->args().at(ax - 1)->size();
+      do_int2double(symbol->args().at(ax - 1), arg->type());
     }
   }
   _pf.CALL(id);
