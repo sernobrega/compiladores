@@ -524,8 +524,8 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
       for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
         m19::variable_declaration_node *arg = dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix));
         basic_type * new_type = new basic_type(arg->type()->size(), arg->type()->name());
-        std::cout << new_type->type()->name() << std::endl;
-        symargs.push_back(new_type)
+        std::cout << new_type->name() << std::endl;
+        symargs.push_back(new_type);
       }
     }
     _symtab.insert(function->name(), function);
