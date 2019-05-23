@@ -515,6 +515,13 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
       throw std::string("conflicting declaration for '" + function->name() + "'");
     }
   } else {
+    if (node->arguments()) {
+      for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
+        m19::variable_declaration_node *arg = (m19::variable_declaration_node*)(node->arguments()->node(ix));
+        if (arg == nullptr) break; // this means an empty sequence of arguments
+        arg->accept(this, 0); // the function symbol is at the top of the stack
+      }
+    }
     _symtab.insert(function->name(), function);
     _parent->set_new_symbol(function);
   }
