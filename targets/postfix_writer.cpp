@@ -585,7 +585,6 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
       argsSize += arg->type()->size();
     }
   }
-  _pf.LDINT();
   _pf.CALL(id);
   if (argsSize != 0) {
     _pf.TRASH(argsSize);
