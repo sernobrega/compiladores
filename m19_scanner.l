@@ -69,7 +69,8 @@ double doubleSciNot(char *yytext, int yyleng) {
 
     strlit << *exponent;
     ret = strtod(strlit.str().c_str(), NULL); 
-    //if(errno != 0) yyerror("Overflow strtod");
+    if(errno != 0) 
+        throw std::string( "overflow strod" );
     strlit.str("");
     return ret;
 }
