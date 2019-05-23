@@ -610,7 +610,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
  ****************************************************************************************/
 void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  if(node->qualifier() == tINCLUSIVE) {
+  if(node->qualifier() == tINCLUSIVE && node->expr() == nullptr) {
     os() << "        ;; section block only " << std::endl;
     node->block()->accept(this, lvl + 2);
   }
@@ -628,13 +628,11 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
   } else {
     os() << "        ;; section exclusive " << std::endl;
     int lbl1;
+    node->expr()->accept(this, lvl + 2);
+    _pf.JZ(mklbl(lbl1 = ++_lbl));
+    node->block()->accept(this, lvl + 2);
+    _pf.LABEL(mklbl(lbl1));
     _pf.JMP(mklbl(_endSectionlbl));
-    // node->expr()->accept(this, lvl + 2);
-    // _pf.JZ(mklbl(lbl1 = ++_lbl));
-    // node->block()->accept(this, lvl + 2);
-    // _pf.JMP(mklbl(_endSectionlbl));
-    // _pf.LABEL(mklbl(lbl1));
-    // _pf.JMP(mklbl(_endSectionlbl));
   }
 }
 
