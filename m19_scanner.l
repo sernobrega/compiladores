@@ -16,6 +16,15 @@
 // output stream for building string literals
 static std::ostringstream strlit;
 
+double doubleSciNot(char *yytext) {
+    char c;
+    while(std::yytext.get(c)) {
+        printf("%c\n", c);
+    }
+        
+    return 2.1;
+}
+
 %}
 %x X_STRING X_COMMENT X_ISLASH X_HEX
 %x X_a X_f X_p X_n X_u X_m X_k X_Me X_G X_T X_P X_E
@@ -84,7 +93,8 @@ static std::ostringstream strlit;
  /* ------------------------------------------------------------ */
  /* --------------->            Reais           <--------------- */
  /* ------------------------------------------------------------ */
-[0-9]+a             yy_push_state(X_a); yyless(yyleng - 1); strlit << *yytext; 
+[0-9]+[afpnumkMGTPE][0-9]+ yyval.d = doubleSciNot(std::string *yytext); return tREAL;
+ /* [0-9]+a             yy_push_state(X_a); yyless(yyleng - 1); strlit << *yytext; 
 <X_a>[0-9]+             {
                             strlit << '.' + *yytext + "e-18";
                             yylval.d = strtod(strlit.str().c_str(), NULL); 
@@ -101,7 +111,7 @@ static std::ostringstream strlit;
                             yy_pop_state();
                             return tREAL;
                         }
-                        
+                    
 [0-9]+p             yy_push_state(X_p); yyless(yyleng - 1); strlit << *yytext; 
 <X_p>[0-9]+             {
                             strlit << '.' + *yytext + "e-12";
@@ -190,12 +200,12 @@ static std::ostringstream strlit;
                             strlit.str("");
                             yy_pop_state();
                             return tREAL;
-                        }
+                        }*/
+
 
 
 
 [1-9][0-9]*\.?[0-9]+    yylval.d = strtod(yytext, NULL); if(errno != 0) yyerror("Overflow strtod"); return tREAL;
-
 
  /* ------------------------------------------------------------ */
  /* --------------->  Identificadores (nomes)  <--------------- */
