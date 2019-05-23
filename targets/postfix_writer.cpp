@@ -529,7 +529,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _pf.LABEL(mklbl(_endBodylbl));
   _inFunctionBody = false;
 
-  _InitSection ? _symtab.pop();
+  if(_InitSection) _symtab.pop();
   _InitSection = false;
   if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
     _pf.STFVAL32();
@@ -554,7 +554,7 @@ void m19::postfix_writer::do_block_node(m19::block_node * const node, int lvl) {
   _symtab.push(); // for block-local vars
   if (node->declaration()) node->declaration()->accept(this, lvl + 2);
   if (node->instruction()) node->instruction()->accept(this, lvl + 2);
-  !_InitSection ? _symtab.pop();
+  if(!_InitSection) _symtab.pop();
 }
 
 void m19::postfix_writer::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
@@ -638,7 +638,7 @@ void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node
 }
 
 void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
-  _InitSection = true;
+  _IsnitSection = true;
   node->block()->accept(this, lvl + 2);
 }
 
