@@ -150,6 +150,9 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
         _pf.LOCAL(symbol->offset()); //FIXME: check forr string
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
+        if(node->expr()->type() == basic_type::TYPE_INT() {
+          _pf.I2D();
+        }
         _pf.DUP64();
         _pf.LOCAL(symbol->offset());
         _pf.STDOUBLE();
@@ -588,6 +591,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
   ASSERT_SAFE_EXPRESSIONS;
 
   const std::string &id = node->id() == "@" ? _function->name() : node->id();
+  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
 
   os() << "        ;; function call node " << std::endl;
   size_t argsSize = 0;
@@ -596,7 +600,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
       cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
       arg->accept(this, lvl + 2);
       argsSize += arg->type()->size();
-      do_int2double(node->type(), arg->type());
+      do_int2double(symbol->args().at(ax - 1)-, arg->type());
     }
   }
   _pf.CALL(id);
@@ -604,7 +608,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
     _pf.TRASH(argsSize);
   }
 
-  std::shared_ptr<m19::symbol> symbol = _symtab.find(id);
+  
   
   basic_type *type = symbol->type();
   if (type->name() == basic_type::TYPE_INT || type->name() == basic_type::TYPE_POINTER || type->name() == basic_type::TYPE_STRING) {
