@@ -628,9 +628,9 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
   } else {
     os() << "        ;; section exclusive " << std::endl;
     int lbl = ++_lbl;
-    if(node->expr()) node->expr()->accept(this, lvl + 2);
+    //if(node->expr()) node->expr()->accept(this, lvl + 2);
     _pf.JZ(mklbl(lbl));
-    if(node->block()) node->block()->accept(this, lvl + 2);
+    //if(node->block()) node->block()->accept(this, lvl + 2);
     _pf.JMP(mklbl(_endSectionlbl));
     _pf.LABEL(mklbl(lbl));
   }
