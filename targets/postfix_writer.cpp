@@ -523,8 +523,8 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
       _pf.LOCAL(_offset);
       _pf.STINT();
     } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
-      // if (node->retval()->type()->name() == basic_type::TYPE_INT)
-      //   _pf.I2D();
+      if (node->retval()->type()->name() == basic_type::TYPE_INT)
+        printf("elaaaa\n");//_pf.I2D();
       _pf.LOCAL(_offset);
       _pf.STDOUBLE();
     }
