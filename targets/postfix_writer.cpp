@@ -50,7 +50,7 @@ void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, 
   
   node->rvalue()->accept(this, lvl + 2);
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {
-    if (node->rvalue()->type()->name() == basic_type::TYPE_INT)
+    if (node->type()->name() == basic_type::TYPE_INT)
     _pf.DUP64();
   } else {
     _pf.DUP32();
