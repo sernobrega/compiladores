@@ -564,11 +564,11 @@ void m19::postfix_writer::do_function_declaration_node(m19::function_declaration
 
   ASSERT_SAFE_EXPRESSIONS;
 
-  // if (!new_symbol()) return;
+  if (!new_symbol()) return;
 
-  // std::shared_ptr<m19::symbol> function = new_symbol();
-  // _functions_to_declare.insert(function->name());
-  // reset_new_symbol();
+  std::shared_ptr<m19::symbol> function = new_symbol();
+  _functions_to_declare.insert(function->name());
+  reset_new_symbol();
 }
 
 void m19::postfix_writer::do_function_call_node(m19::function_call_node * const node, int lvl) {
