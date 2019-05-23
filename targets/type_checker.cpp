@@ -498,7 +498,7 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
 
   if (node->arguments()) {
     for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
-      m19::expression_node *arg = dynamic_cast<m19::expression_node*>(node->arguments()->node(ix));
+      cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ix));
       arg->accept(this, lvl + 2);
 
       if(symbol->args().at(ix)->name() != arg->type()->name())
