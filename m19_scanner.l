@@ -20,6 +20,9 @@ double doubleSciNot(char *yytext, int yyleng) {
     int i = 0;
     while (i < yyleng) {
         printf("%c\n", yytext[i]);
+        if(isDigit(yytext[i])) {
+            strlit << yytext[i];
+        }
         i++;
     }
         
