@@ -462,7 +462,7 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
     if(function->args().size() != previous->args().size())
     throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
 
-    size_t ix = 0
+    size_t ix = 0;
     for (ix = 0; ix < function->args().size() || ix < previous->args().size(); ix++) {
       if(function->args().at(ix)->name() != previous->args().at(ix)->name())
         throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
