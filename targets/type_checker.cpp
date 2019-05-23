@@ -381,10 +381,10 @@ void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const nod
   else if (node->left()->type()->name() == basic_type::TYPE_POINTER && node->right()->type()->name() == basic_type::TYPE_INT
       || node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_POINTER)
     int lt = 0, rt = 0;
-    basic_type * ltype = node->lvalue()->type();
+    basic_type * ltype = node->left()->type();
     for(; ltype->name() == basic_type::TYPE_POINTER; lt++, ltype = ltype->_subtype);
 
-    basic_type * rtype = node->rvalue()->type();
+    basic_type * rtype = node->right()->type();
     for(; rtype->name() == basic_type::TYPE_POINTER; rt++, rtype = rtype->_subtype);
 
     bool compatible = ((lt == rt - 1) && (rtype->name() != basic_type::TYPE_INT)) || ((lt == rt) && (rt == 0 || (rt != 0 && rtype->name() == ltype->name())));
