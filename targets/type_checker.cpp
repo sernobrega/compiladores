@@ -127,9 +127,9 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
       // bool compatible = ((lt == rt - 1) && (rtype->name() != basic_type::TYPE_INT)) || ((lt == rt) && (rt == 0 || (rt != 0 && rtype->name() == ltype->name())));
       // if (!compatible) throw std::string("wrong assignment to pointer");
 
-      // if(lt == rt-1 && !_nullptr) {
-      //   throw std::string("wrong assignment to pointer");
-      // }
+      if(lt == rt-1 && !_nullptr) {
+        throw std::string("wrong assignment to pointer");
+      }
 
       basic_type * pointertype = new basic_type(4, basic_type::TYPE_POINTER);
       basic_type * subtypeholder = new basic_type(0, basic_type::TYPE_UNSPEC);
