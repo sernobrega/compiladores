@@ -150,7 +150,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
         _pf.LOCAL(symbol->offset()); //FIXME: check forr string
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
-        if(node->expr()->type() == basic_type::TYPE_INT()) {
+        if(node->expr()->type() == basic_type::TYPE_INT) {
           _pf.I2D();
         }
         _pf.DUP64();
