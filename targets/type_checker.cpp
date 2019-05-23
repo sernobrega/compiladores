@@ -127,7 +127,7 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
       if (!compatible) throw std::string("wrong assignment to pointer");
 
       basic_type * pointertype = new basic_type(4, basic_type::TYPE_POINTER);
-      basic_type * subtypeholder;
+      basic_type * subtypeholder = nullptr;
       pointertype->_subtype = subtypeholder;
       for(; lt > 0; lt--, subtypeholder = pointertype->_subtype) {
         subtypeholder->_subtype = new basic_type(4, basic_type::TYPE_POINTER);
