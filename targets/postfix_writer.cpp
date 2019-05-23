@@ -382,9 +382,9 @@ void m19::postfix_writer::do_or_node(cdk::or_node * const node, int lvl) {
 void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl);
-  do_i2d(node->type(), node->left()->type())
+  do_i2d(node->type(), node->left()->type());
   node->right()->accept(this, lvl);
-  do_i2d(node->type(), node->right()->type())
+  do_i2d(node->type(), node->right()->type());
   _pf.ADD();
 }
 void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
