@@ -50,7 +50,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
       basic_type * exprtype = node->expr()->type();
       for(; exprtype->name() == basic_type::TYPE_POINTER; exprt++, exprtype = exprtype->_subtype);
 
-      bool compatible = (nodet == exprt) && (exprtype == 0 || (exprtype != 0 && nodetype->name() == exprtype->name()));
+      bool compatible = (nodet == exprt) && nodetype->name() == exprtype->name()) || !(nodet == exprt - 1 && (exprtype->name() != basic_type::TYPE_INT));
       if (!compatible) throw std::string("wrong type for return expression (pointer expected).");
     } else {
       throw std::string("unknown type for expr.");
@@ -382,6 +382,9 @@ void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const nod
 
     basic_type * rtype = node->right()->type();
     for(; rtype->name() == basic_type::TYPE_POINTER; rt++, rtype = rtype->_subtype);
+
+    bool notcompatible = (lt == rt - 1 && (rtype->name() != basic_type::TYPE_INT || !_nullptr));
+      if (notcompatible) throw std::string("wrong assignment to pointer");
 
     basic_type * pointertype = new basic_type(4, basic_type::TYPE_POINTER);
     basic_type * subtypeholder = new basic_type(0, basic_type::TYPE_UNSPEC);
