@@ -586,7 +586,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
       cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
       arg->accept(this, lvl + 2);
       argsSize += arg->type()->size();
-      do_int2double(symbol->args().at(ax - 1), arg->type());
+      if(do_int2double(symbol->args().at(ax - 1), arg->type())) argsSize += arg->type()->size();
     }
   }
   _pf.CALL(id);

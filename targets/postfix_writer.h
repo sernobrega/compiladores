@@ -57,12 +57,12 @@ namespace m19 {
       std::cerr << "error: " << lineno << ": " << s << std::endl;
     }
 
-    void do_int2double(basic_type * left, basic_type * right) {
+    bool do_int2double(basic_type * left, basic_type * right) {
       if(left->name() == basic_type::TYPE_DOUBLE && right->name() == basic_type::TYPE_INT) {
           _pf.I2D();
-        printf("hey\n");
+        return true;
       }
-      
+      return false;
     }
 
   public:
