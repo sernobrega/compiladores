@@ -459,9 +459,6 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
     return;
   }
 
-  _endSectionlbl = ++_lbl;
-  _endBodylbl = ++_lbl;
-
   //FIXME: naive approach - what if functions are defined inside a block or in an argument
   bool _inMain = (node->id() == "m19");
 
@@ -515,6 +512,8 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _function->set_offset(_offset);
     
   //sections
+  _endSectionlbl = ++_lbl;
+  _endBodylbl = ++_lbl;
   os() << "        ;; before body " << std::endl;
   if(node->init()) node->init()->accept(this, lvl + 4);
   if(node->section()) {
@@ -611,6 +610,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
  ****************************************************************************************/
 void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
+  _pf.JMP(mklbl(_endSectionlbl));
   if((node->qualifier() == tINCLUSIVE || node->qualifier() == tEXCLUSIVE) && node->expr() == nullptr) {
     os() << "        ;; section block only " << std::endl;
     node->block()->accept(this, lvl + 2);
@@ -618,6 +618,7 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
   else if(node->qualifier() == tINCLUSIVE) {
     os() << "        ;; section inclusive with condition " << std::endl;
     int lbl = ++_lbl;
+    _pf.JMP(mklbl(_endSectionlbl));
     //node->expr()->accept(this, lvl + 2);
     // _pf.INT(0);
     // _pf.GT();
