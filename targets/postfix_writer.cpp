@@ -430,7 +430,7 @@ void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
   if (node->type()->name() == basic_type::TYPE_DOUBLE && node->left()->type()->name() == basic_type::TYPE_INT) {
     _pf.I2D();
   } else if (node->type()->name() == basic_type::TYPE_POINTER && node->left()->type()->name() == basic_type::TYPE_INT) {
-    _pf.INT(3);
+    _pf.INT(node->type()->subtype()->size());
     _pf.SHTL();
   }
 
@@ -438,7 +438,7 @@ void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
   if (node->type()->name() == basic_type::TYPE_DOUBLE && node->right()->type()->name() == basic_type::TYPE_INT) {
     _pf.I2D();
   } else if (node->type()->name() == basic_type::TYPE_POINTER && node->right()->type()->name() == basic_type::TYPE_INT) {
-    _pf.INT(3);
+    _pf.INT(node->type()->subtype()->size());
     _pf.SHTL();
   }
 
@@ -457,7 +457,7 @@ void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
   if (node->type()->name() == basic_type::TYPE_DOUBLE && node->right()->type()->name() == basic_type::TYPE_INT) {
     _pf.I2D();
   } else if (node->type()->name() == basic_type::TYPE_POINTER && node->right()->type()->name() == basic_type::TYPE_INT) {
-    _pf.INT(3);
+    _pf.INT(node->type()->subtype()->size());
     _pf.SHTL();
   }
 
