@@ -379,7 +379,7 @@ void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const nod
   else if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
     node->type(new basic_type(8, basic_type::TYPE_DOUBLE));
   else if (node->left()->type()->name() == basic_type::TYPE_POINTER && node->right()->type()->name() == basic_type::TYPE_INT
-      || node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_POINTER)
+      || node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_POINTER) {
     int lt = 0, rt = 0;
     basic_type * ltype = node->left()->type();
     for(; ltype->name() == basic_type::TYPE_POINTER; lt++, ltype = ltype->_subtype);
@@ -402,6 +402,7 @@ void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const nod
     }
     subtypeholder->_subtype = ltype;
     node->type(pointertype);
+  }
   else if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_INT)
     node->type(new basic_type(4, basic_type::TYPE_INT));
   else if (node->left()->type()->name() == basic_type::TYPE_UNSPEC && node->right()->type()->name() == basic_type::TYPE_UNSPEC) {
