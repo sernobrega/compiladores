@@ -198,7 +198,7 @@ void m19::type_checker::do_stack_alloc_node(m19::stack_alloc_node * const node, 
       "integer expression expected in allocation expression");
 //FIXME: check the following two lines
   auto mytype = new basic_type(4, basic_type::TYPE_POINTER);
-  mytype->_subtype = new basic_type(8, basic_type::TYPE_DOUBLE);
+  mytype->_subtype = new basic_type(0), basic_type::TYPE_UNSPEC);
   node->type(mytype);
 }
 
