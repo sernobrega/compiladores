@@ -57,9 +57,11 @@ namespace m19 {
       std::cerr << "error: " << lineno << ": " << s << std::endl;
     }
 
-    void do_i2d(basic_type * left, basic_type * right) {
+    void do_int2double(basic_type * left, basic_type * right) {
       if(left->name() == basic_type::TYPE_DOUBLE && right->name() == basic_type::TYPE_INT)
         _pf.I2D();
+      else(left->name() != right->name())
+        throw std::string("impossible conversion");
     }
 
   public:
