@@ -610,25 +610,17 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
  ****************************************************************************************/
 void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  if(node->qualifier() == tINCLUSIVE && node->expr() == nullptr) {
-    os() << "        ;; section block only " << std::endl;
-    node->block()->accept(this, lvl + 2);
-  }
   else if(node->qualifier() == tINCLUSIVE) {
-    os() << "        ;; section inclusive with condition " << std::endl;
-    int lbl = ++_lbl;
-    _pf.JMP(mklbl(_endSectionlbl));
-    //node->expr()->accept(this, lvl + 2);
-    // _pf.INT(0);
-    // _pf.GT();
-    // _pf.JZ(mklbl(lbl));
-    // node->block()->accept(this, lvl + 2);
-    // _pf.ALIGN();
-    // _pf.LABEL(mklbl(lbl));
+    os() << "        ;; section inclusive" << std::endl;
+    int lbl2;
+    node->expr() ? node->expr()->accept(this, lvl + 2) : _pf.INT(1);
+    _pf.JZ(mklbl(lbl2 = ++_lbl));
+    node->block()->accept(this, lvl + 2);
+    _pf.LABEL(mklbl(lbl2));
   } else {
     os() << "        ;; section exclusive " << std::endl;
     int lbl1;
-    node->expr()->accept(this, lvl + 2);
+    node->expr() ? node->expr()->accept(this, lvl + 2) : _pf.INT(1);
     _pf.JZ(mklbl(lbl1 = ++_lbl));
     node->block()->accept(this, lvl + 2);
     _pf.JMP(mklbl(_endSectionlbl));
