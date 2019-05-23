@@ -610,7 +610,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
  ****************************************************************************************/
 void m19::postfix_writer::do_section_node(m19::section_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  else if(node->qualifier() == tINCLUSIVE) {
+  if(node->qualifier() == tINCLUSIVE) {
     os() << "        ;; section inclusive" << std::endl;
     int lbl2;
     node->expr() ? node->expr()->accept(this, lvl + 2) : _pf.INT(1);
