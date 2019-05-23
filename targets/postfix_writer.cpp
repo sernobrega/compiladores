@@ -228,15 +228,34 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
 }
 
 void m19::postfix_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
-  //
+  ASSERT_SAFE_EXPRESSIONS;
+  node->argument()->accept(this, lvl);
+  _pf.INT(3);
+  _pf.SHTL();
+  _pf.ALLOC(); // allocate
+  _pf.SP();// put base pointer in stack
 }
 
 void m19::postfix_writer::do_address_node(m19::address_node * const node, int lvl) {
-  //
+  ASSERT_SAFE_EXPRESSIONS;
+  node->lvalue()->accept(this, lvl + 2);
 }
 
 void m19::postfix_writer::do_index_node(m19::index_node * const node, int lvl) {
-  //
+  ASSERT_SAFE_EXPRESSIONS;
+  if (node->expr()) {
+    node->expr()->accept(this, lvl);
+  } else {
+    if (_function) {
+      _pf.LOCV(-_function->type()->size());
+    } else {
+      std::cerr << "FATAL: " << node->lineno() << ": trying to use return value outside function" << std::endl;
+    }
+  }
+  node->index()->accept(this, lvl);
+  _pf.INT(3);
+  _pf.SHTL();
+  _pf.ADD(); // add pointer and index
 }
 
 /****************************************************************************************

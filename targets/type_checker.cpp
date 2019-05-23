@@ -192,15 +192,39 @@ void m19::type_checker::do_read_node(m19::read_node * const node, int lvl) {
 }
 
 void m19::type_checker::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
-  //
+  ASSERT_UNSPEC;
+  node->argument()->accept(this, lvl + 2);
+  if (node->argument()->type()->name() != basic_type::TYPE_INT) throw std::string(
+      "integer expression expected in allocation expression");
+//FIXME: check the following two lines
+  auto mytype = new basic_type(4, basic_type::TYPE_POINTER);
+  mytype->_subtype = new basic_type(8, basic_type::TYPE_DOUBLE);
+  node->type(mytype);
 }
 
 void m19::type_checker::do_address_node(m19::address_node * const node, int lvl) {
-  //
+  ASSERT_UNSPEC;
+  node->lvalue()->accept(this, lvl + 2);
+  if (node->lvalue()->type()->name() == basic_type::TYPE_DOUBLE) {
+    node->type(new basic_type(4, basic_type::TYPE_POINTER));
+  } else {
+    throw std::string("wrong type in unary logical expression");
+  }
 }
 
 void m19::type_checker::do_index_node(m19::index_node * const node, int lvl) {
-  //
+  ASSERT_UNSPEC;
+  if (node->expr()) {
+    node->expr()->accept(this, lvl + 2);
+    if (node->expr()->type()->name() != basic_type::TYPE_POINTER) throw std::string(
+        "pointer expression expected in index left-value");
+  } else {
+    if (_function->type()->name() != basic_type::TYPE_POINTER) throw std::string(
+        "return pointer expression expected in index left-value");
+  }
+  node->index()->accept(this, lvl + 2);
+  if (node->index()->type()->name() != basic_type::TYPE_INT) throw std::string("integer expression expected in left-value index");
+  node->type(new basic_type(8, basic_type::TYPE_DOUBLE));
 }
 
 /****************************************************************************************
