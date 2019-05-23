@@ -501,7 +501,7 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
       m19::variable_declaration_node *arg = dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix));
       arg->accept(this, lvl + 2);
 
-      if(symbol->args().at(ix)->name() != node->arguments()->node(ix)->type()->name())
+      if(symbol->args().at(ix)->name() != arg->type()->name())
         throw std::string("conflicting declaration for '" + id + "'");
     }
   }
