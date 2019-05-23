@@ -64,9 +64,9 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
   id, // identifier
   (bool)node->expr(), // initialized?
   false); // is it a function?
-  std::shared_ptr<m19::symbol> symbol = _symtab.find_local(id);
-  if (!symbol) {
-    _symtab.insert(id, symbol)
+  std::shared_ptr<m19::symbol> previous = _symtab.find_local(id);
+  if (!previous) {
+    _symtab.insert(id, symbol);
     _parent->set_new_symbol(symbol);  // advise parent that a symbol has been inserted
   } else {
     throw std::string("variable '" + id + "' redeclared");
