@@ -631,8 +631,9 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
     node->expr()->accept(this, lvl + 2);
     _pf.JZ(mklbl(lbl1 = ++_lbl));
     node->block()->accept(this, lvl + 2);
-    _pf.LABEL(mklbl(lbl1));
     _pf.JMP(mklbl(_endSectionlbl));
+    _pf.LABEL(mklbl(lbl1));
+    
   }
 }
 

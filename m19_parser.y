@@ -142,7 +142,7 @@ literal			    : integer                                                   { $$ =
 ini_sem         : tBEGINS block                                             { $$ = new m19::section_init_node(LINE, $2); };
 
 secm            : sec                                                       { $$ = new cdk::sequence_node(LINE, $1); }
-                | secm sec                                                  { $$ = new cdk::sequence_node(LINE, $1, new cdk::sequence_node(LINE, $2)); }
+                | secm sec                                                  { $$ = new cdk::sequence_node(LINE, $2, new cdk::sequence_node(LINE, $1)); }
                 ;
                 
 secs            : /* empty */                                               { $$ = nullptr; }
