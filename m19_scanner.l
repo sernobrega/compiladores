@@ -16,10 +16,11 @@
 // output stream for building string literals
 static std::ostringstream strlit;
 
-double doubleSciNot(char *yytext) {
-    char c;
-    while(yytext.get(c)) {
-        printf("%c\n", c);
+double doubleSciNot(char *yytext, int yyleng) {
+    int i = 0;
+    while (i < yyleng)
+        printf("%c\n", yytext[i]);
+        i++;
     }
         
     return 2.1;
@@ -93,7 +94,7 @@ double doubleSciNot(char *yytext) {
  /* ------------------------------------------------------------ */
  /* --------------->            Reais           <--------------- */
  /* ------------------------------------------------------------ */
-[0-9]+[afpnumkMGTPE][0-9]+ yylval.d = doubleSciNot(std::string *yytext); return tREAL;
+[0-9]+[afpnumkMGTPE][0-9]+ yylval.d = doubleSciNot(*yytext, yyleng); return tREAL;
  /* [0-9]+a             yy_push_state(X_a); yyless(yyleng - 1); strlit << *yytext; 
 <X_a>[0-9]+             {
                             strlit << '.' + *yytext + "e-18";
