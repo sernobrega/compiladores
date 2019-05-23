@@ -618,7 +618,7 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
   else if(node->qualifier() == tINCLUSIVE) {
     os() << "        ;; section inclusive with condition " << std::endl;
     int lbl = ++_lbl;
-    node->expr()->accept(this, lvl + 2);
+    //node->expr()->accept(this, lvl + 2);
     // _pf.INT(0);
     // _pf.GT();
     // _pf.JZ(mklbl(lbl));
@@ -628,7 +628,7 @@ void m19::postfix_writer::do_section_node(m19::section_node * const node, int lv
   } else {
     os() << "        ;; section exclusive " << std::endl;
     int lbl = ++_lbl;
-    node->expr()->accept(this, lvl + 2);
+    //node->expr()->accept(this, lvl + 2);
     // _pf.CALL("printi");
     // _pf.TRASH(4); // trash int
     // _pf.JZ(mklbl(lbl));
