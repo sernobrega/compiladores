@@ -50,7 +50,7 @@ void m19::type_checker::do_variable_declaration_node(m19::variable_declaration_n
       basic_type * exprtype = node->expr()->type();
       for(; exprtype->name() == basic_type::TYPE_POINTER; exprt++, exprtype = exprtype->_subtype);
 
-      bool compatible = (nodet == exprt) && (exprtype == 0 || (exprtype != 0 && nodetype->name() == exprtype->name()));
+      bool compatible = (nodet == exprt) && (exprtype == 0 || nodetype->name() == exprtype->name() || !(nodetype->name() == basic::TYPE_POINTER && exprtype->name() == basic::TYPE_INT)));
       if (!compatible) throw std::string("wrong type for return expression (pointer expected).");
     } else {
       throw std::string("unknown type for expr.");
