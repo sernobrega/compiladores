@@ -22,7 +22,6 @@ double doubleSciNot(char *yytext, int yyleng) {
     std::string * exponent;
 
     while (i < yyleng) {
-        printf("%c\n", yytext[i]);
         if(isdigit(yytext[i])) {
             strlit << yytext[i];
         } else {
@@ -57,7 +56,7 @@ double doubleSciNot(char *yytext, int yyleng) {
         i++;
     }
 
-    strlit << exponent;
+    strlit << *exponent;
     ret = strtod(strlit.str().c_str(), NULL); 
     //if(errno != 0) yyerror("Overflow strtod");
     strlit.str("");
