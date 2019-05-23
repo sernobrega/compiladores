@@ -42,7 +42,7 @@ void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int 
 void m19::postfix_writer::do_rvalue_node(cdk::rvalue_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->lvalue()->accept(this, lvl);
-  node->rvalue()->type()->name() == basic_type::TYPE_DOUBLE ? _pf.LDDOUBLE(): _pf.LDINT(); 
+  node->type()->name() == basic_type::TYPE_DOUBLE ? _pf.LDDOUBLE(): _pf.LDINT(); 
 }
 
 void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, int lvl) {
@@ -50,7 +50,7 @@ void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, 
   
   node->rvalue()->accept(this, lvl + 2);
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {
-    if (node->type()->name() == basic_type::TYPE_INT)
+    if (node->rvalue()->type()->name() == basic_type::TYPE_INT)
     _pf.DUP64();
   } else {
     _pf.DUP32();
