@@ -25,6 +25,7 @@
   m19::section_init_node  *init;
   m19::section_end_node   *end;
   m19::section_node       *sec;
+  m19::variable_declaration_node       *v;
 };
 
 %token <i> tINTEGER
@@ -46,7 +47,7 @@
 %right '(' '['
 %nonassoc ':'
 
-%type <node> declaration vardecl func fundecl
+%type <node> declaration  func fundecl
 %type <node> cond_i iter_i instruction fundef
 %type <sequence> args secs declarations innerdecls vardecls exprs_in
 %type <sequence> opt_instructions instructions exprs file secm
@@ -129,7 +130,7 @@ fundef			    : data_type tID 	  args             ini_sem secs end_sec	  { $$ = n
                 | data_type tID '!' args '=' literal              end_sem	  { $$ = new m19::function_definition_node(LINE, tPUBLIC , $1, *$2, $4, $6, nullptr, nullptr, $7); delete $2; }
                 ;
 
-args            : '('          ')'                                          { $$ = nullptr; }
+args            : '('          ')'                                          { $$ = new cdk::sequence_node(LINE); }
                 | '(' vardecls ')'                                          { $$ = $2; }
                 ;
 
