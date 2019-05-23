@@ -18,7 +18,7 @@ static std::ostringstream strlit;
 
 double doubleSciNot(char *yytext, int yyleng) {
     int i = 0;
-    double ret = 0;
+    double ret;
     std::string * exponent;
 
     while (i < yyleng) {
