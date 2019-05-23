@@ -520,14 +520,16 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
     }
   } else {
     if (node->arguments()) {
+      std::vector<basic_type*> symargs;
       for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
-        m19::variable_declaration_node *arg = (m19::variable_declaration_node*)(node->arguments()->node(ix));
-        if (arg == nullptr) break; // this means an empty sequence of arguments
-        std::cout << arg->type()->name() << std::endl;
-        //arg->accept(this, 0); // the function symbol is at the top of the stack
+        m19::variable_declaration_node *arg = dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix));
+        basic_type * new_type = new basic_type(arg->type()->size(), arg->type()->name());
+        std::cout << new_type->type()->name() << std::endl;
+        symargs.push_back(new_type)
       }
     }
     _symtab.insert(function->name(), function);
+    _parent->set_new_symbol(symbol);
   }
 }
 
