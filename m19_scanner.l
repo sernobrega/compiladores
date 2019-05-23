@@ -18,7 +18,7 @@ static std::ostringstream strlit;
 
 double doubleSciNot(char *yytext, int yyleng) {
     int i = 0;
-    double ret;
+    double ret = 0;
     std::string * exponent;
 
     while (i < yyleng) {
@@ -50,16 +50,16 @@ double doubleSciNot(char *yytext, int yyleng) {
                 case 'P':
                     exponent = new std::string("e+15");
                 case 'E':
-                    exponent = new std::string("e+18);
+                    exponent = new std::string("e+18");
             }
-            strlit << '.'
+            strlit << '.';
         }
         i++;
     }
 
     strlit << exponent;
     ret = strtod(strlit.str().c_str(), NULL); 
-    if(errno != 0) yyerror("Overflow strtod");
+    //if(errno != 0) yyerror("Overflow strtod");
     strlit.str("");
     return ret;
 }
