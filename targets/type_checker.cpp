@@ -529,7 +529,7 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
       }
     }
     _symtab.insert(function->name(), function);
-    _parent->set_new_symbol(symbol);
+    _parent->set_new_symbol(function);
   }
 }
 
