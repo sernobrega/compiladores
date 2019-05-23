@@ -19,6 +19,7 @@ namespace m19 {
     cdk::symbol_table<m19::symbol> &_symtab;
     std::shared_ptr<m19::symbol> _function;
     basic_ast_visitor *_parent;
+    bool _nullptr;
 
   public:
     type_checker(std::shared_ptr<cdk::compiler> compiler, cdk::symbol_table<m19::symbol> &symtab, std::shared_ptr<m19::symbol> func, basic_ast_visitor *parent) :

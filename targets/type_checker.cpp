@@ -125,17 +125,23 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
       bool compatible = ((lt == rt - 1) && (rtype->name() != basic_type::TYPE_INT)) || ((lt == rt) && (rt == 0 || (rt != 0 && rtype->name() == ltype->name())));
       if (!compatible) throw std::string("wrong assignment to pointer");
 
+      if(lt == rt-1 && !_nullptr) {
+        throw std::string("wrong assignment to pointer");
+      }
+
       basic_type * pointertype = new basic_type(4, basic_type::TYPE_POINTER);
       basic_type * subtypeholder = new basic_type(0, basic_type::TYPE_UNSPEC);
       pointertype->_subtype = subtypeholder;
       for(; lt > 0; lt--, subtypeholder = pointertype->_subtype) {
         subtypeholder->_subtype = new basic_type(4, basic_type::TYPE_POINTER);
       }
-      subtypeholder->_subtype = rtype;
+      subtypeholder->_subtype = ltype;
       node->type(pointertype);
     } else if (node->rvalue()->type()->name() == basic_type::TYPE_INT) {
-      //TODO: check that the integer is a literal and that it is zero
-      node->type(new basic_type(4, basic_type::TYPE_POINTER));
+      if(_nullptr) 
+        node->type(new basic_type(4, basic_type::TYPE_POINTER));
+      else
+        throw std::string("wrong assignment to pointer");
     } else if (node->rvalue()->type()->name() == basic_type::TYPE_UNSPEC) {
       node->type(new basic_type(4, basic_type::TYPE_ERROR));
       node->rvalue()->type(new basic_type(4, basic_type::TYPE_ERROR));
@@ -165,6 +171,8 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
   } else {
     throw std::string("wrong types in assignment");
   }
+
+  _nullptr = false;
 }
 
 void m19::type_checker::do_evaluation_node(m19::evaluation_node * const node, int lvl) {
@@ -386,6 +394,9 @@ void m19::type_checker::do_identity_node(m19::identity_node * const node, int lv
 void m19::type_checker::do_integer_node(cdk::integer_node * const node, int lvl) {
   ASSERT_UNSPEC;
   node->type(new basic_type(4, basic_type::TYPE_INT));
+  if(node->value() == 0) {
+    _nullptr = true;
+  }
 }
 
 void m19::type_checker::do_double_node(cdk::double_node * const node, int lvl) {
