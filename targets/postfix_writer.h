@@ -60,10 +60,6 @@ namespace m19 {
     void do_int2double(basic_type * left, basic_type * right) {
       if(left->name() == basic_type::TYPE_DOUBLE && right->name() == basic_type::TYPE_INT)
         _pf.I2D();
-      else if (left->name() != right->name()) 
-        error(0, std::string("impossible conversion"));
-
-        
     }
 
   public:
