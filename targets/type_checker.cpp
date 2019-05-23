@@ -198,7 +198,7 @@ void m19::type_checker::do_stack_alloc_node(m19::stack_alloc_node * const node, 
       "integer expression expected in allocation expression");
   auto mytype = new basic_type(4, basic_type::TYPE_POINTER);
   //FIXME: subtype is either pointer, string, double or int
-  mytype->_subtype = new basic_type(0), basic_type::TYPE_DOUBLE);
+  mytype->_subtype = new basic_type(0, basic_type::TYPE_DOUBLE);
   node->type(mytype);
 }
 
