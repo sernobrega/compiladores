@@ -42,17 +42,15 @@ void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int 
 void m19::postfix_writer::do_rvalue_node(cdk::rvalue_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->lvalue()->accept(this, lvl);
-  _pf.LDINT(); // depends on type size
+  node->rvalue()->type()->name() == basic_type::TYPE_DOUBLE ? _pf.LDDOUBLE(): _pf.LDINT(); 
 }
 
 void m19::postfix_writer::do_assignment_node(cdk::assignment_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   
-  //FIXME: if string or pointer
   node->rvalue()->accept(this, lvl + 2);
   if (node->type()->name() == basic_type::TYPE_DOUBLE) {
     if (node->rvalue()->type()->name() == basic_type::TYPE_INT)
-      _pf.I2D();
     _pf.DUP64();
   } else {
     _pf.DUP32();
