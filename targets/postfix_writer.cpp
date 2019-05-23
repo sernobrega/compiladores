@@ -301,49 +301,37 @@ void m19::postfix_writer::do_if_else_node(m19::if_else_node * const node, int lv
 void m19::postfix_writer::do_lt_node(cdk::lt_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   node->right()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   _pf.LT();
 }
 void m19::postfix_writer::do_le_node(cdk::le_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   node->right()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   _pf.LE();
 }
 void m19::postfix_writer::do_ge_node(cdk::ge_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   node->right()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   _pf.GE();
 }
 void m19::postfix_writer::do_gt_node(cdk::gt_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   node->right()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   _pf.GT();
 }
 void m19::postfix_writer::do_ne_node(cdk::ne_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   node->right()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   _pf.NE();
 }
 void m19::postfix_writer::do_eq_node(cdk::eq_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   node->right()->accept(this, lvl);
-  do_int2double(node->right()->type(), node->left()->type());
   _pf.EQ();
 }
 
@@ -383,9 +371,7 @@ void m19::postfix_writer::do_or_node(cdk::or_node * const node, int lvl) {
 void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl);
-  do_int2double(node->type(), node->left()->type());
   node->right()->accept(this, lvl);
-  do_int2double(node->type(), node->right()->type());
   _pf.ADD();
 }
 void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
