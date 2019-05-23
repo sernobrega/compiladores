@@ -505,8 +505,8 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   if(node->retval()) {
     node->retval()->accept(this, lvl);
-    if(_function->type()->name() == basic_type::TYPE_DOUBLE && node->retval()->type()->name() == basic_type::TYPE_INT)
-        _pf.I2D();
+    // if(_function->type()->name() == basic_type::TYPE_DOUBLE && node->retval()->type()->name() == basic_type::TYPE_INT)
+    //     _pf.I2D();
     //do_int2double(_function->type(), node->retval()->type());
     if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
       _pf.LOCAL(_offset);
