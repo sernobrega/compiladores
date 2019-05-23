@@ -61,7 +61,7 @@ namespace m19 {
       if(left->name() == basic_type::TYPE_DOUBLE && right->name() == basic_type::TYPE_INT)
         _pf.I2D();
       else if (left->name() != right->name()) 
-        error(left->lineno(), std::string("impossible conversion"));
+        error(0, std::string("impossible conversion"));
 
         
     }
