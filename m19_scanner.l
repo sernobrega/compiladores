@@ -18,12 +18,12 @@ static std::ostringstream strlit;
 
 double doubleSciNot(char *yytext, int yyleng) {
     int i = 0;
-    while (i < yyleng)
+    while (i < yyleng) {
         printf("%c\n", yytext[i]);
         i++;
     }
         
-    return 2.1;
+    return 0;
 }
 
 %}
