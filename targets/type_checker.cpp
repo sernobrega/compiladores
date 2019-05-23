@@ -204,8 +204,8 @@ void m19::type_checker::do_stack_alloc_node(m19::stack_alloc_node * const node, 
 
 void m19::type_checker::do_address_node(m19::address_node * const node, int lvl) {
   ASSERT_UNSPEC;
-  node->lvalue()->accept(this, lvl + 2);
-  if (node->lvalue()->type()->name() == basic_type::TYPE_DOUBLE) {
+  node->lval()->accept(this, lvl + 2);
+  if (node->lval()->type()->name() == basic_type::TYPE_DOUBLE) {
     node->type(new basic_type(4, basic_type::TYPE_POINTER));
   } else {
     throw std::string("wrong type in unary logical expression");

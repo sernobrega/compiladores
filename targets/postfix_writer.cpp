@@ -238,7 +238,7 @@ void m19::postfix_writer::do_stack_alloc_node(m19::stack_alloc_node * const node
 
 void m19::postfix_writer::do_address_node(m19::address_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->lvalue()->accept(this, lvl + 2);
+  node->lval()->accept(this, lvl + 2);
 }
 
 void m19::postfix_writer::do_index_node(m19::index_node * const node, int lvl) {
