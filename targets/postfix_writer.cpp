@@ -638,7 +638,7 @@ void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node
 }
 
 void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
-  _IsnitSection = true;
+  _InitSection = true;
   node->block()->accept(this, lvl + 2);
 }
 
