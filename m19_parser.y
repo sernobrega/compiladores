@@ -129,7 +129,7 @@ fundef			    : data_type tID 	  args             ini_sem secs end_sec	  { $$ = n
                 | data_type tID '!' args '=' literal              end_sem	  { $$ = new m19::function_definition_node(LINE, tPUBLIC , $1, *$2, $4, $6, nullptr, nullptr, $7); delete $2; }
                 ;
 
-args            : '('          ')'                                          { $$ = new cdk::sequence_node(LINE); }
+args            : '('          ')'                                          { $$ = nullptr; }
                 | '(' vardecls ')'                                          { $$ = $2; }
                 ;
 
