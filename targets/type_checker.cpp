@@ -523,7 +523,7 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
       std::vector<basic_type*> symargs;
       for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
         //m19::variable_declaration_node *arg = );
-        basic_type * new_type = new basic_type((dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix))->type()->size(), (dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix))->type()->name());
+        basic_type * new_type = new basic_type((dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix)))->type()->size(), (dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix)))->type()->name());
         std::cout << new_type->name() << std::endl;
         symargs.push_back(new_type);
       }
