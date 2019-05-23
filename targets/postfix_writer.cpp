@@ -230,7 +230,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
 void m19::postfix_writer::do_stack_alloc_node(m19::stack_alloc_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->argument()->accept(this, lvl);
-  _pf.INT(3);
+  _pf.INT(node->type()->subtype()->size());
   _pf.SHTL();
   _pf.ALLOC(); // allocate
   _pf.SP();// put base pointer in stack
