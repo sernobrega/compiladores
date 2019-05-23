@@ -501,6 +501,7 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
 
   if(node->retval()) {
     node->retval()->accept(this, lvl);
+    do_int2double(_function->type(), node->retval()->type());
     if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
       _pf.LOCAL(_offset);
       _pf.STINT();
@@ -585,8 +586,8 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
     for (int ax = node->arguments()->size(); ax > 0; ax--) {
       cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
       arg->accept(this, lvl + 2);
+       do_int2double(symbol->args().at(ax - 1), arg->type())
       argsSize += symbol->args().at(ax - 1)->size();
-      do_int2double(symbol->args().at(ax - 1), arg->type());
     }
   }
   _pf.CALL(id);
