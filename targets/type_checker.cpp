@@ -114,7 +114,6 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
       throw std::string("wrong assignment to integer");
   //Pointer
   } else if (node->lvalue()->type()->name() == basic_type::TYPE_POINTER) {
-    //TODO: check pointer level
     if (node->rvalue()->type()->name() == basic_type::TYPE_POINTER) {
       int lt = 0, rt = 0;
       basic_type * ltype = node->lvalue()->type();
@@ -127,12 +126,12 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
       if (!compatible) throw std::string("wrong assignment to pointer");
 
       basic_type * pointertype = new basic_type(4, basic_type::TYPE_POINTER);
-      basic_type * subtypeholder = nullptr;
+      basic_type * subtypeholder = new basic_type(0, basic_type::TYPE_UNSPEC);
       pointertype->_subtype = subtypeholder;
       for(; lt > 0; lt--, subtypeholder = pointertype->_subtype) {
         subtypeholder->_subtype = new basic_type(4, basic_type::TYPE_POINTER);
       }
-      
+      subtypeholder->_subtype = rtype;
       node->type(pointertype);
     } else if (node->rvalue()->type()->name() == basic_type::TYPE_INT) {
       //TODO: check that the integer is a literal and that it is zero
