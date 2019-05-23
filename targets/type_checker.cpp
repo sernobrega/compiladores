@@ -458,13 +458,20 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
     throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible.");
   }
 
-  //FIXME: check arguments?
-  // std::vector<basic_type*> argsPrevious = previous->args();
-  // for(size_t ix = 0; ix < node->arguments()->size() || ix < previous->args()->size(); ix++) {
-  //   if(argsPrevious.at(ix)->name() != node->arguments()->node(ix)->type()->name()) {
-  //     throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
-  //   }
-  // }
+  if(node->arguments()) {
+    if(function->args().size() != previous->args().size())
+    throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
+
+    for (size_t ix = 0; ix < function->args().size() || ix < previous->args().size(); ix++) {
+      if(function->args().at(ix)->name() != previous->args().at(ix)->name())
+        function->args().at(ix)->name()
+    }
+
+    if(ix < function->args().size() || ix < previous->args().size())
+      throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
+  }
+  
+
   // if(ix < node->arguments()->size() || ix < previous->args()->size()) {
   //   throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
   // }
