@@ -371,8 +371,25 @@ void m19::postfix_writer::do_or_node(cdk::or_node * const node, int lvl) {
  ****************************************************************************************/
 void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
-  node->left()->accept(this, lvl);
-  node->right()->accept(this, lvl);
+  node->left()->accept(this, lvl + 2);
+  if (node->type()->name() == basic_type::TYPE_DOUBLE && node->left()->type()->name() == basic_type::TYPE_INT) {
+    _pf.I2D();
+  } else if (node->type()->name() == basic_type::TYPE_POINTER && node->left()->type()->name() == basic_type::TYPE_INT) {
+    _pf.INT(3);
+    _pf.SHTL();
+  }
+
+  node->right()->accept(this, lvl + 2);
+  if (node->type()->name() == basic_type::TYPE_DOUBLE && node->right()->type()->name() == basic_type::TYPE_INT) {
+    _pf.I2D();
+  } else if (node->type()->name() == basic_type::TYPE_POINTER && node->right()->type()->name() == basic_type::TYPE_INT) {
+    _pf.INT(3);
+    _pf.SHTL();
+  }
+
+  if (node->type()->name() == basic_type::TYPE_DOUBLE)
+  _pf.DADD();
+  else
   _pf.ADD();
 }
 void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
