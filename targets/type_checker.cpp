@@ -471,11 +471,6 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
     if(ix < function->args().size() || ix < previous->args().size())
       throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
   }
-  
-
-  // if(ix < node->arguments()->size() || ix < previous->args()->size()) {
-  //   throw std::string("Redefinition of function " + function->name() + " is invalid. Function declared with the same name but incompatible args.");
-  // }
 
   _symtab.replace(function->name(), function);
   _parent->set_new_symbol(function);
@@ -491,8 +486,6 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
 
   if (!symbol->isFunction()) throw std::string("symbol '" + id + "' is not a function.");
 
-  node->type(symbol->type());
-
   if(node->arguments()->size() != symbol->args().size())
         throw std::string("conflicting calling for '" + id + "'");
 
@@ -505,16 +498,8 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
         throw std::string("conflicting declaration for '" + id + "'");
     }
   }
-  
 
-  // if (node->arguments()) {
-  //   for (int ax = node->arguments()->size(); ax > 0; ax--) {
-  //     for(int ix = symbol->arguments()->size())
-  //     cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
-  //     arg->accept(this, lvl + 4);
-  //     argsSize += arg->type()->size();
-  //   }
-  // }
+  node->type(symbol->type());
 }
 
 void m19::type_checker::do_function_declaration_node(m19::function_declaration_node * const node, int lvl) {
