@@ -383,7 +383,7 @@ void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const nod
     basic_type * rtype = node->right()->type();
     for(; rtype->name() == basic_type::TYPE_POINTER; rt++, rtype = rtype->_subtype);
 
-    bool notcompatible = (lt == rt - 1 && (rtype->name() != basic_type::TYPE_INT || !_nullptr));
+    bool notcompatible = (lt == rt - 1 && (rtype->name() != basic_type::TYPE_INT));
       if (notcompatible) throw std::string("wrong assignment to pointer");
 
     basic_type * pointertype = new basic_type(4, basic_type::TYPE_POINTER);
@@ -403,8 +403,6 @@ void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const nod
     node->right()->type(new basic_type(4, basic_type::TYPE_INT));
   } else
     throw std::string("wrong types in binary expression");
-
-  _nullptr = false;
 }
 
 void m19::type_checker::do_add_node(cdk::add_node * const node, int lvl) {
