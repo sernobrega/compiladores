@@ -496,7 +496,7 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
       cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ix));
       arg->accept(this, lvl + 2);
 
-      if(symbol->args().at(ix)->name() != arg->type()->name())
+      if(symbol->args().at(ix)->name() != arg->type()->name() && !(symbol->args().at(ix)->name()) == basic_type::TYPE_DOUBLE && arg->type()->name() == basic_type::TYPE_INT))
         throw std::string("conflicting declaration for '" + id + "'");
     }
   }
