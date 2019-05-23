@@ -94,7 +94,7 @@ double doubleSciNot(char *yytext, int yyleng) {
  /* ------------------------------------------------------------ */
  /* --------------->            Reais           <--------------- */
  /* ------------------------------------------------------------ */
-[0-9]+[afpnumkMGTPE][0-9]+ yylval.d = doubleSciNot(*yytext, yyleng); return tREAL;
+[0-9]+[afpnumkMGTPE][0-9]+ yylval.d = doubleSciNot(yytext, yyleng); return tREAL;
  /* [0-9]+a             yy_push_state(X_a); yyless(yyleng - 1); strlit << *yytext; 
 <X_a>[0-9]+             {
                             strlit << '.' + *yytext + "e-18";
