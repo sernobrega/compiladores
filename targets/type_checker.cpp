@@ -121,15 +121,15 @@ void m19::type_checker::do_assignment_node(cdk::assignment_node * const node, in
       for(; ltype->name() == basic_type::TYPE_POINTER; lt++, ltype = ltype->_subtype);
 
       basic_type * rtype = node->rvalue()->type();
-      for(; rtype->name() == basic_type::TYPE_POINTER; rt++, exprtype = rtype->_subtype);
+      for(; rtype->name() == basic_type::TYPE_POINTER; rt++, rvalue = rtype->_subtype);
 
-      bool compatible = (lt == rt - 1) && (rtype->name() != basic_type::TYPE_INT) || (lt == rt) && (rt == 0 || (rt != 0 && rtype->name() == ltype->name()));
+      bool compatible = ((lt == rt - 1) && (rtype->name() != basic_type::TYPE_INT)) || ((lt == rt) && (rt == 0 || (rt != 0 && rtype->name() == ltype->name())));
       if (!compatible) throw std::string("wrong assignment to pointer");
 
       basic_type * pointertype = new basic_type(4, basic_type::TYPE_POINTER);
       basic_type * subtypeholder;
       pointertype->_subtype = subtypeholder;
-      for(; lt > 0; lt--, subtypeholder = pointertype_f->_subtype) {
+      for(; lt > 0; lt--, subtypeholder = pointertype->_subtype) {
         basic_type * pointertype = new basic_type(4, basic_type::TYPE_POINTER);
         subtypeholder->_subtype = new basic_type(4, basic_type::TYPE_POINTER);
       }
