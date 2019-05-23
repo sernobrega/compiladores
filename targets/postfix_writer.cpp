@@ -150,7 +150,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
         _pf.LOCAL(symbol->offset()); //FIXME: check forr string
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
-        if(node->expr()->type() == basic_type::TYPE_INT() {
+        if(node->expr()->type() == basic_type::TYPE_INT()) {
           _pf.I2D();
         }
         _pf.DUP64();
@@ -600,7 +600,7 @@ void m19::postfix_writer::do_function_call_node(m19::function_call_node * const 
       cdk::expression_node *arg = dynamic_cast<cdk::expression_node*>(node->arguments()->node(ax - 1));
       arg->accept(this, lvl + 2);
       argsSize += arg->type()->size();
-      do_int2double(symbol->args().at(ax - 1)-, arg->type());
+      do_int2double(symbol->args().at(ax - 1), arg->type());
     }
   }
   _pf.CALL(id);
