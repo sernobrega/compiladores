@@ -529,8 +529,8 @@ void m19::postfix_writer::do_function_definition_node(m19::function_definition_n
   _pf.LABEL(mklbl(_endBodylbl));
   _inFunctionBody = false;
 
-  if(_InitSection) _symtab.pop();
-  _InitSection = false;
+  if(node->init()) _symtab.pop();
+
   if(_function->type()->name() == basic_type::TYPE_INT || _function->type()->name() == basic_type::TYPE_POINTER || _function->type()->name() == basic_type::TYPE_STRING) {
     _pf.STFVAL32();
   } else if(_function->type()->name() == basic_type::TYPE_DOUBLE) {
@@ -640,6 +640,7 @@ void m19::postfix_writer::do_section_end_node(m19::section_end_node * const node
 void m19::postfix_writer::do_section_init_node(m19::section_init_node * const node, int lvl) {
   _InitSection = true;
   node->block()->accept(this, lvl + 2);
+  _InitSection = false;
 }
 
 /****************************************************************************************
