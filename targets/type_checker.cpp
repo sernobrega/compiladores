@@ -403,6 +403,8 @@ void m19::type_checker::do_PIDExpression(cdk::binary_expression_node * const nod
     node->right()->type(new basic_type(4, basic_type::TYPE_INT));
   } else
     throw std::string("wrong types in binary expression");
+
+  _nullptr = false;
 }
 
 void m19::type_checker::do_add_node(cdk::add_node * const node, int lvl) {
