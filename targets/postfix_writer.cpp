@@ -431,7 +431,7 @@ void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
     _pf.I2D();
   } else if (node->type()->name() == basic_type::TYPE_POINTER && node->left()->type()->name() == basic_type::TYPE_INT) {
     _pf.INT(node->type()->subtype()->size());
-    _pf.SHTL();
+    _pf.MUL();
   }
 
   node->right()->accept(this, lvl + 2);
@@ -439,7 +439,7 @@ void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
     _pf.I2D();
   } else if (node->type()->name() == basic_type::TYPE_POINTER && node->right()->type()->name() == basic_type::TYPE_INT) {
     _pf.INT(node->type()->subtype()->size());
-    _pf.SHTL();
+    _pf.MUL();
   }
 
   if (node->type()->name() == basic_type::TYPE_DOUBLE)
