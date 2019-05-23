@@ -426,13 +426,14 @@ void m19::type_checker::do_function_definition_node(m19::function_definition_nod
       std::make_shared < m19::symbol> (false, node->scope(), node->type(), id, false, true);
  
   if (node->arguments()) {
-    for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
-      m19::variable_declaration_node *arg = (m19::variable_declaration_node*)(node->arguments()->node(ix));
-      if (arg == nullptr) break; // this means an empty sequence of arguments
-      arg->accept(this, 0); // the function symbol is at the top of the stack
-      std::cout << arg->type()->name() << std::endl;
-    }
-  
+      for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
+        m19::variable_declaration_node *arg = (m19::variable_declaration_node*)(node->arguments()->node(ix));
+        if (arg == nullptr) break; // this means an empty sequence of arguments
+        
+        arg->accept(this, 0); // the function symbol is at the top of the stack
+        std::cout << arg->type()->name() << std::endl;
+      }
+  }
   function->set_offset(-node->type()->size()); //return val
 
   std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
@@ -523,7 +524,7 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
         m19::variable_declaration_node *arg = (m19::variable_declaration_node*)(node->arguments()->node(ix));
         if (arg == nullptr) break; // this means an empty sequence of arguments
         std::cout << arg->type()->name() << std::endl;
-        //arg->accept(this, 0); // the function symbol is at the top of the stack
+        arg->accept(this, 0); // the function symbol is at the top of the stack
       }
     }
     _symtab.insert(function->name(), function);
