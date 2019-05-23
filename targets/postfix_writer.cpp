@@ -148,7 +148,7 @@ void m19::postfix_writer::do_variable_declaration_node(m19::variable_declaration
       if (node->type()->name() == basic_type::TYPE_INT || node->type()->name() == basic_type::TYPE_STRING
           || node->type()->name() == basic_type::TYPE_POINTER) {
         _pf.DUP32();
-        _pf.LOCAL(symbol->offset()); //FIXME: check forr string
+        _pf.LOCAL(symbol->offset());
         _pf.STINT();
       } else if (node->type()->name() == basic_type::TYPE_DOUBLE) {
         if(node->expr()->type()->name() == basic_type::TYPE_INT) {
@@ -557,14 +557,13 @@ void m19::postfix_writer::do_string_node(cdk::string_node * const node, int lvl)
  *****************************       FUNCTION RELATED       *****************************
  ****************************************************************************************/
 void m19::postfix_writer::do_function_definition_node(m19::function_definition_node * const node, int lvl) {
-  ASSERT_SAFE_EXPRESSIONS;
-
   if (_inFunctionBody || _inFunctionArgs) {
     error(node->lineno(), "cannot define function in body or in arguments");
     return;
   }
 
-  //FIXME: naive approach - what if functions are defined inside a block or in an argument
+  ASSERT_SAFE_EXPRESSIONS;
+
   bool _inMain = (node->id() == "m19");
 
   _function = new_symbol(); //gets symbol set by type checker
