@@ -493,10 +493,19 @@ void m19::type_checker::do_function_call_node(m19::function_call_node * const no
 
   node->type(symbol->type());
 
-  //DAVID: FIXME: should also validate args against symbol
+  if(node->arguments()->size() != symbol->args().size())
+        throw std::string("conflicting calling for '" + id + "'");
+
   if (node->arguments()) {
-    node->arguments()->accept(this, lvl + 4);
+    for (size_t ix = 0; ix < node->arguments()->size(); ix++) {
+      m19::variable_declaration_node *arg = dynamic_cast<m19::variable_declaration_node*>(node->arguments()->node(ix));
+      arg->accept(this, lvl + 2);
+
+      if(symbol->args().at(ix)->name() != node->arguments()->node(ix)->type()->name())
+        throw std::string("conflicting declaration for '" + id + "'");
+    }
   }
+  
 
   // if (node->arguments()) {
   //   for (int ax = node->arguments()->size(); ax > 0; ax--) {
