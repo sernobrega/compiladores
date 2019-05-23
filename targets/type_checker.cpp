@@ -523,9 +523,19 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
 
   std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
   if (previous) {
-    if (false) { //TODO: check fields
-      throw std::string("conflicting declaration for '" + function->name() + "'");
-    }
+      if(previous->arguments()) {
+        if(function->args().size() != previous->args().size())
+        throw std::string("conflicting declaration for '" + function->name() + "'");
+
+        size_t ix = 0;
+        for (ix = 0; ix < function->args().size() || ix < previous->args().size(); ix++) {
+          if(function->args().at(ix)->name() != previous->args().at(ix)->name())
+            throw std::string("conflicting declaration for '" + function->name() + "'");
+        }
+
+        if(ix < function->args().size() || ix < previous->args().size())
+          throw std::string("conflicting declaration for '" + function->name() + "'");
+      }
   } else {
     if (node->arguments()) {
       std::vector<basic_type*> symargs;
