@@ -523,7 +523,7 @@ void m19::type_checker::do_function_declaration_node(m19::function_declaration_n
 
   std::shared_ptr<m19::symbol> previous = _symtab.find(function->name());
   if (previous) {
-      if(previous->args()) {
+      if(!previous->args().empty()) {
         if(function->args().size() != previous->args().size())
         throw std::string("conflicting declaration for '" + function->name() + "'");
 
