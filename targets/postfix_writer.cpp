@@ -25,7 +25,7 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   if(node->name() == "@") {
-    _pf.LOCAL(_function->offset());
+    _pf.LOCAL(_function->offset());<
     return;
   }
 
@@ -268,7 +268,6 @@ void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   _forEnd.push(++_lbl);// after for
 
   os() << "        ;; FOR initialize" << std::endl;
-  _inForInit = true;
   node->init()->accept(this, lvl);
 
   os() << "        ;; FOR test" << std::endl;
@@ -286,8 +285,6 @@ void m19::postfix_writer::do_for_node(m19::for_node * const node, int lvl) {
   _pf.JMP(mklbl(_forIni.top()));
   os() << "        ;; FOR end" << std::endl;
   _pf.LABEL(mklbl(_forEnd.top()));
-
-  _inForInit = false;// remember this for local declarations
 
   _forIni.pop();
   _forStep.pop();
@@ -322,11 +319,11 @@ void m19::postfix_writer::do_lt_node(cdk::lt_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl + 2);
   if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   node->right()->accept(this, lvl + 2);
   if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   _pf.LT();
 }
@@ -334,11 +331,11 @@ void m19::postfix_writer::do_le_node(cdk::le_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl + 2);
   if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   node->right()->accept(this, lvl + 2);
   if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   _pf.LE();
 }
@@ -346,11 +343,11 @@ void m19::postfix_writer::do_ge_node(cdk::ge_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl + 2);
   if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   node->right()->accept(this, lvl + 2);
   if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   _pf.GE();
 }
@@ -358,11 +355,11 @@ void m19::postfix_writer::do_gt_node(cdk::gt_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl + 2);
   if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   node->right()->accept(this, lvl + 2);
   if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   _pf.GT();
 }
@@ -370,11 +367,11 @@ void m19::postfix_writer::do_ne_node(cdk::ne_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl + 2);
   if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   node->right()->accept(this, lvl + 2);
   if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   _pf.NE();
 }
@@ -382,11 +379,11 @@ void m19::postfix_writer::do_eq_node(cdk::eq_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl + 2);
   if (node->left()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   node->right()->accept(this, lvl + 2);
   if (node->right()->type()->name() == basic_type::TYPE_INT && node->right()->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.I2D();
+    _pf.I2D();
 
   _pf.EQ();
 }
@@ -442,10 +439,7 @@ void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
     _pf.SHTL();
   }
 
-  if (node->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.DADD();
-  else
-  _pf.ADD();
+  (node->type()->name() == basic_type::TYPE_DOUBLE ? _pf.DADD() : _pf.ADD();
 }
 void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
@@ -461,10 +455,7 @@ void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
     _pf.SHTL();
   }
 
-  if (node->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.DSUB();
-  else
-  _pf.SUB();
+  node->type()->name() == basic_type::TYPE_DOUBLE ? _pf.DSUB() : _pf.SUB();
 }
 void m19::postfix_writer::do_mul_node(cdk::mul_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
@@ -476,25 +467,19 @@ void m19::postfix_writer::do_mul_node(cdk::mul_node * const node, int lvl) {
   if (node->type()->name() == basic_type::TYPE_DOUBLE && node->right()->type()->name() == basic_type::TYPE_INT)
   _pf.I2D();
 
-  if (node->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.DMUL();
-  else
-  _pf.MUL();
+  node->type()->name() == basic_type::TYPE_DOUBLE ? _pf.DMUL() : _pf.MUL();
 }
 void m19::postfix_writer::do_div_node(cdk::div_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   node->left()->accept(this, lvl + 2);
   if (node->type()->name() == basic_type::TYPE_DOUBLE && node->left()->type()->name() == basic_type::TYPE_INT)
-  _pf.I2D();
+    _pf.I2D();
 
   node->right()->accept(this, lvl + 2);
   if (node->type()->name() == basic_type::TYPE_DOUBLE && node->right()->type()->name() == basic_type::TYPE_INT)
-  _pf.I2D();
+    _pf.I2D();
 
-  if (node->type()->name() == basic_type::TYPE_DOUBLE)
-  _pf.DDIV();
-  else
-  _pf.DIV();
+  node->type()->name() == basic_type::TYPE_DOUBLE ? _pf.DDIV() : _pf.DIV();
 }
 void m19::postfix_writer::do_mod_node(cdk::mod_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
@@ -754,7 +739,10 @@ void m19::postfix_writer::do_section_init_node(m19::section_init_node * const no
  *****************************    CONTINUE, RETURN, STOP    *****************************
  ****************************************************************************************/
 void m19::postfix_writer::do_continue_node(m19::continue_node * const node, int lvl) {
-  //
+   if (_forIni.size() != 0) {
+    _pf.JMP(mklbl(_forStep.top())); // jump to next cycle
+  } else
+    error(node->lineno(), "'restart' outside 'for'");
 }
 
 void m19::postfix_writer::do_return_node(m19::return_node * const node, int lvl) {
@@ -771,4 +759,3 @@ void m19::postfix_writer::do_stop_node(m19::stop_node * const node, int lvl) {
   } else
     error(node->lineno(), "'break' outside 'for'");
 }
-

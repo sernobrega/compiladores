@@ -19,7 +19,6 @@ namespace m19 {
     cdk::symbol_table<m19::symbol> &_symtab;
     cdk::basic_postfix_emitter &_pf;
     int _lbl;
-    bool _inForInit;
     bool _errors, _inFunction, _inFunctionName, _inFunctionArgs, _inFunctionBody;
     bool _inMain, _inFinalSection, _InitSection;
     std::stack<int> _forIni, _forStep, _forEnd; // for break/repeat
@@ -55,12 +54,6 @@ namespace m19 {
 
     void error(int lineno, std::string s) {
       std::cerr << "error: " << lineno << ": " << s << std::endl;
-    }
-
-    void do_int2double(basic_type * left, basic_type * right) {
-      // if((t1->name()==basic_type::TYPE_DOUBLE && t2->name()==basic_type::TYPE_INT) || (t1->name()==basic_type::TYPE_POINTER && t2->name()==basic_type::TYPE_INT)){
-      // if(left->name() == basic_type::TYPE_DOUBLE && right->name() == basic_type::TYPE_INT || (left->name() == basic_type::TYPE_POINTER && right->n))
-        // _pf.I2D();
     }
 
   public:
