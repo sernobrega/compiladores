@@ -25,7 +25,7 @@ void m19::postfix_writer::do_sequence_node(cdk::sequence_node * const node, int 
 void m19::postfix_writer::do_variable_node(cdk::variable_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
   if(node->name() == "@") {
-    _pf.LOCAL(_function->offset());<
+    _pf.LOCAL(_function->offset());
     return;
   }
 
@@ -439,7 +439,7 @@ void m19::postfix_writer::do_add_node(cdk::add_node * const node, int lvl) {
     _pf.SHTL();
   }
 
-  (node->type()->name() == basic_type::TYPE_DOUBLE ? _pf.DADD() : _pf.ADD();
+  node->type()->name() == basic_type::TYPE_DOUBLE ? _pf.DADD() : _pf.ADD();
 }
 void m19::postfix_writer::do_sub_node(cdk::sub_node * const node, int lvl) {
   ASSERT_SAFE_EXPRESSIONS;
